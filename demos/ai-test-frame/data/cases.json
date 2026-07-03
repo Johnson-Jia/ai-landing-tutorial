@@ -1,0 +1,6 @@
+[
+  {"data_json": "[{\"type\":\"app\",\"key\":\"商品管理\"}]", "running": "是"},
+  {"data_json": "[{\"type\":\"addproduct\",\"val\":\"实物\",\"_save_as\":\"pname\"}]", "running": "是"},
+  {"data_json": "[{\"type\":\"addproduct\",\"val\":\"虚拟\"}]", "running": "是"},
+  {"data_json": "[{\"type\":\"app\",\"key\":\"商品管理\"}]", "running": "否"}
+]

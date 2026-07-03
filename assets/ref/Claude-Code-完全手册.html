@@ -1,0 +1,1633 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Claude Code 完全使用手册 — 从入门到精通</title>
+<style>
+  :root {
+    --primary: #4A83DD;
+    --primary-dark: #3A6BC2;
+    --primary-light: #E8F0FE;
+    --success: #2D9A5C;
+    --success-light: #E6F7EE;
+    --warning: #D4920B;
+    --warning-light: #FFF8E1;
+    --danger: #DC3545;
+    --danger-light: #FDE8EA;
+    --gray-50: #F9FAFB;
+    --gray-100: #F3F4F6;
+    --gray-200: #E5E7EB;
+    --gray-300: #D1D5DB;
+    --gray-400: #9CA3AF;
+    --gray-600: #4B5563;
+    --gray-700: #374151;
+    --gray-800: #1F2937;
+    --gray-900: #111827;
+    --radius: 10px;
+    --shadow: 0 1px 3px rgba(0,0,0,.1), 0 1px 2px rgba(0,0,0,.06);
+    --shadow-lg: 0 10px 15px -3px rgba(0,0,0,.1), 0 4px 6px -4px rgba(0,0,0,.1);
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html { scroll-behavior:smooth; scroll-padding-top:80px; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    color: var(--gray-800); line-height:1.8; background:var(--gray-50);
+  }
+  #progress-bar { position:fixed; top:0; left:0; height:3px; background:var(--primary); z-index:9999; transition:width .15s; }
+  #sidebar {
+    position:fixed; top:0; left:0; width:280px; height:100vh;
+    background:#fff; border-right:1px solid var(--gray-200);
+    overflow-y:auto; z-index:100; padding:20px 0; transition: transform .3s;
+  }
+  #sidebar .logo { padding:0 24px 20px; border-bottom:1px solid var(--gray-200); font-size:18px; font-weight:700; color:var(--primary); }
+  #sidebar .logo small { display:block; font-size:12px; font-weight:400; color:var(--gray-600); margin-top:2px; }
+  #sidebar nav { padding:12px 0; }
+  #sidebar nav a { display:block; padding:8px 24px; color:var(--gray-700); text-decoration:none; font-size:14px; transition:all .15s; border-left:3px solid transparent; }
+  #sidebar nav a:hover { background:var(--gray-50); color:var(--primary); }
+  #sidebar nav a.active { background:var(--primary-light); color:var(--primary); border-left-color:var(--primary); font-weight:600; }
+  #sidebar nav .nav-group { padding:8px 24px 4px; font-size:11px; text-transform:uppercase; letter-spacing:1px; color:var(--gray-300); font-weight:700; }
+  #main { margin-left:280px; max-width:900px; padding:40px 48px 120px; }
+  #back-top { position:fixed; bottom:30px; right:30px; width:44px; height:44px; background:var(--primary); color:#fff; border:none; border-radius:50%; cursor:pointer; font-size:20px; box-shadow:var(--shadow-lg); opacity:0; transition:opacity .3s; z-index:200; }
+  #back-top.show { opacity:1; }
+  h1 { font-size:32px; font-weight:800; margin-bottom:8px; color:var(--gray-900); }
+  h2 { font-size:26px; font-weight:700; margin:48px 0 20px; color:var(--gray-900); border-bottom:2px solid var(--primary-light); padding-bottom:8px; }
+  h3 { font-size:20px; font-weight:600; margin:32px 0 14px; color:var(--gray-800); }
+  h4 { font-size:17px; font-weight:600; margin:24px 0 10px; color:var(--gray-700); }
+  p { margin-bottom:14px; }
+  a { color:var(--primary); text-decoration:none; }
+  a:hover { text-decoration:underline; }
+  strong { color:var(--gray-900); }
+  ul, ol { margin:10px 0 16px 24px; }
+  li { margin-bottom:6px; }
+  code { background:var(--gray-100); padding:2px 6px; border-radius:4px; font-family:"JetBrains Mono","Fira Code","Consolas",monospace; font-size:13px; color:var(--danger); }
+  pre { background:var(--gray-900); color:#E5E7EB; padding:18px 20px; border-radius:var(--radius); overflow-x:auto; margin:14px 0 18px; font-family:"JetBrains Mono","Fira Code","Consolas",monospace; font-size:13px; line-height:1.7; position:relative; }
+  pre code { background:none; color:inherit; padding:0; font-size:inherit; }
+  .copy-btn { position:absolute; top:8px; right:8px; background:rgba(255,255,255,.12); color:#ccc; border:none; padding:4px 10px; border-radius:4px; cursor:pointer; font-size:12px; transition:all .15s; }
+  .copy-btn:hover { background:rgba(255,255,255,.25); color:#fff; }
+  .callout { padding:16px 20px; border-radius:var(--radius); margin:16px 0; border-left:4px solid; }
+  .callout p { margin-bottom:8px; }
+  .callout p:last-child { margin-bottom:0; }
+  .callout-title { font-weight:700; margin-bottom:6px; }
+  .callout-info { background:var(--primary-light); border-color:var(--primary); }
+  .callout-info .callout-title { color:var(--primary-dark); }
+  .callout-success { background:var(--success-light); border-color:var(--success); }
+  .callout-success .callout-title { color:var(--success); }
+  .callout-warning { background:var(--warning-light); border-color:var(--warning); }
+  .callout-warning .callout-title { color:var(--warning); }
+  .callout-danger { background:var(--danger-light); border-color:var(--danger); }
+  .callout-danger .callout-title { color:var(--danger); }
+  table { width:100%; border-collapse:collapse; margin:14px 0 18px; font-size:14px; }
+  th { background:var(--gray-100); text-align:left; padding:10px 14px; font-weight:600; border:1px solid var(--gray-200); }
+  td { padding:10px 14px; border:1px solid var(--gray-200); }
+  tr:nth-child(even) { background:var(--gray-50); }
+  .badge { display:inline-block; padding:2px 10px; border-radius:12px; font-size:12px; font-weight:600; }
+  .badge-blue { background:var(--primary-light); color:var(--primary); }
+  .badge-green { background:var(--success-light); color:var(--success); }
+  .badge-orange { background:var(--warning-light); color:var(--warning); }
+  .badge-purple { background:#F3E8FF; color:#7C3AED; }
+  .badge-red { background:var(--danger-light); color:var(--danger); }
+  .badge-gray { background:var(--gray-100); color:var(--gray-600); }
+  .card-grid { display:grid; grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)); gap:16px; margin:16px 0; }
+  .card { background:#fff; border-radius:var(--radius); padding:20px; box-shadow:var(--shadow); border:1px solid var(--gray-200); }
+  .card h4 { margin:0 0 8px; font-size:16px; color:var(--gray-900); }
+  .card p { font-size:14px; color:var(--gray-600); margin:0 0 6px; }
+  .card .tag { display:inline-block; background:var(--primary-light); color:var(--primary); padding:2px 8px; border-radius:4px; font-size:12px; }
+  .flow { text-align:center; margin:20px 0; }
+  .flow-step { display:inline-block; background:var(--primary); color:#fff; padding:10px 20px; border-radius:var(--radius); font-weight:600; font-size:14px; margin:4px 0; }
+  .flow-arrow { display:inline-block; color:var(--gray-400); font-size:20px; margin:0 6px; vertical-align:middle; }
+  .layer { background:#fff; border-radius:var(--radius); padding:16px 22px; margin-bottom:8px; box-shadow:var(--shadow); border:1px solid var(--gray-200); border-left:4px solid var(--primary); }
+  .layer.l1 { border-left-color:var(--danger); }
+  .layer.l2 { border-left-color:var(--warning); }
+  .layer.l3 { border-left-color:var(--success); }
+  .layer.l4 { border-left-color:#7C3AED; }
+  .layer.l5 { border-left-color:var(--primary); }
+  .layer .layer-title { font-weight:700; margin-bottom:4px; color:var(--gray-900); }
+  .layer p { color:var(--gray-600); font-size:14px; margin:0; }
+  .step { background:#fff; border-radius:var(--radius); padding:20px; margin:14px 0; box-shadow:var(--shadow); border:1px solid var(--gray-200); }
+  .step-number { display:inline-flex; align-items:center; justify-content:center; width:32px; height:32px; border-radius:50%; background:var(--primary); color:#fff; font-weight:700; font-size:15px; margin-right:10px; flex-shrink:0; }
+  .step-title { display:flex; align-items:center; font-size:17px; font-weight:600; color:var(--gray-900); margin-bottom:10px; }
+  .checklist { list-style:none; margin-left:0; }
+  .checklist li { padding:6px 0 6px 30px; position:relative; }
+  .checklist li::before { content:"\2610"; position:absolute; left:0; top:6px; font-size:16px; color:var(--gray-300); }
+  @media(max-width:900px) {
+    #sidebar { transform:translateX(-100%); }
+    #sidebar.open { transform:translateX(0); }
+    #main { margin-left:0; padding:24px 20px 80px; }
+    #menu-toggle { display:block !important; }
+  }
+  #menu-toggle { display:none; position:fixed; top:12px; left:12px; z-index:101; background:var(--primary); color:#fff; border:none; padding:8px 12px; border-radius:var(--radius); cursor:pointer; font-size:18px; }
+  @media print { #sidebar, #progress-bar, #back-top, #menu-toggle, .copy-btn { display:none !important; } #main { margin-left:0; padding:0; } pre { border:1px solid #ddd; } }
+.hljs,pre code.hljs{background:transparent!important;padding:0;margin:0}
+</style>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/styles/atom-one-dark.min.css">
+</head>
+<body>
+
+<div id="progress-bar"></div>
+<button id="menu-toggle" onclick="document.getElementById('sidebar').classList.toggle('open')">&#9776;</button>
+
+<div id="sidebar">
+  <div class="logo">Claude Code<small>完全使用手册</small></div>
+  <nav>
+    <div class="nav-group">快速开始</div>
+    <a href="#s1">产品概述与环境要求</a>
+    <a href="#s2">安装与升级</a>
+    <div class="nav-group">认证与网络</div>
+    <a href="#s3">认证体系详解</a>
+    <a href="#s4">代理与网络配置</a>
+    <a href="#s5">国内大模型与中转 API</a>
+    <div class="nav-group">深度配置</div>
+    <a href="#s6">Settings 配置体系</a>
+    <a href="#s7">CLAUDE.md 记忆系统</a>
+    <a href="#s8">模型选择与参数调优</a>
+    <div class="nav-group">安全与扩展</div>
+    <a href="#s9">权限模式与安全配置</a>
+    <a href="#s10">MCP 服务器集成</a>
+    <a href="#s11">自定义 Agent / Skills / Hooks</a>
+    <div class="nav-group">高级功能</div>
+    <a href="#s12">多智能体协作</a>
+    <a href="#s13">Plan 模式与 Worktree</a>
+    <a href="#s14">IDE 集成</a>
+    <a href="#s15">故障排除与参考</a>
+  </nav>
+</div>
+
+<div id="main">
+
+<!-- ==================== HERO ==================== -->
+<div style="text-align:center; padding:30px 0 40px; border-bottom:2px solid var(--gray-200); margin-bottom:40px;">
+  <h1 style="font-size:36px; margin-bottom:12px;">Claude Code 完全使用手册</h1>
+  <p style="color:var(--gray-600); max-width:700px; margin:0 auto 20px; font-size:16px; line-height:1.8;">
+    从零基础到高级配置，覆盖安装、认证、代理、API Key、国内外大模型集成、
+    Settings 深度配置、MCP 服务器、多智能体协作等全部场景。
+    基于泄露源码逆向分析与官方文档交叉验证。
+  </p>
+  <div style="display:flex; justify-content:center; gap:16px; flex-wrap:wrap;">
+    <div class="card" style="text-align:center; padding:12px 22px;">
+      <div style="font-size:1.6em; font-weight:700; color:var(--primary);">15+</div>
+      <div style="font-size:13px; color:var(--gray-600);">配置章节</div>
+    </div>
+    <div class="card" style="text-align:center; padding:12px 22px;">
+      <div style="font-size:1.6em; font-weight:700; color:var(--primary);">50+</div>
+      <div style="font-size:13px; color:var(--gray-600);">环境变量</div>
+    </div>
+    <div class="card" style="text-align:center; padding:12px 22px;">
+      <div style="font-size:1.6em; font-weight:700; color:var(--primary);">4</div>
+      <div style="font-size:13px; color:var(--gray-600);">认证方式</div>
+    </div>
+    <div class="card" style="text-align:center; padding:12px 22px;">
+      <div style="font-size:1.6em; font-weight:700; color:var(--primary);">3</div>
+      <div style="font-size:13px; color:var(--gray-600);">云平台集成</div>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== 第1章 ==================== -->
+<h2 id="s1">第一章：产品概述与环境要求</h2>
+
+<h3>什么是 Claude Code？</h3>
+<p>
+  Claude Code 是 Anthropic 官方推出的 <strong>智能编程命令行工具</strong>。
+  它不是普通的代码补全工具，而是一个能在终端中理解你的整个代码库、
+  自主执行编码任务的 AI 代理。你可以用自然语言描述需求，Claude Code 会：
+</p>
+<ul>
+  <li>读取、搜索、编辑你的代码文件</li>
+  <li>执行 shell 命令（运行测试、构建项目、安装依赖）</li>
+  <li>管理 Git 工作流（提交、分支、创建 PR）</li>
+  <li>搜索互联网获取最新信息</li>
+  <li>通过 MCP 协议连接外部工具和服务</li>
+</ul>
+
+<h3>系统要求</h3>
+<table>
+  <tr><th>项目</th><th>最低要求</th><th>推荐</th></tr>
+  <tr><td>操作系统</td><td>macOS 12+、Ubuntu 20.04+、Windows 10+（WSL 或原生）</td><td>macOS 14+、Ubuntu 22.04+</td></tr>
+  <tr><td>Node.js</td><td>18+</td><td>22+（源码要求 24.0.0+）</td></tr>
+  <tr><td>内存</td><td>4 GB</td><td>8 GB+</td></tr>
+  <tr><td>磁盘空间</td><td>1 GB</td><td>2 GB+</td></tr>
+  <tr><td>网络</td><td>需要访问 Anthropic API 或兼容 API</td><td>稳定低延迟连接</td></tr>
+</table>
+
+<div class="callout callout-info">
+  <p class="callout-title">平台差异说明</p>
+  <p>
+    Claude Code 同时支持 macOS、Linux 和 Windows（原生 + WSL）。
+    macOS 是一等公民平台，源码中有 macOS Keychain 安全存储、Touch ID 等专属集成。
+    Windows 用户推荐使用 WSL2 或原生安装（winget）。
+  </p>
+</div>
+
+<h3>版本信息</h3>
+<p>
+  本手册基于泄露源码 <code>999.0.0-restored</code> 版本逆向分析，
+  结合官方 <code>anthropics/claude-code</code> GitHub 仓库交叉验证。
+  截至 2026 年 5 月，Claude Code 已发展为一个功能极其丰富的平台。
+</p>
+
+<!-- ==================== 第2章 ==================== -->
+<h2 id="s2">第二章：安装与升级</h2>
+
+<h3>2.1 推荐安装方式</h3>
+
+<div class="callout callout-warning">
+  <p class="callout-title">npm 安装已废弃</p>
+  <p>
+    官方已明确标注 <code>npm install -g @anthropic-ai/claude-code</code> 为废弃方式。
+    推荐使用原生安装器。
+  </p>
+</div>
+
+<h4>macOS / Linux</h4>
+<pre><button class="copy-btn" onclick="copyCode(this)">复制</button><code class="language-bash"># 方式一：官方安装脚本（推荐）
+curl -fsSL https://claude.ai/install.sh | bash
+
+# 方式二：Homebrew
+brew install --cask claude-code</code></pre>
+
+<h4>Windows</h4>
+<pre><button class="copy-btn" onclick="copyCode(this)">复制</button><code class="language-bash"># 方式一：PowerShell 安装脚本（推荐）
+irm https://claude.ai/install.ps1 | iex
+
+# 方式二：WinGet
+winget install Anthropic.ClaudeCode</code></pre>
+
+<h4>npm（兼容但已废弃）</h4>
+<pre><button class="copy-btn" onclick="copyCode(this)">复制</button><code class="language-bash">npm install -g @anthropic-ai/claude-code</code></pre>
+
+<h3>2.2 首次启动</h3>
+
+<div class="step">
+  <div class="step-title"><span class="step-number">1</span>进入项目目录</div>
+  <p>Claude Code 以项目为上下文工作，必须先 <code>cd</code> 到你的项目根目录。</p>
+</div>
+<div class="step">
+  <div class="step-title"><span class="step-number">2</span>启动 Claude Code</div>
+  <p>运行 <code>claude</code> 命令。首次运行会提示你登录。</p>
+</div>
+<div class="step">
+  <div class="step-title"><span class="step-number">3</span>完成认证</div>
+  <p>选择 OAuth 登录（浏览器跳转）或配置 API Key（见第3章）。<strong>国内用户推荐直接配置 API Key（配合中转服务），不登录 Claude Code 账户</strong>——OAuth 需浏览器跳转 Anthropic 官网，国内网络不便。</p>
+</div>
+<div class="step">
+  <div class="step-title"><span class="step-number">4</span>开始对话</div>
+  <p>认证成功后直接输入自然语言指令即可。</p>
+</div>
+
+<h3>2.3 常用启动参数</h3>
+<table>
+  <tr><th>参数</th><th>说明</th><th>示例</th></tr>
+  <tr><td><code>--version</code></td><td>显示版本号</td><td><code>claude --version</code></td></tr>
+  <tr><td><code>--print</code> / <code>-p</code></td><td>非交互模式，适合管道和脚本</td><td><code>claude -p "解释这个函数"</code></td></tr>
+  <tr><td><code>--output-format</code></td><td>输出格式：text / json / stream-json</td><td><code>claude -p "..." --output-format json</code></td></tr>
+  <tr><td><code>--model</code></td><td>指定模型</td><td><code>claude --model sonnet</code></td></tr>
+  <tr><td><code>--allowedTools</code></td><td>限制可用工具</td><td><code>claude --allowedTools "Read,Write,Bash"</code></td></tr>
+  <tr><td><code>--max-turns</code></td><td>限制最大对话轮次</td><td><code>claude --max-turns 10</code></td></tr>
+  <tr><td><code>--resume</code></td><td>恢复上次会话</td><td><code>claude --resume</code></td></tr>
+  <tr><td><code>--continue</code></td><td>继续最近的对话</td><td><code>claude --continue</code></td></tr>
+  <tr><td><code>--dangerously-skip-permissions</code></td><td>跳过所有权限确认（危险）</td><td>CI/CD 场景</td></tr>
+  <tr><td><code>--verbose</code></td><td>详细输出模式</td><td><code>claude --verbose</code></td></tr>
+  <tr><td><code>--bare</code></td><td>纯 API Key 模式，跳过 OAuth</td><td>仅 API Key 认证</td></tr>
+</table>
+
+<h3>2.4 升级</h3>
+<pre><button class="copy-btn" onclick="copyCode(this)">复制</button><code class="language-bash"># curl 安装的用户，重新运行安装脚本即可升级
+curl -fsSL https://claude.ai/install.sh | bash
+
+# Homebrew
+brew upgrade claude-code
+
+# WinGet
+winget upgrade Anthropic.ClaudeCode</code></pre>
+
+<!-- ==================== 第3章 ==================== -->
+<h2 id="s3">第三章：认证体系详解</h2>
+
+<p>
+  Claude Code 支持四种认证方式。源码中认证优先级定义在
+  <code>src/utils/auth.ts</code>，采用<strong>瀑布式降级</strong>策略。
+</p>
+
+<h3>3.1 认证方式总览</h3>
+<table>
+  <tr><th>方式</th><th>优先级</th><th>适用场景</th><th>配置位置</th></tr>
+  <tr>
+    <td><span class="badge badge-blue">OAuth</span></td>
+    <td>默认</td>
+    <td>个人开发者，Anthropic 账号登录</td>
+    <td><code>claude auth login</code></td>
+  </tr>
+  <tr>
+    <td><span class="badge badge-green">API Key</span></td>
+    <td>高</td>
+    <td>企业用户，CI/CD，中转 API</td>
+    <td><code>ANTHROPIC_API_KEY</code> 环境变量</td>
+  </tr>
+  <tr>
+    <td><span class="badge badge-purple">apiKeyHelper</span></td>
+    <td>高</td>
+    <td>动态获取密钥，企业密钥管理</td>
+    <td><code>~/.claude/settings.json</code></td>
+  </tr>
+  <tr>
+    <td><span class="badge badge-orange">第三方平台</span></td>
+    <td>专有</td>
+    <td>AWS Bedrock / Google Vertex / Foundry</td>
+    <td>专用环境变量</td>
+  </tr>
+</table>
+
+<h3>3.2 OAuth 登录（推荐）</h3>
+<pre><button class="copy-btn" onclick="copyCode(this)">复制</button><code class="language-bash"># 交互式登录（浏览器跳转）
+claude auth login
+
+# 查看当前认证状态
+claude auth status
+
+# 登出
+claude auth logout</code></pre>
+
+<p>
+  OAuth 登录会打开浏览器跳转到 Anthropic 账号页面。
+  登录成功后 Token 存储在：
+</p>
+<ul>
+  <li><strong>macOS</strong>：Keychain（系统安全存储）</li>
+  <li><strong>Linux</strong>：<code>~/.claude/credentials.json</code></li>
+  <li><strong>Windows</strong>：Credential Manager 或文件存储</li>
+</ul>
+
+<h3>3.3 API Key 认证</h3>
+
+<h4>方式一：环境变量（最常用）</h4>
+<pre><button class="copy-btn" onclick="copyCode(this)">复制</button><code class="language-bash"># 临时设置（当前终端会话）
+export ANTHROPIC_API_KEY="sk-ant-api03-xxxxxxxxxxxx"
+
+# 永久设置（添加到 ~/.bashrc / ~/.zshrc）
+echo 'export ANTHROPIC_API_KEY="sk-ant-api03-xxxxxxxxxxxx"' >> ~/.bashrc
+source ~/.bashrc</code></pre>
+
+<h4>方式二：settings.json 中的环境变量</h4>
+<pre><button class="copy-btn" onclick="copyCode(this)">复制</button><code class="language-json">// ~/.claude/settings.json
+{
+  "env": {
+    "ANTHROPIC_API_KEY": "sk-ant-api03-xxxxxxxxxxxx"
+  }
+}</code></pre>
+
+<h4>方式三：apiKeyHelper（高级）</h4>
+<p>
+  <code>apiKeyHelper</code> 允许通过外部命令动态获取 API Key，
+  支持企业密钥轮换、临时凭证等场景。源码中缓存 TTL 为 5 分钟。
+</p>
+<pre><button class="copy-btn" onclick="copyCode(this)">复制</button><code class="language-json">// ~/.claude/settings.json
+{
+  "apiKeyHelper": "cat /path/to/api_key.txt"
+}</code></pre>
+
+<p>更高级的例子 — 从密钥管理服务获取：</p>
+<pre><button class="copy-btn" onclick="copyCode(this)">复制</button><code class="language-json">{
+  "apiKeyHelper": "aws secretsmanager get-secret-value --secret-id claude-api-key --query SecretString --output text"
+}</code></pre>
+
+<h3>3.4 AWS Bedrock 集成</h3>
+<p>使用 AWS Bedrock 运行 Claude 模型，无需 Anthropic API Key。</p>
+<pre><button class="copy-btn" onclick="copyCode(this)">复制</button><code class="language-bash"># 启用 Bedrock 模式
+export CLAUDE_CODE_USE_BEDROCK=1
+
+# 配置 AWS 凭证（任选一种）
+# 方式一：AWS CLI 配置
+aws configure
+
+# 方式二：环境变量
+export AWS_ACCESS_KEY_ID="AKIAIOSFODNN7EXAMPLE"
+export AWS_SECRET_ACCESS_KEY="wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY"
+export AWS_REGION="us-east-1"
+
+# 可选：指定模型
+export CLAUDE_CODE_BEDROCK_MODEL="us.anthropic.claude-sonnet-4-20250514"</code></pre>
+
+<div class="callout callout-success">
+  <p class="callout-title">Bedrock 优势</p>
+  <p>
+    AWS Bedrock 在国内有更好的网络可达性。通过 AWS 中国区或亚太区部署，
+    可以避免直连 Anthropic API 的网络问题。Bedrock 还支持 AWS PrivateLink，
+    适合企业内网场景。
+  </p>
+</div>
+
+<h3>3.5 Google Vertex AI 集成</h3>
+<pre><button class="copy-btn" onclick="copyCode(this)">复制</button><code class="language-bash"># 启用 Vertex 模式
+export CLAUDE_CODE_USE_VERTEX=1
+
+# 配置 Google Cloud 认证
+export CLOUD_ML_REGION="us-east5"
+export ANTHROPIC_VERTEX_PROJECT_ID="your-gcp-project-id"
+
+# Google Cloud 认证（任选一种）
+gcloud auth application-default login
+# 或
+export GOOGLE_APPLICATION_CREDENTIALS="/path/to/service-account.json"</code></pre>
+
+<h3>3.6 Foundry（本地/私有部署）集成</h3>
+<pre><button class="copy-btn" onclick="copyCode(this)">复制</button><code class="language-bash"># 启用 Foundry 模式
+export CLAUDE_CODE_USE_FOUNDRY=1
+
+# 指定 Foundry 端点
+export ANTHROPIC_BASE_URL="https://your-foundry-endpoint/v1"</code></pre>
+
+<h3>3.7 认证优先级（源码解析）</h3>
+<p>基于 <code>src/utils/auth.ts</code> 和 <code>src/cli/handlers/auth.ts</code> 逆向：</p>
+
+<div class="layer l1">
+  <div class="layer-title">Level 1 — 环境变量 API Key</div>
+  <p><code>ANTHROPIC_API_KEY</code> 直接设置 &rarr; 最高优先级，跳过所有 OAuth</p>
+</div>
+<div class="layer l2">
+  <div class="layer-title">Level 2 — apiKeyHelper</div>
+  <p>settings.json 中的 <code>apiKeyHelper</code> 命令 &rarr; 动态获取密钥</p>
+</div>
+<div class="layer l3">
+  <div class="layer-title">Level 3 — 文件描述符 / Auth Token</div>
+  <p><code>CLAUDE_CODE_API_KEY_FILE_DESCRIPTOR</code> 或 <code>ANTHROPIC_AUTH_TOKEN</code></p>
+</div>
+<div class="layer l4">
+  <div class="layer-title">Level 4 — OAuth Token</div>
+  <p>Keychain / credentials.json 中的 OAuth 刷新令牌</p>
+</div>
+<div class="layer l5">
+  <div class="layer-title">Level 5 — 交互式登录</div>
+  <p>以上均无 &rarr; 提示 <code>claude auth login</code></p>
+</div>
+
+<div class="callout callout-warning">
+  <p class="callout-title">第三方模式互斥</p>
+  <p>
+    <code>CLAUDE_CODE_USE_BEDROCK</code>、<code>CLAUDE_CODE_USE_VERTEX</code>、
+    <code>CLAUDE_CODE_USE_FOUNDRY</code> 三者互斥，同时只能启用一个。
+    启用任一后，Anthropic OAuth 认证会被自动禁用。
+  </p>
+</div>
+
+<!-- ==================== 第4章 ==================== -->
+<h2 id="s4">第四章：代理与网络配置</h2>
+
+<h3>4.1 为什么需要代理？</h3>
+<p>
+  Anthropic API 端点 <code>api.anthropic.com</code> 在中国大陆无法直接访问。
+  国内用户必须通过以下方式之一解决网络问题。
+</p>
+
+<h3>4.2 方案一：ANTHROPIC_BASE_URL（中转 API）</h3>
+<p>
+  这是最推荐的方案。设置 <code>ANTHROPIC_BASE_URL</code> 指向一个兼容 Anthropic API 的中转服务。
+  源码中所有 API 请求都通过这个基础 URL 构建。
+</p>
+<pre><button class="copy-btn" onclick="copyCode(this)">复制</button><code class="language-bash"># 设置中转 API 地址
+export ANTHROPIC_BASE_URL="https://your-proxy.example.com"
+
+# 配合 API Key 使用
+export ANTHROPIC_API_KEY="sk-ant-xxxxx"  # 或中转服务提供的 Key
+
+# 或在 settings.json 中配置
+# ~/.claude/settings.json
+{
+  "env": {
+    "ANTHROPIC_BASE_URL": "https://your-proxy.example.com",
+    "ANTHROPIC_API_KEY": "your-api-key"
+  }
+}</code></pre>
+
+<div class="callout callout-info">
+  <p class="callout-title">中转 API 工作原理</p>
+  <p>
+    Claude Code 的所有请求都发往 <code>ANTHROPIC_BASE_URL/v1/messages</code>。
+    中转服务只需实现 Anthropic Messages API 的兼容接口，
+    将请求转发到真正的 <code>api.anthropic.com</code> 并返回响应即可。
+  </p>
+</div>
+
+<h3>4.3 方案二：HTTP/SOCKS 代理</h3>
+<pre><button class="copy-btn" onclick="copyCode(this)">复制</button><code class="language-bash"># HTTP 代理
+export HTTP_PROXY="http://127.0.0.1:7890"
+export HTTPS_PROXY="http://127.0.0.1:7890"
+
+# SOCKS5 代理
+export HTTP_PROXY="socks5://127.0.0.1:1080"
+export HTTPS_PROXY="socks5://127.0.0.1:1080"
+
+# 需要 Node.js 支持的代理方式
+# 全局代理（推荐）
+export ALL_PROXY="http://127.0.0.1:7890"</code></pre>
+
+<p>注意：Claude Code 底层使用 <code>undici</code> HTTP 客户端（源码依赖），部分代理需要额外配置。</p>
+
+<h3>4.4 方案三：系统级代理 / TUN 模式</h3>
+<p>
+  如果使用 Clash、V2Ray 等工具的 TUN/系统代理模式，
+  Claude Code 的所有流量会自动经过代理，无需额外配置。
+  这是最简单的方案，但可能影响其他应用。
+</p>
+
+<h3>4.5 网络相关环境变量完整参考</h3>
+<table>
+  <tr><th>变量</th><th>说明</th><th>示例</th></tr>
+  <tr><td><code>ANTHROPIC_BASE_URL</code></td><td>API 基础 URL，覆盖默认端点</td><td><code>https://api.example.com</code></td></tr>
+  <tr><td><code>HTTP_PROXY</code></td><td>HTTP 代理地址</td><td><code>http://127.0.0.1:7890</code></td></tr>
+  <tr><td><code>HTTPS_PROXY</code></td><td>HTTPS 代理地址</td><td><code>http://127.0.0.1:7890</code></td></tr>
+  <tr><td><code>ALL_PROXY</code></td><td>全局代理</td><td><code>socks5://127.0.0.1:1080</code></td></tr>
+  <tr><td><code>NO_PROXY</code></td><td>不经过代理的域名</td><td><code>localhost,127.0.0.1</code></td></tr>
+  <tr><td><code>ANTHROPIC_UNIX_SOCKET</code></td><td>Unix 域套接字（SSH 隧道场景）</td><td><code>/tmp/claude-proxy.sock</code></td></tr>
+</table>
+
+<h3>4.6 macOS Keychain 代理场景</h3>
+<p>
+  源码中 <code>src/utils/authPortable.ts</code> 使用 macOS Keychain 安全存储 API Key。
+  如果你在 macOS 上遇到 Keychain 弹窗，这是正常的 — Claude Code 在读取已保存的凭证。
+</p>
+
+<!-- ==================== 第5章 ==================== -->
+<h2 id="s5">第五章：国内大模型与中转 API 集成</h2>
+
+<h3>5.1 国内使用场景总览</h3>
+<p>国内开发者使用 Claude Code 主要有以下路径：</p>
+
+<div class="card-grid">
+  <div class="card">
+    <h4>Anthropic 官方 API</h4>
+    <p>通过中转服务或代理访问 api.anthropic.com，使用 Anthropic 原生 API Key</p>
+    <span class="tag">最稳定</span>
+  </div>
+  <div class="card">
+    <h4>AWS Bedrock</h4>
+    <p>通过 AWS Bedrock 使用 Claude，AWS 在国内有更好的网络覆盖</p>
+    <span class="tag">推荐企业</span>
+  </div>
+  <div class="card">
+    <h4>第三方中转平台</h4>
+    <p>使用国内中转服务（如 OpenRouter、各类 API 代理），可能支持多种模型</p>
+    <span class="tag">最便捷</span>
+  </div>
+  <div class="card">
+    <h4>国内模型替代</h4>
+    <p>使用兼容 Anthropic API 的国内模型服务（有限支持）</p>
+    <span class="tag">成本最低</span>
+  </div>
+</div>
+
+<h3>5.2 中转 API 详细配置</h3>
+
+<h4>通用中转服务配置</h4>
+<pre><button class="copy-btn" onclick="copyCode(this)">复制</button><code class="language-bash"># 1. 获取中转服务的 API Key 和 Base URL
+# 2. 配置环境变量
+
+export ANTHROPIC_BASE_URL="https://api.your-proxy.com"
+export ANTHROPIC_API_KEY="sk-your-proxy-key"
+
+# 3. 启动 Claude Code
+claude</code></pre>
+
+<h4>OpenRouter 配置示例</h4>
+<pre><button class="copy-btn" onclick="copyCode(this)">复制</button><code class="language-bash">export ANTHROPIC_BASE_URL="https://openrouter.ai/api"
+export ANTHROPIC_API_KEY="sk-or-v1-xxxxx"</code></pre>
+
+<div class="callout callout-warning">
+  <p class="callout-title">中转服务注意事项</p>
+  <p>
+    1. 确保中转服务支持 Anthropic Messages API 的完整接口（包括 streaming、tool_use）<br>
+    2. 中转服务必须正确转发 <code>x-api-key</code> 和 <code>anthropic-version</code> 请求头<br>
+    3. 部分中转服务可能不支持 extended thinking（深度思考）功能<br>
+    4. 注意中转服务的速率限制和计费方式
+  </p>
+</div>
+
+<h3>5.3 国内模型间接使用</h3>
+<p>
+  Claude Code 的 API 客户端期望 Anthropic Messages API 格式。
+  如果国内模型提供商实现了兼容接口（如 DeepSeek 的 OpenAI 兼容模式），
+  理论上可以通过 <code>ANTHROPIC_BASE_URL</code> 指向适配层。
+</p>
+
+<div class="callout callout-danger">
+  <p class="callout-title">兼容性警告</p>
+  <p>
+    国内大模型（DeepSeek、Qwen、GLM 等）的 API 接口与 Anthropic Messages API
+    <strong>不完全兼容</strong>，尤其是 tool_use（工具调用）格式。
+    直接使用可能导致 Claude Code 核心功能（文件编辑、命令执行）失效。
+    如需使用国内模型，建议等待官方适配或使用 API 转换中间件。
+  </p>
+</div>
+
+<h3>5.4 自建中转服务</h3>
+<p>如果你有 Anthropic API 访问能力，可以自建中转：</p>
+<pre><button class="copy-btn" onclick="copyCode(this)">复制</button><code class="language-javascript">// 最简单的 Node.js 中转示例
+import express from 'express'
+import fetch from 'node-fetch'
+
+const app = express()
+app.use(express.json())
+
+app.all('/v1/*', async (req, res) => {
+  const upstream = await fetch(`https://api.anthropic.com${req.path}`, {
+    method: req.method,
+    headers: {
+      'Content-Type': 'application/json',
+      'x-api-key': process.env.REAL_API_KEY,
+      'anthropic-version': req.headers['anthropic-version'] || '2023-06-01',
+    },
+    body: JSON.stringify(req.body),
+  })
+  res.status(upstream.status)
+  upstream.body.pipe(res)
+})
+
+app.listen(3000)</code></pre>
+
+<!-- ==================== 第6章 ==================== -->
+<h2 id="s6">第六章：Settings 配置体系深度解析</h2>
+
+<h3>6.1 配置文件层级</h3>
+<p>Claude Code 的配置系统采用多层覆盖架构（优先级从高到低）：</p>
+
+<div class="layer l1">
+  <div class="layer-title">Managed Settings（企业托管配置）</div>
+  <p>路径：<code>/etc/claude-code/managed-settings.json</code>（Linux/macOS）或注册表（Windows）<br>
+  由企业管理员设置，不可被用户覆盖，优先级最高。源码中 <code>src/utils/settings/settings.ts</code> 强制合并。</p>
+</div>
+<div class="layer l2">
+  <div class="layer-title">User Settings（用户全局配置）</div>
+  <p>路径：<code>~/.claude/settings.json</code><br>
+  用户个人偏好配置，对所有项目生效。包含 API Key、环境变量、权限规则等。</p>
+</div>
+<div class="layer l3">
+  <div class="layer-title">Project Settings（项目配置）</div>
+  <p>路径：<code>.claude/settings.json</code>（项目根目录下）<br>
+  项目级配置，会随 Git 提交共享给团队。适合定义项目特定的工具权限和 MCP 服务器。</p>
+</div>
+<div class="layer l4">
+  <div class="layer-title">Local Settings（本地配置）</div>
+  <p>路径：<code>.claude/settings.local.json</code><br>
+  本地覆盖配置，不随 Git 提交（应加入 .gitignore）。适合个人开发环境特定配置。</p>
+</div>
+
+<h3>6.2 settings.json 完整字段参考</h3>
+<pre><button class="copy-btn" onclick="copyCode(this)">复制</button><code class="language-json">// ~/.claude/settings.json — 完整配置示例
+{
+  // ===== 认证 =====
+  "apiKeyHelper": "cat ~/.anthropic-key",   // 动态获取 API Key 的命令
+
+  // ===== 环境变量 =====
+  "env": {
+    "ANTHROPIC_API_KEY": "sk-ant-xxxxx",
+    "ANTHROPIC_BASE_URL": "https://your-proxy.com",
+    "MY_CUSTOM_VAR": "some-value"
+  },
+
+  // ===== 权限控制 =====
+  "permissions": {
+    "allow": [
+      "Read",                    // 允许读取任意文件
+      "Write",                   // 允许写入任意文件
+      "Bash(git log*)",         // 允许特定命令模式
+      "Bash(npm test*)",
+      "WebFetch",               // 允许网页抓取
+      "mcp__my_server__*"       // 允许特定 MCP 服务器的所有工具
+    ],
+    "deny": [
+      "Bash(rm -rf*)",          // 禁止危险命令
+      "Write(.env*)",           // 禁止写入环境变量文件
+      "Read(*secret*)"          // 禁止读取敏感文件
+    ]
+  },
+
+  // ===== MCP 服务器 =====
+  "mcpServers": {
+    "my-server": {
+      "command": "node",
+      "args": ["./mcp-server.js"],
+      "env": { "API_KEY": "xxx" }
+    }
+  },
+
+  // ===== 模型配置 =====
+  "model": "claude-sonnet-4-20250514",
+  "smallModel": "claude-haiku-4-5-20251001",
+
+  // ===== 其他 =====
+  "theme": "dark",
+  "verbose": true
+}</code></pre>
+
+<h3>6.3 权限规则语法</h3>
+<p>
+  <code>permissions.allow</code> 和 <code>permissions.deny</code> 使用 glob 模式匹配：
+</p>
+<table>
+  <tr><th>模式</th><th>含义</th><th>示例</th></tr>
+  <tr><td><code>ToolName</code></td><td>允许/禁止某个工具</td><td><code>Read</code>、<code>Write</code>、<code>Bash</code></td></tr>
+  <tr><td><code>Bash(command*)</code></td><td>允许/禁止匹配前缀的命令</td><td><code>Bash(git *)</code></td></tr>
+  <tr><td><code>mcp__server__tool</code></td><td>控制特定 MCP 工具</td><td><code>mcp__github__create_issue</code></td></tr>
+  <tr><td><code>mcp__server__*</code></td><td>控制 MCP 服务器的所有工具</td><td><code>mcp__mydb__*</code></td></tr>
+  <tr><td><code>Read(pattern)</code></td><td>允许读取匹配的文件路径</td><td><code>Read(src/**)</code></td></tr>
+  <tr><td><code>Write(pattern)</code></td><td>允许写入匹配的文件路径</td><td><code>Write(*.ts)</code></td></tr>
+</table>
+
+<div class="callout callout-success">
+  <p class="callout-title">deny 优先于 allow</p>
+  <p>
+    当一条规则同时匹配 <code>allow</code> 和 <code>deny</code> 时，<code>deny</code> 优先。
+    这可以用来在 <code>allow</code> 大范围工具时排除特定危险操作。
+  </p>
+</div>
+
+<h3>6.4 企业托管配置详解</h3>
+<p>
+  企业管理员可以通过 Managed Settings 强制推配置，用户无法覆盖。
+  典型配置文件路径：
+</p>
+<pre><button class="copy-btn" onclick="copyCode(this)">复制</button><code class="language-json">// /etc/claude-code/managed-settings.json（macOS/Linux）
+{
+  "permissions": {
+    "deny": [
+      "Bash(curl*)",
+      "Bash(wget*)",
+      "Bash(*|*)",           // 禁止管道
+      "Bash(*>*)",           // 禁止重定向
+      "Write(/etc/*)",
+      "Read(/etc/shadow*)"
+    ]
+  },
+  "env": {
+    "ANTHROPIC_BASE_URL": "https://internal-api.company.com"
+  },
+  "allowedMcpServers": ["internal-tools"],
+  "disableUpdateCheck": true
+}</code></pre>
+
+<!-- ==================== 第7章 ==================== -->
+<h2 id="s7">第七章：CLAUDE.md 记忆系统</h2>
+
+<h3>7.1 什么是 CLAUDE.md？</h3>
+<p>
+  <code>CLAUDE.md</code> 是 Claude Code 的<strong>项目记忆文件</strong>，
+  在每次对话开始时自动加载到系统提示中。
+  它让你能为 Claude 设定项目上下文、编码规范、架构决策等。
+</p>
+
+<h3>7.2 三级 CLAUDE.md 体系</h3>
+<table>
+  <tr><th>层级</th><th>路径</th><th>作用域</th><th>Git</th></tr>
+  <tr><td><span class="badge badge-blue">用户级</span></td><td><code>~/.claude/CLAUDE.md</code></td><td>所有项目共享</td><td>不提交</td></tr>
+  <tr><td><span class="badge badge-green">项目级</span></td><td><code>项目根/CLAUDE.md</code></td><td>当前项目</td><td>提交到 Git</td></tr>
+  <tr><td><span class="badge badge-purple">目录级</span></td><td><code>子目录/CLAUDE.md</code></td><td>子目录上下文</td><td>提交到 Git</td></tr>
+</table>
+
+<h3>7.3 CLAUDE.md 最佳实践</h3>
+<pre><button class="copy-btn" onclick="copyCode(this)">复制</button><code># 项目根/CLAUDE.md 示例
+
+## 项目概述
+这是一个 Next.js 14 + TypeScript 的电商平台项目。
+
+## 技术栈
+- 框架：Next.js 14 (App Router)
+- 语言：TypeScript 严格模式
+- 样式：Tailwind CSS
+- 数据库：PostgreSQL + Prisma
+- 测试：Vitest + Playwright
+
+## 编码规范
+- 使用函数式组件和 hooks，不用 class 组件
+- 文件命名：kebab-case
+- 组件命名：PascalCase
+- 常量全大写：UPPER_SNAKE_CASE
+- 优先使用 `import type` 导入类型
+- 所有 async 函数必须有错误处理
+
+## 项目结构
+- `src/app/` — 页面路由
+- `src/components/` — 共享组件
+- `src/lib/` — 工具函数和配置
+- `src/server/` — 服务端逻辑
+
+## 测试要求
+- 新增功能必须包含单元测试
+- 测试文件放在 `__tests__/` 目录
+- 运行测试：`npm run test`
+- 运行 lint：`npm run lint`
+
+## 注意事项
+- 不要修改 `prisma/schema.prisma` 除非明确要求
+- 环境变量在 `.env.local` 中，不要提交到 Git
+- API 路由统一在 `src/app/api/` 下</code></pre>
+
+<h3>7.4 CLAUDE.md 中的指令</h3>
+<p>你可以在 CLAUDE.md 中写入指令来控制 Claude 的行为：</p>
+<ul>
+  <li><strong>编码规范</strong>：告诉 Claude 项目的代码风格</li>
+  <li><strong>禁止操作</strong>：例如"不要删除测试文件"</li>
+  <li><strong>架构约束</strong>：例如"数据库操作只在 server 目录中"</li>
+  <li><strong>命令提示</strong>：告诉 Claude 如何运行构建和测试</li>
+  <li><strong>Git 规范</strong>：commit message 格式、分支命名等</li>
+</ul>
+
+<div class="callout callout-info">
+  <p class="callout-title">CLAUDE.md 加载机制</p>
+  <p>
+    源码中 CLAUDE.md 在每次对话开始时读取并注入到系统提示。
+    目录级 CLAUDE.md 会在 Claude 访问该目录下的文件时自动加载。
+    用户级 CLAUDE.md 对所有项目生效，适合放通用偏好。
+  </p>
+</div>
+
+<!-- ==================== 第8章 ==================== -->
+<h2 id="s8">第八章：模型选择与参数调优</h2>
+
+<h3>8.1 可用模型</h3>
+<table>
+  <tr><th>模型别名</th><th>完整模型 ID</th><th>特点</th><th>适用场景</th></tr>
+  <tr>
+    <td><code>opus</code></td>
+    <td>claude-opus-4-20250515</td>
+    <td>最强推理能力，速度较慢</td>
+    <td>复杂架构设计、难题攻坚</td>
+  </tr>
+  <tr>
+    <td><code>sonnet</code></td>
+    <td>claude-sonnet-4-20250514</td>
+    <td>能力与速度的平衡</td>
+    <td>日常编码（默认推荐）</td>
+  </tr>
+  <tr>
+    <td><code>haiku</code></td>
+    <td>claude-haiku-4-5-20251001</td>
+    <td>最快速度，成本最低</td>
+    <td>快速问答、简单任务</td>
+  </tr>
+</table>
+
+<h3>8.2 模型选择方式</h3>
+<pre><button class="copy-btn" onclick="copyCode(this)">复制</button><code class="language-bash"># 命令行参数
+claude --model opus
+
+# 在对话中切换（斜杠命令）
+/model opus
+
+# settings.json 全局默认
+{
+  "model": "claude-sonnet-4-20250514"
+}
+
+# 环境变量
+export CLAUDE_CODE_MODEL="opus"</code></pre>
+
+<h3>8.3 模型别名系统（源码解析）</h3>
+<p>源码 <code>src/utils/model/model.ts</code> 中定义了模型别名映射：</p>
+<table>
+  <tr><th>别名</th><th>映射到</th></tr>
+  <tr><td><code>opus</code></td><td>claude-opus-4 最新版本</td></tr>
+  <tr><td><code>sonnet</code></td><td>claude-sonnet-4 最新版本</td></tr>
+  <tr><td><code>haiku</code></td><td>claude-haiku-4-5 最新版本</td></tr>
+  <tr><td><code>opusplan</code></td><td>opus（仅 plan 模式使用）</td></tr>
+</table>
+
+<h3>8.4 Thinking 模式（深度思考）</h3>
+<p>
+  Claude Code 默认启用 extended thinking（扩展思考），让模型在回答前进行更深入的推理。
+  这对于复杂代码任务非常重要。
+</p>
+<pre><button class="copy-btn" onclick="copyCode(this)">复制</button><code class="language-json"># 控制思考预算（token 数）
+# 在 settings.json 或环境变量中设置
+{
+  "thinkingBudgetTokens": 10000   // 增加思考深度
+}</code></pre>
+
+<h3>8.5 Extended Context（扩展上下文）</h3>
+<p>
+  默认上下文窗口为 200K tokens。通过扩展上下文可以达到 1M tokens，
+  适合超大型代码库。
+</p>
+<pre><button class="copy-btn" onclick="copyCode(this)">复制</button><code class="language-bash"># 启用扩展上下文（1M tokens）
+# 在对话中使用斜杠命令
+/extended-context</code></pre>
+
+<div class="callout callout-warning">
+  <p class="callout-title">扩展上下文成本</p>
+  <p>
+    1M tokens 上下文会显著增加 API 调用成本。
+    仅在处理超大型代码库或需要同时理解多个大文件时使用。
+  </p>
+</div>
+
+<h3>8.6 Prompt Caching（提示缓存）</h3>
+<p>
+  源码中 Claude Code 默认启用 Anthropic 的 prompt caching 功能，
+  通过缓存不变的系统提示和工具定义来降低成本。
+  源码中设置了 <code>anthropic-beta: prompt-caching-2024-07-31</code> 头。
+</p>
+
+<h3>8.7 小模型配置</h3>
+<p>
+  Claude Code 在某些轻量任务（如文件搜索、简单分类）中使用小模型以节省成本。
+  可通过 <code>smallModel</code> 配置：
+</p>
+<pre><button class="copy-btn" onclick="copyCode(this)">复制</button><code class="language-json">// settings.json
+{
+  "smallModel": "claude-haiku-4-5-20251001"
+}</code></pre>
+
+<!-- ==================== 第9章 ==================== -->
+<h2 id="s9">第九章：权限模式与安全配置</h2>
+
+<h3>9.1 权限模式概览</h3>
+<table>
+  <tr><th>模式</th><th>行为</th><th>启动方式</th><th>适用场景</th></tr>
+  <tr>
+    <td><span class="badge badge-blue">Default</span></td>
+    <td>每个敏感操作都需要用户确认</td>
+    <td><code>claude</code></td>
+    <td>日常开发（最安全）</td>
+  </tr>
+  <tr>
+    <td><span class="badge badge-green">Auto-accept edits</span></td>
+    <td>自动接受文件编辑，其他操作仍需确认</td>
+    <td>在对话中选择</td>
+    <td>信任 Claude 的编辑能力</td>
+  </tr>
+  <tr>
+    <td><span class="badge badge-purple">Plan</span></td>
+    <td>先规划再执行，需批准计划后才动手</td>
+    <td><code>claude --plan</code></td>
+    <td>复杂任务，需要先理解再动手</td>
+  </tr>
+  <tr>
+    <td><span class="badge badge-red">Bypass</span></td>
+    <td>跳过所有权限检查</td>
+    <td><code>--dangerously-skip-permissions</code></td>
+    <td>CI/CD、自动化脚本（危险）</td>
+  </tr>
+</table>
+
+<h3>9.2 权限确认机制</h3>
+<p>
+  在默认模式下，Claude Code 的以下操作需要用户确认：
+</p>
+<ul>
+  <li><strong>Write</strong>：写入或修改文件</li>
+  <li><strong>Bash</strong>：执行 shell 命令</li>
+  <li><strong>WebFetch</strong>：抓取外部网页</li>
+  <li><strong>MCP 工具</strong>：调用外部工具</li>
+</ul>
+<p>
+  <strong>Read</strong>（读取文件）和 <strong>Grep/Glob</strong>（搜索）不需要确认。
+</p>
+
+<h3>9.3 自定义权限白名单</h3>
+<pre><button class="copy-btn" onclick="copyCode(this)">复制</button><code class="language-json">// ~/.claude/settings.json
+{
+  "permissions": {
+    "allow": [
+      "Bash(git *)",           // 允许所有 git 命令
+      "Bash(npm run *)",       // 允许 npm 脚本
+      "Bash(npx vitest *)",    // 允许测试
+      "Read",                  // 允许读取（默认就是允许的）
+      "Write(src/**)",         // 允许写入 src 目录
+      "mcp__github__*"         // 允许 GitHub MCP 所有操作
+    ],
+    "deny": [
+      "Bash(rm -rf /)",        // 禁止危险删除
+      "Bash(sudo *)",          // 禁止 sudo
+      "Write(.env*)",          // 禁止修改环境变量文件
+      "Write(**/secret*)",     // 禁止写入敏感文件
+      "Read(**/.ssh/**)"       // 禁止读取 SSH 密钥
+    ]
+  }
+}</code></pre>
+
+<h3>9.4 CI/CD 场景配置</h3>
+<pre><button class="copy-btn" onclick="copyCode(this)">复制</button><code class="language-bash"># GitHub Actions 示例
+- name: Run Claude Code
+  env:
+    ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+  run: |
+    claude -p "Run the test suite and fix any failing tests" \
+      --dangerously-skip-permissions \
+      --max-turns 20 \
+      --output-format json</code></pre>
+
+<div class="callout callout-danger">
+  <p class="callout-title">安全警告</p>
+  <p>
+    <code>--dangerously-skip-permissions</code> 会跳过所有安全检查。
+    仅在受控环境（CI/CD、Docker 容器）中使用，且确保 API Key 权限最小化。
+    源码中此参数名本身就在提醒你：这很危险。
+  </p>
+</div>
+
+<!-- ==================== 第10章 ==================== -->
+<h2 id="s10">第十章：MCP 服务器集成</h2>
+
+<h3>10.1 什么是 MCP？</h3>
+<p>
+  <strong>MCP（Model Context Protocol）</strong> 是 Anthropic 推出的开放协议，
+  允许 Claude Code 通过标准化接口连接外部工具和服务。
+  Claude Code 既是 MCP 客户端（调用外部工具），也支持作为 MCP 服务器（被其他工具调用）。
+</p>
+
+<h3>10.2 配置 MCP 服务器</h3>
+<pre><button class="copy-btn" onclick="copyCode(this)">复制</button><code class="language-json">// ~/.claude/settings.json 或 .claude/settings.json
+{
+  "mcpServers": {
+    // 本地命令启动的 MCP 服务器
+    "filesystem": {
+      "command": "npx",
+      "args": ["-y", "@anthropic-ai/mcp-server-filesystem", "/path/to/dir"]
+    },
+
+    // 带环境变量的 MCP 服务器
+    "github": {
+      "command": "npx",
+      "args": ["-y", "@anthropic-ai/mcp-server-github"],
+      "env": {
+        "GITHUB_TOKEN": "ghp_xxxxx"
+      }
+    },
+
+    // SSE 连接的远程 MCP 服务器
+    "remote-api": {
+      "url": "https://api.example.com/mcp",
+      "headers": {
+        "Authorization": "Bearer your-token"
+      }
+    }
+  }
+}</code></pre>
+
+<h3>10.3 常用 MCP 服务器</h3>
+<table>
+  <tr><th>服务器</th><th>功能</th><th>安装命令</th></tr>
+  <tr><td>Filesystem</td><td>安全文件系统访问</td><td><code>npx @anthropic-ai/mcp-server-filesystem</code></td></tr>
+  <tr><td>GitHub</td><td>GitHub API 操作</td><td><code>npx @anthropic-ai/mcp-server-github</code></td></tr>
+  <tr><td>PostgreSQL</td><td>数据库查询</td><td><code>npx @anthropic-ai/mcp-server-postgres</code></td></tr>
+  <tr><td>Puppeteer</td><td>浏览器自动化</td><td><code>npx @anthropic-ai/mcp-server-puppeteer</code></td></tr>
+  <tr><td>Memory</td><td>持久化知识图谱</td><td><code>npx @anthropic-ai/mcp-server-memory</code></td></tr>
+  <tr><td>Sentry</td><td>错误追踪</td><td><code>npx @anthropic-ai/mcp-server-sentry</code></td></tr>
+</table>
+
+<h3>10.4 在对话中使用 MCP 工具</h3>
+<p>
+  MCP 服务器启动后，其提供的工具会出现在 Claude Code 的工具列表中。
+  工具名称格式为 <code>mcp__服务器名__工具名</code>。
+</p>
+<pre><button class="copy-btn" onclick="copyCode(this)">复制</button><code class="language-bash"># 示例：配置了 GitHub MCP 后，可以直接说：
+"创建一个 issue，标题是 'Fix login bug'"
+"查看最近的 PR 列表"
+"搜索 closed 状态的 issue"
+
+# Claude 会自动调用 mcp__github__create_issue、
+# mcp__github__list_pull_requests 等工具</code></pre>
+
+<h3>10.5 MCP 工具权限控制</h3>
+<pre><button class="copy-btn" onclick="copyCode(this)">复制</button><code class="language-json">// settings.json
+{
+  "permissions": {
+    "allow": [
+      "mcp__github__list_*",          // 允许所有 GitHub 列表查询
+      "mcp__github__create_issue",    // 允许创建 issue
+      "mcp__postgres__query"          // 允许数据库查询
+    ],
+    "deny": [
+      "mcp__github__delete_*",        // 禁止删除操作
+      "mcp__postgres__execute"        // 禁止数据库写入
+    ]
+  }
+}</code></pre>
+
+<div class="callout callout-success">
+  <p class="callout-title">源码中的 MCP 实现</p>
+  <p>
+    源码中 MCP 客户端实现在 <code>src/mcp/</code> 目录下，
+    使用 <code>@modelcontextprotocol/sdk</code> 依赖。
+    Claude Code 支持 stdio 和 SSE 两种传输方式。
+    工具调用通过 <code>callTool</code> 方法完成，结果会显示在对话中。
+  </p>
+</div>
+
+<!-- ==================== 第11章 ==================== -->
+<h2 id="s11">第十一章：自定义 Agent / Skills / Hooks</h2>
+
+<h3>11.1 自定义 Agent（子代理）</h3>
+<p>
+  你可以在 <code>.claude/agents/</code> 目录下创建自定义 Agent 定义文件，
+  它们会出现在 Claude Code 的 <code>/agent</code> 斜杠命令中。
+</p>
+<pre><button class="copy-btn" onclick="copyCode(this)">复制</button><code># .claude/agents/code-reviewer.md
+---
+name: code-reviewer
+description: 专门做代码审查的 Agent
+tools:
+  - Read
+  - Grep
+  - Glob
+---
+
+你是一个专业的代码审查专家。请审查给定的代码变更，关注：
+1. 代码正确性和潜在 Bug
+2. 安全漏洞（SQL注入、XSS、命令注入）
+3. 性能问题
+4. 代码可维护性
+5. 命名规范
+
+输出格式：
+- 每个问题一行，包含文件名和行号
+- 按严重程度排序（Critical &gt; Warning &gt; Info）</code></pre>
+
+<h3>11.2 Skills（技能）</h3>
+<p>
+  Skills 是可复用的任务模板，通过斜杠命令调用。
+  Claude Code 内置了大量 Skills，你也可以创建自定义 Skills。
+</p>
+<pre><button class="copy-btn" onclick="copyCode(this)">复制</button><code class="language-bash"># 使用内置 Skill
+/bug          # 报告 Bug
+/init         # 初始化项目配置
+/pr           # 创建 Pull Request
+
+# Skill 文件结构
+.claude/skills/
+  my-skill.md      # Skill 定义文件</code></pre>
+
+<h3>11.3 Hooks（钩子）</h3>
+<p>
+  Hooks 允许你在特定事件发生时执行自定义命令。
+  配置在 <code>settings.json</code> 的 <code>hooks</code> 字段中。
+</p>
+<pre><button class="copy-btn" onclick="copyCode(this)">复制</button><code class="language-json">// settings.json
+{
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Write",
+        "command": "echo 'File being modified: $TOOL_INPUT' &gt;&gt; /tmp/audit.log"
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Bash",
+        "command": "notify-send 'Claude Code' 'Command completed'"
+      }
+    ],
+    "Stop": [
+      {
+        "command": "say 'Task completed'"
+      }
+    ]
+  }
+}</code></pre>
+
+<h4>可用 Hook 事件</h4>
+<table>
+  <tr><th>事件</th><th>触发时机</th><th>可用变量</th></tr>
+  <tr><td><code>PreToolUse</code></td><td>工具调用前</td><td><code>TOOL_NAME</code>、<code>TOOL_INPUT</code></td></tr>
+  <tr><td><code>PostToolUse</code></td><td>工具调用后</td><td><code>TOOL_NAME</code>、<code>TOOL_OUTPUT</code></td></tr>
+  <tr><td><code>Notification</code></td><td>收到通知时</td><td><code>NOTIFICATION_MESSAGE</code></td></tr>
+  <tr><td><code>Stop</code></td><td>对话结束时</td><td>&mdash;</td></tr>
+  <tr><td><code>SubagentStop</code></td><td>子代理完成时</td><td>&mdash;</td></tr>
+</table>
+
+<!-- ==================== 第12章 ==================== -->
+<h2 id="s12">第十二章：多智能体协作与 Agent Teams</h2>
+
+<h3>12.1 多智能体架构</h3>
+<p>
+  Claude Code 支持多智能体协作，源码中称为 <strong>Coordinator</strong> 模式。
+  一个主 Agent（协调者）可以分派任务给多个子 Agent（执行者）并行或串行执行。
+</p>
+
+<h3>12.2 Agent Teams</h3>
+<p>
+  通过 <code>TeamCreate</code> 创建团队，使用 <code>Agent</code> 工具分派成员。
+  团队共享一个任务列表（TaskList），成员之间通过 <code>SendMessage</code> 通信。
+</p>
+<pre><button class="copy-btn" onclick="copyCode(this)">复制</button><code class="language-bash"># 在对话中创建团队（示例）
+"创建一个团队来重构认证模块"
+
+# Claude 会：
+# 1. 用 TeamCreate 创建团队和任务列表
+# 2. 用 TaskCreate 创建任务
+# 3. 用 Agent 分派成员
+# 4. 成员通过 TaskUpdate 更新进度
+# 5. 完成后用 SendMessage 关闭成员</code></pre>
+
+<h3>12.3 Worktree 隔离</h3>
+<p>
+  并行任务使用 Git Worktree 隔离工作空间，避免文件冲突。
+  源码中 <code>src/utils/swarm/</code> 目录实现了完整的分布式执行架构。
+</p>
+<pre><button class="copy-btn" onclick="copyCode(this)">复制</button><code class="language-bash"># Worktree 工作流
+.claude/worktrees/
+  task-1/     # 任务1的工作树（独立分支）
+  task-2/     # 任务2的工作树（独立分支）
+
+# 完成后 squash 合并回主分支</code></pre>
+
+<h3>12.4 Coordinator 模式（源码解析）</h3>
+<p>源码 <code>src/coordinator/coordinatorMode.ts</code> 中的 Coordinator 模式：</p>
+<ul>
+  <li>通过 <code>CLAUDE_CODE_COORDINATOR_MODE=1</code> 环境变量激活</li>
+  <li>主 Agent 充当协调者，不直接执行任务</li>
+  <li>子 Agent 使用精简工具集（<code>CLAUDE_CODE_SIMPLE=1</code>）</li>
+  <li>支持 tmux 窗格并行显示多个 Agent 状态</li>
+  <li>完成后通过 <code>SendMessage</code> 汇报结果</li>
+</ul>
+
+<div class="callout callout-info">
+  <p class="callout-title">何时使用多智能体？</p>
+  <p>
+    适合大型重构、多文件并行修改、前端+后端同时开发等场景。
+    简单任务不建议使用 — 协调开销可能超过收益。
+    源码中建议仅在"无依赖 + 无文件重叠"时使用并行路径。
+  </p>
+</div>
+
+<!-- ==================== 第13章 ==================== -->
+<h2 id="s13">第十三章：Plan 模式与 Worktree 工作流</h2>
+
+<h3>13.1 Plan 模式</h3>
+<p>
+  Plan 模式让 Claude 在动手前先制定详细计划，用户审批后才执行。
+  适合复杂任务，防止 Claude 偏离方向。
+</p>
+<pre><button class="copy-btn" onclick="copyCode(this)">复制</button><code class="language-bash"># 启动 Plan 模式
+claude --plan
+
+# 在对话中切换
+/plan</code></pre>
+
+<p>Plan 模式的工作流：</p>
+<div class="flow">
+  <div class="flow-step">需求描述</div><span class="flow-arrow">&rarr;</span>
+  <div class="flow-step">Claude 分析代码库</div><span class="flow-arrow">&rarr;</span>
+  <div class="flow-step">输出实现计划</div><span class="flow-arrow">&rarr;</span>
+  <div class="flow-step">用户审批</div><span class="flow-arrow">&rarr;</span>
+  <div class="flow-step">执行实现</div>
+</div>
+
+<h3>13.2 自动 Plan（Opus Plan）</h3>
+<p>
+  源码中有 <code>opusplan</code> 模型别名，专门用于 Plan 模式。
+  系统会在 Plan 阶段自动使用 Opus 模型（最强推理能力），
+  执行阶段切换回 Sonnet（更快速度），实现成本与质量的最优平衡。
+</p>
+
+<h3>13.3 Worktree 工作流</h3>
+<p>
+  Git Worktree 允许在同一仓库中同时检出多个分支到不同目录。
+  Claude Code 利用 Worktree 实现任务隔离：
+</p>
+<pre><button class="copy-btn" onclick="copyCode(this)">复制</button><code class="language-bash"># Claude Code 自动管理的 Worktree 结构
+.claude/worktrees/
+  feature-auth/      # 在独立分支上工作
+  feature-api/       # 另一个独立分支
+
+# Worktree 操作
+git worktree list                    # 查看所有 worktree
+git worktree add .claude/worktrees/task-1 -b task-1  # 创建
+git worktree remove .claude/worktrees/task-1          # 清理</code></pre>
+
+<div class="callout callout-success">
+  <p class="callout-title">Worktree 最佳实践</p>
+  <p>
+    Worktree 适合并行开发无依赖的任务。如果有文件重叠（两个任务修改同一文件），
+    源码中建议使用串行路径（在主分支直接工作）。
+    并行任务完成后，使用 squash merge 合并回主分支。
+  </p>
+</div>
+
+<!-- ==================== 第14章 ==================== -->
+<h2 id="s14">第十四章：IDE 集成</h2>
+
+<h3>14.1 VS Code 集成</h3>
+<p>
+  Claude Code 提供官方 VS Code 扩展，可以在编辑器中直接使用。
+</p>
+<div class="step">
+  <div class="step-title"><span class="step-number">1</span>安装 VS Code 扩展</div>
+  <p>在扩展市场搜索 "Claude Code" 并安装</p>
+</div>
+<div class="step">
+  <div class="step-title"><span class="step-number">2</span>打开命令面板</div>
+  <p>按 Ctrl+Shift+P，搜索 "Claude Code: Open"</p>
+</div>
+<div class="step">
+  <div class="step-title"><span class="step-number">3</span>完成认证</div>
+  <p>首次使用需要完成认证（与 CLI 相同的认证流程）</p>
+</div>
+<div class="step">
+  <div class="step-title"><span class="step-number">4</span>开始对话</div>
+  <p>在侧边栏的 Claude Code 面板中开始对话</p>
+</div>
+
+<p>VS Code 集成额外功能：</p>
+<ul>
+  <li>选中代码后右键发送给 Claude 分析</li>
+  <li>直接在编辑器中查看和接受代码修改</li>
+  <li>Terminal 集成（在 VS Code 终端中直接运行 <code>claude</code>）</li>
+  <li>文件上下文自动感知</li>
+</ul>
+
+<h3>14.2 JetBrains 集成</h3>
+<p>
+  Claude Code 也支持 JetBrains IDE（IntelliJ、PyCharm、WebStorm 等），
+  通过终端工具窗口使用。
+</p>
+<div class="step">
+  <div class="step-title"><span class="step-number">1</span>打开终端</div>
+  <p>在 JetBrains 终端中运行 <code>claude</code></p>
+</div>
+<div class="step">
+  <div class="step-title"><span class="step-number">2</span>自动检测环境</div>
+  <p>Claude Code 会自动检测 JetBrains 环境</p>
+</div>
+<div class="step">
+  <div class="step-title"><span class="step-number">3</span>文件跳转</div>
+  <p>支持直接打开文件跳转（文件路径可点击）</p>
+</div>
+
+<h3>14.3 源码中的 IDE 检测</h3>
+<p>
+  源码中通过环境变量检测运行环境：
+</p>
+<table>
+  <tr><th>变量</th><th>含义</th></tr>
+  <tr><td><code>TERM_PROGRAM</code></td><td>终端类型（vscode = VS Code 集成终端）</td></tr>
+  <tr><td><code>JETBRAINS_IDE</code></td><td>JetBrains IDE 标识</td></tr>
+  <tr><td><code>CLAUDE_CODE_ENTRYPOINT</code></td><td>入口类型（claude-desktop = 桌面应用）</td></tr>
+</table>
+
+<!-- ==================== 第15章 ==================== -->
+<h2 id="s15">第十五章：高级场景与故障排除</h2>
+
+<h3>15.1 常用斜杠命令速查</h3>
+<table>
+  <tr><th>命令</th><th>功能</th></tr>
+  <tr><td><code>/help</code></td><td>显示帮助信息</td></tr>
+  <tr><td><code>/init</code></td><td>初始化项目 CLAUDE.md</td></tr>
+  <tr><td><code>/bug</code></td><td>报告 Bug</td></tr>
+  <tr><td><code>/clear</code></td><td>清除对话历史</td></tr>
+  <tr><td><code>/compact</code></td><td>压缩对话上下文（节省 tokens）</td></tr>
+  <tr><td><code>/model</code></td><td>切换模型</td></tr>
+  <tr><td><code>/cost</code></td><td>查看当前会话成本</td></tr>
+  <tr><td><code>/permissions</code></td><td>查看/修改权限设置</td></tr>
+  <tr><td><code>/review</code></td><td>代码审查</td></tr>
+  <tr><td><code>/pr</code></td><td>创建 Pull Request</td></tr>
+  <tr><td><code>/memory</code></td><td>编辑 CLAUDE.md 记忆文件</td></tr>
+  <tr><td><code>/plan</code></td><td>进入 Plan 模式</td></tr>
+  <tr><td><code>/terminal-setup</code></td><td>配置终端集成</td></tr>
+  <tr><td><code>/mcp</code></td><td>管理 MCP 服务器</td></tr>
+  <tr><td><code>/doctor</code></td><td>诊断常见问题</td></tr>
+  <tr><td><code>/status</code></td><td>查看系统状态</td></tr>
+</table>
+
+<h3>15.2 重要环境变量完整参考</h3>
+<table>
+  <tr><th>变量</th><th>说明</th></tr>
+  <tr><td><code>ANTHROPIC_API_KEY</code></td><td>Anthropic API 密钥</td></tr>
+  <tr><td><code>ANTHROPIC_BASE_URL</code></td><td>API 基础 URL（覆盖默认端点）</td></tr>
+  <tr><td><code>ANTHROPIC_AUTH_TOKEN</code></td><td>认证令牌（Bearer Token）</td></tr>
+  <tr><td><code>CLAUDE_CODE_USE_BEDROCK</code></td><td>启用 AWS Bedrock 模式</td></tr>
+  <tr><td><code>CLAUDE_CODE_USE_VERTEX</code></td><td>启用 Google Vertex 模式</td></tr>
+  <tr><td><code>CLAUDE_CODE_USE_FOUNDRY</code></td><td>启用 Foundry 模式</td></tr>
+  <tr><td><code>CLAUDE_CODE_MODEL</code></td><td>默认模型</td></tr>
+  <tr><td><code>CLAUDE_CODE_COORDINATOR_MODE</code></td><td>Coordinator 多智能体模式</td></tr>
+  <tr><td><code>CLAUDE_CODE_REMOTE</code></td><td>远程模式（CCR/Bridge）</td></tr>
+  <tr><td><code>CLAUDE_CODE_OAUTH_TOKEN</code></td><td>OAuth 令牌（程序化使用）</td></tr>
+  <tr><td><code>CLAUDE_CODE_OAUTH_REFRESH_TOKEN</code></td><td>OAuth 刷新令牌</td></tr>
+  <tr><td><code>CLAUDE_CODE_OAUTH_SCOPES</code></td><td>OAuth 权限范围</td></tr>
+  <tr><td><code>CLAUDE_CODE_SIMPLE</code></td><td>精简模式（子代理使用）</td></tr>
+  <tr><td><code>CLAUDE_CODE_PROACTIVE</code></td><td>启用主动模式（KAIROS 功能）</td></tr>
+  <tr><td><code>CLAUDE_CODE_API_KEY_FILE_DESCRIPTOR</code></td><td>从文件描述符读取 API Key</td></tr>
+  <tr><td><code>CLAUDE_CODE_DISABLE_CLAUDE_MDS</code></td><td>禁用 Claude 模型发现服务</td></tr>
+  <tr><td><code>CLAUDE_CODE_SKIP_PROMPT_HISTORY</code></td><td>跳过提示历史加载</td></tr>
+  <tr><td><code>AWS_ACCESS_KEY_ID</code></td><td>AWS 访问密钥（Bedrock）</td></tr>
+  <tr><td><code>AWS_SECRET_ACCESS_KEY</code></td><td>AWS 秘密密钥（Bedrock）</td></tr>
+  <tr><td><code>AWS_REGION</code></td><td>AWS 区域（Bedrock）</td></tr>
+  <tr><td><code>CLOUD_ML_REGION</code></td><td>Google Cloud 区域（Vertex）</td></tr>
+  <tr><td><code>ANTHROPIC_VERTEX_PROJECT_ID</code></td><td>GCP 项目 ID（Vertex）</td></tr>
+  <tr><td><code>GOOGLE_APPLICATION_CREDENTIALS</code></td><td>GCP 服务账号 JSON（Vertex）</td></tr>
+  <tr><td><code>HTTP_PROXY / HTTPS_PROXY</code></td><td>HTTP(S) 代理</td></tr>
+  <tr><td><code>ANTHROPIC_UNIX_SOCKET</code></td><td>Unix 域套接字（SSH 隧道）</td></tr>
+</table>
+
+<h3>15.3 常见问题排查</h3>
+
+<h4>问题 1：连接超时 / 无法连接到 API</h4>
+<pre><button class="copy-btn" onclick="copyCode(this)">复制</button><code class="language-bash"># 检查网络连通性
+curl -I https://api.anthropic.com
+
+# 如果超时，需要配置代理或中转
+export ANTHROPIC_BASE_URL="https://your-proxy.com"
+export ANTHROPIC_API_KEY="your-key"
+
+# 验证中转可用
+curl -H "x-api-key: $ANTHROPIC_API_KEY" \
+     -H "anthropic-version: 2023-06-01" \
+     -H "content-type: application/json" \
+     -d '{"model":"claude-sonnet-4-20250514","max_tokens":10,"messages":[{"role":"user","content":"hi"}]}' \
+     $ANTHROPIC_BASE_URL/v1/messages</code></pre>
+
+<h4>问题 2：认证失败 / Token 过期</h4>
+<pre><button class="copy-btn" onclick="copyCode(this)">复制</button><code class="language-bash"># 重新登录
+claude auth logout
+claude auth login
+
+# 或使用 API Key 模式
+export ANTHROPIC_API_KEY="sk-ant-xxxxx"
+
+# 查看当前认证状态
+claude auth status</code></pre>
+
+<h4>问题 3：权限被拒绝</h4>
+<pre><button class="copy-btn" onclick="copyCode(this)">复制</button><code class="language-bash"># 检查当前权限配置
+claude /permissions
+
+# 临时允许特定操作（在对话中输入）
+# 在权限提示时选择 "Allow" 或 "Allow always"
+
+# 永久允许（settings.json）
+{
+  "permissions": {
+    "allow": ["Bash(npm *)", "Write(src/**)"]
+  }
+}</code></pre>
+
+<h4>问题 4：上下文过长 / 成本过高</h4>
+<pre><button class="copy-btn" onclick="copyCode(this)">复制</button><code class="language-bash"># 压缩上下文
+/compact
+
+# 限制对话轮次
+claude --max-turns 10
+
+# 使用更便宜的模型
+claude --model haiku
+
+# 清除对话重新开始
+/clear</code></pre>
+
+<h4>问题 5：MCP 服务器启动失败</h4>
+<pre><button class="copy-btn" onclick="copyCode(this)">复制</button><code class="language-bash"># 查看 MCP 状态
+/mcp
+
+# 检查 MCP 服务器配置
+cat ~/.claude/settings.json | grep -A 10 mcpServers
+
+# 常见原因：
+# 1. command 路径不正确（使用绝对路径）
+# 2. Node.js 版本不兼容
+# 3. 缺少环境变量（检查 env 字段）
+# 4. 端口冲突（SSE 模式）</code></pre>
+
+<h3>15.4 性能优化建议</h3>
+<div class="card-grid">
+  <div class="card">
+    <h4>使用 Prompt Caching</h4>
+    <p>默认启用，保持 CLAUDE.md 稳定不变可最大化缓存命中率</p>
+  </div>
+  <div class="card">
+    <h4>合理使用 /compact</h4>
+    <p>长对话中定期压缩上下文，减少 token 消耗</p>
+  </div>
+  <div class="card">
+    <h4>精准的 CLAUDE.md</h4>
+    <p>好的 CLAUDE.md 减少反复询问，一次就理解项目上下文</p>
+  </div>
+  <div class="card">
+    <h4>选择合适的模型</h4>
+    <p>简单任务用 Haiku，复杂任务用 Opus，日常用 Sonnet</p>
+  </div>
+  <div class="card">
+    <h4>利用 --max-turns</h4>
+    <p>防止 Claude 无限循环，设置合理的最大轮次</p>
+  </div>
+  <div class="card">
+    <h4>批量操作</h4>
+    <p>一次请求中描述多个相关修改，而非逐个请求</p>
+  </div>
+</div>
+
+<h3>15.5 非交互式使用（自动化场景）</h3>
+<pre><button class="copy-btn" onclick="copyCode(this)">复制</button><code class="language-bash"># 单次执行并输出
+claude -p "列出项目中所有 TODO 注释" --output-format text
+
+# JSON 输出（适合程序处理）
+claude -p "分析这个函数的复杂度" --output-format json
+
+# 流式 JSON（适合实时显示）
+claude -p "重构这个模块" --output-format stream-json
+
+# 管道输入
+cat error.log | claude -p "分析这个错误日志并给出修复建议"
+
+# CI/CD 集成
+claude -p "运行测试并修复失败用例" \
+  --dangerously-skip-permissions \
+  --max-turns 30 \
+  --output-format json \
+  --model sonnet</code></pre>
+
+<h3>15.6 数据隐私与安全</h3>
+<div class="callout callout-warning">
+  <p class="callout-title">数据安全须知</p>
+  <p>
+    1. Claude Code 会将代码内容发送到 Anthropic API 进行处理<br>
+    2. 对话数据可能被 Anthropic 收集用于产品改进（可在设置中关闭）<br>
+    3. 使用 <code>permissions.deny</code> 保护敏感文件（密钥、证书、.env）<br>
+    4. 企业用户建议使用 Bedrock/Vertex 部署，数据不经过 Anthropic<br>
+    5. <code>.gitignore</code> 中列出的文件不会被自动读取，但仍可通过显式路径访问<br>
+    6. 源码中有 <code>CLAUDE_CODE_DISABLE_CLAUDE_MDS</code> 环境变量可禁用模型发现服务
+  </p>
+</div>
+
+<h3>15.7 隐藏功能一览（社区发现）</h3>
+<p>
+  通过源码逆向分析发现的部分隐藏/实验性功能，部分需要特定条件激活：
+</p>
+<table>
+  <tr><th>功能</th><th>激活方式</th><th>说明</th></tr>
+  <tr>
+    <td>BUDDY 宠物系统</td>
+    <td><code>feature('BUDDY')</code></td>
+    <td>18种虚拟宠物，5个稀有度等级，基于用户 ID 确定性生成</td>
+  </tr>
+  <tr>
+    <td>KAIROS 持久助手</td>
+    <td><code>feature('KAIROS')</code> + settings</td>
+    <td>关闭终端后仍运行，自动写日志、整理记忆、做梦</td>
+  </tr>
+  <tr>
+    <td>Coordinator 模式</td>
+    <td><code>CLAUDE_CODE_COORDINATOR_MODE=1</code></td>
+    <td>多智能体协调，自动分派任务给子 Agent</td>
+  </tr>
+  <tr>
+    <td>Bridge 远程控制</td>
+    <td><code>CLAUDE_CODE_REMOTE</code></td>
+    <td>允许远程控制 Claude Code 会话</td>
+  </tr>
+  <tr>
+    <td>Voice 语音模式</td>
+    <td><code>feature('VOICE')</code></td>
+    <td>语音输入输出交互</td>
+  </tr>
+  <tr>
+    <td>Proactive 主动模式</td>
+    <td><code>CLAUDE_CODE_PROACTIVE=1</code></td>
+    <td>没人说话时 Claude 自己找活干</td>
+  </tr>
+</table>
+
+<br><br>
+<div style="text-align:center; padding:40px; color:var(--gray-600); border-top:2px solid var(--gray-200); margin-top:48px;">
+  <p style="font-size:18px; font-weight:600; color:var(--gray-800);">参考资源</p>
+  <div class="card-grid" style="max-width:700px; margin:20px auto;">
+    <div class="card"><h4>官方文档</h4><p><a href="https://code.claude.com/docs/en/overview" target="_blank">code.claude.com/docs</a></p></div>
+    <div class="card"><h4>GitHub 仓库</h4><p><a href="https://github.com/anthropics/claude-code" target="_blank">anthropics/claude-code</a></p></div>
+    <div class="card"><h4>泄露源码分析</h4><p>本手册同目录下的 REPORT.html</p></div>
+    <div class="card"><h4>Anthropic API 文档</h4><p><a href="https://docs.anthropic.com" target="_blank">docs.anthropic.com</a></p></div>
+    <div class="card"><h4>MCP 协议规范</h4><p><a href="https://modelcontextprotocol.io" target="_blank">modelcontextprotocol.io</a></p></div>
+    <div class="card"><h4>Discord 社区</h4><p><a href="https://anthropic.com/discord" target="_blank">Claude Developers Discord</a></p></div>
+  </div>
+  <p style="font-size:13px; margin-top:20px;">本手册基于泄露源码逆向分析与官方文档交叉验证编写 &mdash; 2026 年 5 月</p>
+</div>
+
+</div>
+
+<script>
+window.addEventListener('scroll', () => {
+  const h = document.documentElement;
+  const pct = (h.scrollTop / (h.scrollHeight - h.clientHeight)) * 100;
+  document.getElementById('progress-bar').style.width = pct + '%';
+  document.getElementById('back-top').classList.toggle('show', h.scrollTop > 400);
+  document.querySelectorAll('#main h2[id]').forEach(el => {
+    const rect = el.getBoundingClientRect();
+    if (rect.top < 120 && rect.bottom > 0) {
+      document.querySelectorAll('#sidebar nav a').forEach(a => a.classList.remove('active'));
+      const link = document.querySelector('#sidebar nav a[href="#' + el.id + '"]');
+      if (link) link.classList.add('active');
+    }
+  });
+});
+document.getElementById('back-top').innerHTML = '↑';
+document.getElementById('back-top').onclick = () => window.scrollTo({top:0, behavior:'smooth'});
+function copyCode(btn) {
+  const code = btn.parentElement.querySelector('code');
+  navigator.clipboard.writeText(code.textContent).then(() => {
+    btn.textContent = '已复制!';
+    setTimeout(() => btn.textContent = '复制', 2000);
+  });
+}
+</script>
+<script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/highlight.min.js"></script>
+<script>hljs.highlightAll();</script>
+
+</body>
+</html>

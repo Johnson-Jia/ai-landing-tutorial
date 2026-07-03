@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI 自动化测试：方法论与实践 · AI 战略转型方法论</title>
+<link rel="stylesheet" href="../css/style.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/styles/atom-one-dark.min.css">
+</head>
+<body>
+<header class="topbar"><div class="wrap topbar-inner">
+  <a class="brand" href="../index.html"><span class="brand-mark">⚡</span><span>AI 战略转型方法论</span></a>
+  <nav class="topnav"><a href="../index.html">首页</a><a href="../stage0.html">总纲</a><a href="../appendix.html">附录</a></nav>
+</div></header>
+<main class="wrap" style="max-width:940px;padding:32px 24px 64px">
+  <h1>AI 自动化测试：方法论与实践</h1>
+  <p class="subtitle">运行期零 AI、AI 全在编码期——企业级最可信的测试资产生产形态。</p>
+
+  <div class="key-conclusion"><p>这套方案<strong>不是"AI 自动跑测试"</strong>，而是"AI 辅助的测试资产生产流水线"：<strong>录制（Playwright）→ AI 转换（Claude Code + 规范 Skill）→ 人审验证 → 数据驱动执行</strong>。AI 只在第二段（编码期）介入，运行期是确定性的数据驱动框架、零 AI。<strong>"AI 只生成不执行"</strong>这个边界，恰恰规避了 LLM 幻觉导致的"虚假通过"——企业级落地最可信的形态。呼应总纲：<strong>信任但验证</strong>。</p></div>
+
+  <style>
+  #toc{position:fixed;top:84px;left:calc(50% - 702px);width:218px;max-height:calc(100vh - 104px);overflow-y:auto;background:#fff;border:1px solid #e2e8f0;border-radius:10px;padding:14px 16px;margin:0;font-size:13px;box-shadow:0 1px 4px rgba(15,23,42,.06);z-index:50}
+  .toc-title{font-weight:700;color:#1057cb;font-size:14px;margin-bottom:8px}
+  .toc-list{list-style:none;padding-left:0;margin:0}
+  .toc-list li{margin:0}
+  .toc-list a{color:#334155;text-decoration:none;display:block;padding:5px 8px;border-radius:4px;line-height:1.45}
+  .toc-list a:hover{background:#eef4fc}
+  .toc-list a.active{color:#fff;background:#1057cb;font-weight:600}
+  @media (max-width:1440px){#toc{position:static;left:auto;width:auto;max-height:none;overflow:visible;margin:22px 0 28px;background:#f8fafc;box-shadow:none}.toc-list{display:grid;grid-template-columns:1fr 1fr;gap:2px 32px}.toc-list a.active{color:#1057cb;background:#dbeafe}}
+  </style>
+  <nav id="toc" class="toc" aria-label="目录"></nav>
+  <script>
+  document.addEventListener('DOMContentLoaded', function(){
+    var hs = document.querySelectorAll('main h2');
+    var toc = document.getElementById('toc');
+    if(!toc || !hs.length) return;
+    var html = '<div class="toc-title">📑 目录</div><ul class="toc-list">';
+    hs.forEach(function(h, i){
+      if(!h.id) h.id = 'sec' + (i+1);
+      html += '<li><a href="#' + h.id + '">' + h.textContent + '</a></li>';
+    });
+    html += '</ul>';
+    toc.innerHTML = html;
+
+    // scroll spy：高亮当前正在阅读的章节
+    var links = toc.querySelectorAll('a');
+    function spy(){
+      var cur = hs[0];
+      for(var i=0;i<hs.length;i++){
+        if(hs[i].getBoundingClientRect().top <= 140) cur = hs[i];
+      }
+      links.forEach(function(a){
+        a.classList.toggle('active', a.getAttribute('href') === '#'+cur.id);
+      });
+    }
+    window.addEventListener('scroll', spy, {passive:true});
+    spy();
+  });
+  </script>
+
+  <h2>一、为什么是"AI 在编码期，不在运行期"</h2>
+  <p>很多人想象"AI 测试"=<strong>AI 自己打开浏览器跑、自己判断对错</strong>。但企业级落地的真实形态不是这样，原因有三：</p>
+  <ul>
+    <li><strong>运行期要稳定可复现</strong>——CI 每次跑同样用例必须结果一致，不能依赖"每次推理可能不同"的 LLM。</li>
+    <li><strong>LLM 会幻觉</strong>——让 AI 运行时判断"测试通过没"，它可能把失败说成通过（虚假通过），这在 CI 里是灾难。</li>
+    <li><strong>AI 真正的价值在降门槛</strong>——录制 + 生成测试类骨架，让"写一个测试"从小时级降到分钟级；而非替代测试设计本身。</li>
+  </ul>
+  <p>所以务实路线：<strong>AI 生成测试资产（测试类代码 + Excel 用例骨架），框架确定性执行</strong>。生成阶段容忍 AI 的不确定性（反正要人审），执行阶段要 100% 确定（数据驱动）。</p>
+  <div class="danger"><strong>关键边界</strong>：AI 的产物（测试类源码 + Excel 步骤）<strong>必须经人工逐行审查 + 运行验证后</strong>才进入用例库。录制脚本只是"操作流程参考"，<strong>不是</strong>"可直接运行的代码"——这是质量红线。</p></div>
+
+  <h2>二、四段式工作流</h2>
+  <figure style="margin:18px 0;text-align:center">
+    <img src="../images/diagrams/ai-test-workflow.svg" alt="AI 自动化测试四段式工作流：录制→AI转换→人审→数据驱动执行" style="max-width:100%;border-radius:8px">
+  </figure>
+  <p>五步细化（每步标注"谁做"）：</p>
+  <table>
+    <tr><th>步骤</th><th>动作</th><th>输入 → 输出</th><th>谁做</th></tr>
+    <tr><td>① 录制</td><td>Playwright Codegen 录制业务操作</td><td>人操作被测系统 → 原始 Python 脚本</td><td>人</td></tr>
+    <tr><td>② 整理</td><td>标注关键操作、剔除冗余</td><td>原始脚本 → 整理后的脚本</td><td>人</td></tr>
+    <tr><td>③ AI 转换</td><td>Claude Code + 规范 Skill 生成标准测试类</td><td>脚本 + 需求描述 → 测试类（含元数据/动态数据/断言）</td><td><strong>AI</strong></td></tr>
+    <tr><td>④ 编排</td><td>注册 handler，编 Excel 步骤</td><td>测试类 → 可执行用例</td><td>人（Web 编辑器）</td></tr>
+    <tr><td>⑤ 验证</td><td>运行 + 修复 + 确认稳定</td><td>用例 → 稳定资产入库</td><td>人</td></tr>
+  </table>
+  <p>第 ③ 步的 Claude Code 指令示例：</p>
+<pre><code class="language-text">请根据以下 Playwright 录制脚本，生成符合框架规范的测试类：
+
+模块：课程管理
+功能：创建文档类课程
+录制脚本内容：[粘贴录制脚本]
+
+要求：
+- 继承测试基类
+- 使用 @handler_registry.register 装饰器注册（必须带 editor_meta）
+- 使用 test_data 动态生成测试数据（时间戳，避免重复冲突）
+- 优先用框架通用方法（input_text / click_button 等），无法覆盖的写自定义方法
+- 关键业务节点补软断言</code></pre>
+
+  <h2>三、规范即 Prompt（最值得复用的方法论）</h2>
+  <p>这是本方案<strong>最有教学价值</strong>的发现：团队把"测试类编写规范"沉淀成一个 <strong>Claude Code Skill</strong>（一份约 380 行的规范文档作为 Skill 正文），用斜杠命令触发。规范本身就是提示词——<strong>AI 生成质量的稳定性靠"约束规范"而非"自由发挥"</strong>。</p>
+  <div class="tip"><strong>规范即 Prompt 的本质</strong>：你把模板、字段约束、断言时机、等待策略<strong>写死成规范</strong>，AI 就在规范框框里稳定产出；不约束就靠运气。这和总纲阶段 3 的"CLAUDE.md / Skill 沉淀"是同一思想——<strong>把团队规范变成 AI 能读的资产</strong>。</div>
+
+  <h3>3.1 必须遵守的 8 条硬规范</h3>
+  <table>
+    <tr><th>#</th><th>规范</th><th>为什么</th></tr>
+    <tr><td>1</td><td>环境参数预留（<code>ENV_DATA</code>，每参数加注释）</td><td>多环境差异不硬编码，Web 编辑器读注释当标签</td></tr>
+    <tr><td>2</td><td>test_data 动态参数（时间戳 + 缓存）</td><td>重复运行数据不冲突</td></tr>
+    <tr><td>3</td><td>主方法只做调度</td><td>获取环境→缓存→iframe→解析→流程→验证→return</td></tr>
+    <tr><td>4</td><td>add 流程 return 新增数据</td><td>供 Excel <code>_save_as</code> 步骤间传递</td></tr>
+    <tr><td>5</td><td>每步有日志</td><td>失败可追溯</td></tr>
+    <tr><td>6</td><td>每步有注释</td><td>可读性</td></tr>
+    <tr><td>7</td><td>等待策略（减少 <code>time.sleep</code>）</td><td>用 Playwright 内置等待，稳定且快</td></tr>
+    <tr><td>8</td><td>映射表控制类型</td><td>多类型新增用 <code>TYPE_FILES</code> 分发</td></tr>
+  </table>
+
+  <h3>3.2 三套模板（按场景选）</h3>
+  <table>
+    <tr><th>场景</th><th>模板</th><th>特点</th></tr>
+    <tr><td>一个新增有多种业务类型</td><td>模板 A（多类型新增）</td><td>映射表 + 类型分发 + 多子流程</td></tr>
+    <tr><td>单一新增流程</td><td>模板 B（简单新增）</td><td>单流程 + return 创建的名称</td></tr>
+    <tr><td>不新增数据，验证页面功能</td><td>模板 C（页面点检）</td><td>val 路由分发 + 软断言 + 环境数据</td></tr>
+  </table>
+  <p>给 AI 规范的本质：不是让它"自由创作测试"，而是<strong>让它在这三套模板 + 8 条规范里填空</strong>——产出自然符合团队标准。</p>
+
+  <h2>四、元数据驱动可视化（AI 生成 ↔ 非技术人员编辑 闭环）</h2>
+  <p>AI 生成的测试类<strong>必须带 <code>editor_meta</code></strong> 元数据。Web 可视化编辑器通过 <code>handler_registry.get_type_meta()</code> 自动读取元数据渲染表单。这形成了一个闭环：</p>
+  <ul>
+    <li><strong>AI 产出</strong>：结构化代码 + 元数据（字段、标签、下拉选项）</li>
+    <li><strong>运营/测试人员</strong>：在 Web 端拖拽编辑用例（<strong>不碰代码</strong>）</li>
+    <li><strong>二者解耦</strong>：开发写 handler，运营编 Excel，各司其职</li>
+  </ul>
+<pre><code class="language-python"># 每个 handler 注册必须带 editor_meta —— 它是 Web 编辑器渲染表单的"schema"
+@handler_registry.register('addcourse', editor_meta={
+    'label': '创建课程',            # 编辑器下拉里显示的中文名（必填）
+    'fields': ['val', 'val1'],      # 该 handler 用的字段（必填）
+    'field_labels': {               # 字段中文标签（必填）
+        'val': '课程类型',
+        'val1': '文件格式'
+    },
+    'group': '课程管理',            # 分组（必填）
+    'dropdowns': {                  # 固定选项用下拉，没有则不加（可选）
+        'val': ['文档类', '视频类', '音频类'],
+        'val1': ['docx', 'pdf', 'mp4']
+    },
+    'save_as_options': ['course_name'],  # return 值可作变量传递（新增类必填）
+    'custom_key_options': [],        # 自定义键提示，如 ${user.id}
+})
+def create_course(self, data, dict_param, parent=None):
+    ...</code></pre>
+  <div class="tip"><strong>元数据就近维护</strong>：<code>editor_meta</code> 直接写在 handler 代码旁，编辑器自动读取——<strong>无需再到别处手动维护映射表</strong>。这是"代码即配置"的实践。</div>
+
+  <h2>五、动态数据 + 软断言（两个关键技术点）</h2>
+  <h3>5.1 动态数据：把录制时的硬编码改成动态值</h3>
+  <p>录制时填的"测试课程001"会被硬编码，第二次运行就"名称已存在"。规范要求 AI 转换时必须改成动态值：</p>
+<pre><code class="language-python">@property
+def test_data(self):
+    timestamp = datetime.datetime.now().strftime("%Y%m%d%H%M%S")
+    env_data = self.get_env_data(self.ENV_DATA)   # 按环境取差异值
+    return {"name": f"自动化测试_{timestamp}", "category": env_data.get("category", "")}
+
+# 主方法中必须缓存！否则每次访问 test_data 都会生成新时间戳
+cached_data = self.test_data</code></pre>
+  <div class="warn"><strong>诚实说明</strong>：这是"规则化动态"（时间戳 + 环境数据），<strong>不是 LLM 生成测试数据</strong>。时间戳保证唯一性，ENV_DATA 按环境区分——够用、稳定、可复现。AI 生成测试数据（如随机业务用例）目前未落地。</div>
+
+  <h3>5.2 软断言：失败不中断、自动截图</h3>
+  <p>用软断言（<code>assert_pass/assert_fail/assert_info</code>）而非 <code>assert</code>：失败不中断后续步骤、自动截图记录，结果体现在报告里。<strong>核心原则：只在验证结果和条件判断时加断言，操作步骤（点击、填写、保存）不加</strong>——否则报告全是噪音。</p>
+  <table>
+    <tr><th>方法</th><th>场景</th><th>影响通过率</th><th>截图</th></tr>
+    <tr><td><code>assert_pass("描述")</code></td><td>查询验证通过、条件成立</td><td>是（绿色）</td><td>—</td></tr>
+    <tr><td><code>assert_fail("描述","原因")</code></td><td>查询未找到、条件不成立</td><td>是（红色）</td><td>是</td></tr>
+    <tr><td><code>assert_info("描述")</code></td><td>暂无数据、跳过步骤</td><td>否（蓝色）</td><td>是</td></tr>
+  </table>
+<pre><code class="language-python"># ❌ 不要在操作步骤上加断言（噪音）
+add_btn.click()
+self.assertions.assert_pass("点击新增按钮")   # 多余
+
+# ✅ 只在验证/判断时加断言
+loc = iframe.locator(f"xpath=//*[contains(text(),'{name}')]")
+if loc.count() == 0:
+    self.assertions.assert_fail(f"查询验证 - {name}", "未找到")
+else:
+    loc.first.wait_for(state="visible", timeout=10000)
+    self.assertions.assert_pass(f"查询验证通过 - {name}")</code></pre>
+
+  <h2>六、录制 → 框架方法映射 + 7 大避坑</h2>
+  <h3>6.1 录制操作的"翻译字典"</h3>
+  <p>AI 转换时的核心是把 Playwright 录制的原始操作，翻译成框架的标准方法。这张映射表就是翻译依据：</p>
+  <table>
+    <tr><th>录制中的操作</th><th>转换为框架方法</th></tr>
+    <tr><td>点击左侧应用图标</td><td><code>click_app()</code></td></tr>
+    <tr><td>在输入框输入文字</td><td><code>input_text()</code></td></tr>
+    <tr><td>点击按钮</td><td><code>click_button()</code></td></tr>
+    <tr><td>下拉框选择</td><td><code>select_popup()</code></td></tr>
+    <tr><td>点击列表中的操作按钮</td><td><code>click_list_button()</code></td></tr>
+    <tr><td>关闭弹窗/抽屉</td><td><code>click_close_window()</code></td></tr>
+    <tr><td>选择人员/组织</td><td><code>input_button()</code></td></tr>
+    <tr><td>切换顶部 Tab</td><td><code>click_title()</code></td></tr>
+    <tr><td>上传图片 / 文件</td><td><code>upload_image()</code> / <code>import_upload()</code></td></tr>
+    <tr><td>业务特定操作</td><td>自定义方法 + <code>@register</code></td></tr>
+  </table>
+
+  <h3>6.2 录制转测试类 · 7 大避坑</h3>
+  <p>录制生成的脚本是"原始素材"，<strong>直接运行几乎必然出错</strong>。实战中最常见的 7 个坑：</p>
+  <table>
+    <tr><th>坑</th><th>表现</th><th>应对</th></tr>
+    <tr><td>① iframe 多层嵌套</td><td>元素在 iframe 内，录制只记最外层 → "元素不存在"</td><td>始终用 <code>self._get_main_iframe()</code>，嵌套用 <code>content_frame</code> 逐层进</td></tr>
+    <tr><td>② 元素重复</td><td><code>text=确定</code> 匹配多个按钮 → strict mode 报错</td><td>改精确 xpath，用父容器限定范围</td></tr>
+    <tr><td>③ 硬编码参数</td><td>课程名"测试001"写死 → 第二次"名称已存在"</td><td>改 <code>test_data</code> 时间戳动态值</td></tr>
+    <tr><td>④ 缺断言</td><td>创建后没验证 → 失败也显示"通过"</td><td>关键节点补 <code>assert</code>（创建→验证出现、删除→验证消失）</td></tr>
+    <tr><td>⑤ 加载时序</td><td>弹窗内容没渲染完就输入 → 输入丢失</td><td><code>wait_for(state="visible")</code> + 必要时短 sleep</td></tr>
+    <tr><td>⑥ 上传失真</td><td>录制用绝对路径 → 换环境失效</td><td>用框架公共上传方法，文件统一放 <code>Data/</code></td></tr>
+    <tr><td>⑦ <strong>少录制多补充</strong></td><td>录太多冗余操作 → 脚本难维护</td><td><strong>只录核心主流程，逐行审查调整才是主要工作量</strong></td></tr>
+  </table>
+  <div class="key-conclusion" style="margin-top:16px"><p><strong>金句</strong>：录制只是起点，<strong>手动调整才是保证测试类质量的关键</strong>。核心关注六点：iframe 处理、定位器精确性、动态数据、断言补充、等待时序、上传适配。</p></div>
+
+  <h2>七、诚实边界：已实现 vs 规划</h2>
+  <p>为避免把方案包装成"全链路 AI 测试"而失真，逐项核对真实状态：</p>
+  <table>
+    <tr><th>环节</th><th>状态</th><th>说明</th></tr>
+    <tr><td>录制 → AI 生成测试类</td><td><strong style="color:#16a34a">已实现</strong></td><td>Claude Code + 规范 Skill，编码期落地</td></tr>
+    <tr><td>AI 生成测试步骤 JSON</td><td>未独立实现</td><td>步骤由人在 Web 编辑器 / Excel 编写</td></tr>
+    <tr><td>AI 生成测试数据</td><td>未实现</td><td>规则化时间戳（伪动态），非 LLM 生成</td></tr>
+    <tr><td>AI 生成断言</td><td>半实现</td><td>AI 按规范套软断言模板，不做智能推断</td></tr>
+    <tr><td>AI 分析报告/失败/截图</td><td>规划中（P3）</td><td>且是<strong>规则分类</strong>（超时 60% / 可见性 25%…），非 LLM 分析</td></tr>
+    <tr><td>接口自动化 AI</td><td>未发现</td><td>接口用例目前手写硬编码</td></tr>
+  </table>
+  <div class="danger"><strong>重要澄清，避免误导</strong>：测试代码里出现"AI 生成"步骤（如"创建智能体""AI 文生图""AI 陪练对话"），是<strong>在测试被测系统自带的 AI 功能</strong>，<strong>不是</strong>测试框架在用 AI 生成测试。两者完全不同——前者是业务功能测试，后者才是本篇讲的能力。别看到测试代码有"AI"就以为框架用了 AI。</div>
+
+  <h3>7.1 等待策略优先级（稳定性关键）</h3>
+  <p>测试稳定性的关键在"等待"。规范明确优先用 Playwright 内置等待，<code>time.sleep</code> 是最后手段：</p>
+  <table>
+    <tr><th>优先级</th><th>方法</th><th>适用</th></tr>
+    <tr><td>1（首选）</td><td><code>locator.wait_for(state="visible/hidden")</code></td><td>等元素出现/消失</td></tr>
+    <tr><td>2</td><td><code>expect(locator).to_be_visible()</code></td><td>断言式等待</td></tr>
+    <tr><td>3</td><td><code>page.wait_for_load_state("networkidle")</code></td><td>等网络请求完成</td></tr>
+    <tr><td>4</td><td><code>page.wait_for_selector()</code></td><td>等选择器匹配</td></tr>
+    <tr><td>5（最后）</td><td><code>time.sleep()</code></td><td>仅 DOM 无法判断时，<strong>必须加注释说明原因</strong></td></tr>
+  </table>
+
+  <h2>八、动手实践：搭一个最小可运行框架</h2>
+  <div class="tip">📦 <strong>不想手动搭？</strong>本节代码已落地为完整可运行 demo：<code>demos/ai-test-frame/</code>——<code>cd demos/ai-test-frame && python main.py</code> 即可端到端运行（自带被测页面，开箱即跑）。下面逐个文件讲解怎么写。</div>
+  <p>前面讲了方法论，这一节给一套<strong>能跑起来的最小框架骨架</strong>——提炼出通用架构（注册中心 / 软断言 / 基类 / 数据驱动调度 / 变量传递 / 元数据），<strong>去掉所有业务特定的 xpath 和登录</strong>（那些照搬没意义），换成通用定位。照这套骨架，你能为自己的被测系统搭起框架。</p>
+  <div class="tip"><strong>为什么给"最小骨架"而不是一整套成品代码</strong>：每个团队的被测系统不同（UI 结构、登录方式、业务流程各异），任何成品的 xpath 和登录你都用不上。真正可复用的是<strong>架构模式</strong>——这套骨架把模式抽出来，业务特定的部分留给你填。</div>
+
+  <h3>8.1 文件结构</h3>
+<pre><code class="language-text">mini-test-frame/
+├── registry.py          # ① 注册中心（装饰器 + type→handler）
+├── assertions.py        # ② 软断言（失败不中断 + 截图）
+├── base_page.py         # ③ 测试基类（通用操作，通用定位）
+├── runner.py            # ④ 数据驱动调度器（读 Excel + 分发 + ${变量}）
+├── handlers/
+│   └── test_product.py  # ⑤ 一个完整 handler 示例（把 8 规范串起来）
+├── data/
+│   └── 用例.xlsx        # ⑥ Excel 用例
+└── main.py              # ⑦ 执行入口</code></pre>
+
+  <h3>8.2 ① 注册中心</h3>
+  <p>核心模式：<strong>装饰器把方法注册成 Excel 里的一个 type</strong>，调度器按 type 取 handler。完整生产版还会加上延迟加载、自动扫描，这里精简为最小可用版。</p>
+<pre><code class="language-python">from typing import Dict, Optional, Tuple, Callable
+
+class HandlerRegistry:
+    def __init__(self):
+        # type -> (方法名, 函数, 类引用)。存类引用是为了延迟加载时创建实例
+        self._methods: Dict[str, Tuple[str, Callable, type]] = {}
+        self._metas: Dict[str, dict] = {}           # type -> editor_meta（驱动编辑器）
+
+    def register(self, type_name: str, editor_meta: dict = None):
+        """装饰器：把方法注册成 Excel 里的一个 type"""
+        def deco(func):
+            class_name = func.__qualname__.split('.')[0] if '.' in func.__qualname__ else None
+            class_ref = func.__globals__.get(class_name) if class_name else None
+            self._methods[type_name] = (func.__name__, func, class_ref)
+            if editor_meta:
+                self._metas[type_name] = editor_meta
+            return func
+        return deco
+
+    def get(self, type_name: str):
+        """返回 (方法名, 函数, 类引用)，未注册返回 None"""
+        return self._methods.get(type_name)
+
+    def get_meta(self, type_name: str) -> Optional[dict]:
+        return self._metas.get(type_name)
+
+handler_registry = HandlerRegistry()   # 全局单例</code></pre>
+
+  <h3>8.3 ② 软断言</h3>
+  <p>核心：<strong>失败不抛异常、不中断后续步骤，自动截图 + 收集结果</strong>，最后统一进报告。</p>
+<pre><code class="language-python">class AssertionCollector:
+    def __init__(self, page=None):
+        self._results = []
+        self.page = page
+
+    def assert_pass(self, name):
+        self._results.append({"name": name, "status": "PASS"})
+        print(f"  ✅ {name}")
+
+    def assert_fail(self, name, err=""):
+        shot = None
+        if self.page:                      # 失败自动截图
+            try:
+                shot = f"fail_{len(self._results)}.png"
+                self.page.screenshot(path=shot)
+            except Exception:
+                pass
+        self._results.append({"name": f"{name} - {err}", "status": "FAIL", "shot": shot})
+        print(f"  ❌ {name} {err}")
+
+    def assert_info(self, name, info=""):
+        self._results.append({"name": f"{name} - {info}", "status": "INFO"})
+        print(f"  ℹ️ {name} {info}")
+
+    def drain(self):                      # 取走结果（清空，避免用例间污染）
+        r, self._results = self._results, []
+        return r</code></pre>
+
+  <h3>8.4 ③ 测试基类</h3>
+  <p>提供通用操作（input_text / click_button …），<strong>定位用 Playwright 推荐的通用策略</strong>（role / placeholder / text），<strong>不绑死特定 UI 组件的 xpath</strong>——这是本骨架的关键设计（很多现成框架会把定位写死在某个 UI 库的 class 上，换系统就失效）。真实项目里按你的 UI 调整定位方式。</p>
+<pre><code class="language-python">from playwright.sync_api import Page
+from assertions import AssertionCollector
+
+class BasePage:
+    """所有测试类继承它。__init__ 接收 page 复用（不重复开浏览器）。"""
+    def __init__(self, page: Page):
+        self.page = page
+        self.assertions = AssertionCollector(page=page)
+
+    # ===== Excel 里 type=text/button/app... 会调到这些方法 =====
+    # 定位用通用策略；你的系统若不同，替换这些实现即可。
+
+    def input_text(self, data):
+        """data={'key':'标签/占位符','val':'值'}"""
+        self.page.get_by_placeholder(data["key"]).fill(str(data["val"]))
+
+    def click_button(self, data):
+        """data={'key':'按钮文本'}"""
+        self.page.get_by_role("button", name=data["key"]).click()
+
+    def click_app(self, data):
+        """data={'key':'菜单/应用名'}"""
+        self.page.get_by_text(data["key"]).first.click()
+
+    def select_popup(self, data):
+        """data={'key':'下拉标签','val':'选项'}"""
+        self.page.get_by_label(data["key"]).click()
+        self.page.get_by_role("option", name=data["val"]).click()</code></pre>
+
+  <h3>8.5 ④ 数据驱动调度器</h3>
+  <p>核心循环：<strong>读 Excel 逐行 → running 开关 → 按 type 路由（基础操作走字典、模块操作走注册中心）→ <code>${变量}</code> 解析 → 收集结果</strong>。</p>
+<pre><code class="language-python">import json, re
+import pandas as pd
+from base_page import BasePage
+from registry import handler_registry
+
+class TestRunner:
+    def __init__(self, page, excel_path: str):
+        self.page = page
+        self.base = BasePage(page)             # 基础操作实例
+        self.ctx = {}                          # 跨行变量上下文（_save_as）
+        self._instances = {}                   # 模块操作实例池（延迟加载、复用）
+        self.df = pd.read_excel(excel_path)    # 读 Excel
+
+    # 基础操作 type -> 方法名
+    BASIC = {"text": "input_text", "button": "click_button",
+             "app": "click_app", "selector": "select_popup"}
+
+    def run(self):
+        for i, row in self.df.iterrows():
+            data_json = str(row.get("data_json", "")).strip()
+            running = str(row.get("running", "是")).strip()
+            if not data_json or running == "否":
+                continue                       # 空行 / 关闭的用例跳过
+            print(f"\n=== 用例 第{i+2}行 ===")
+            self._exec_row(json.loads(data_json))
+
+    def _exec_row(self, steps: list):
+        for step in steps:
+            step = self._resolve_vars(step)    # ${变量} 替换
+            t = step["type"]
+            try:
+                if t in self.BASIC:
+                    # 1) 基础操作走字典
+                    handler = getattr(self.base, self.BASIC[t])
+                else:
+                    # 2) 模块操作走注册中心
+                    info = handler_registry.get(t)        # (方法名, 函数, 类引用)
+                    if not info:
+                        self.base.assertions.assert_fail(f"未知 type {t}", "未注册")
+                        continue
+                    name, _, class_ref = info
+                    # 延迟加载：按需创建实例并复用
+                    # 关键：handler 是实例方法，必须先有实例再取绑定方法，否则 self 会错位
+                    if t not in self._instances:
+                        self._instances[t] = class_ref(self.page)
+                    handler = getattr(self._instances[t], name)
+                result = handler(step)
+                if "_save_as" in step and result is not None:
+                    self.ctx[step["_save_as"]] = result   # 保存供后续步骤
+            except Exception as e:
+                self.base.assertions.assert_fail(t, str(e))
+
+    def _resolve_vars(self, step: dict) -> dict:
+        """把 ${name} 替换成 ctx 里的值"""
+        s = dict(step)
+        for k, v in s.items():
+            if isinstance(v, str) and "${" in v:
+                s[k] = re.sub(r"\$\{(\w+)\}",
+                              lambda m: str(self.ctx.get(m.group(1), m.group(0))), v)
+        return s</code></pre>
+
+  <h3>8.6 ⑤ 一个完整 handler 示例（把 8 条规范串起来）</h3>
+  <p>这是最关键的一段——把前面 §3 的 8 条规范<strong>整合成一个完整 handler</strong>，用"新增商品"作为示例业务。</p>
+<pre><code class="language-python">import datetime
+from base_page import BasePage
+from registry import handler_registry
+
+class TestProduct(BasePage):
+    # 规范1: ENV_DATA 环境参数预留（每参数加注释，多环境差异不硬编码）
+    ENV_DATA = {
+        "dev":  {"category": "测试分类A"},   # dev 环境
+        "prod": {"category": "正式分类B"},   # prod 环境
+    }
+
+    def get_env_data(self):
+        env = getattr(self, "_env", "dev")   # 真实项目从配置读 active env
+        return self.ENV_DATA.get(env, self.ENV_DATA["dev"])
+
+    # 规范2: test_data 动态参数（时间戳保证唯一，避免重复运行冲突）
+    @property
+    def test_data(self):
+        ts = datetime.datetime.now().strftime("%Y%m%d%H%M%S")
+        return {"name": f"自动化商品_{ts}", "category": self.get_env_data()["category"]}
+
+    # 规范3+4: 主方法只做调度；add 流程 return 新增数据（供 _save_as）
+    @handler_registry.register("addproduct", editor_meta={   # 元数据驱动编辑器
+        "label": "新增商品", "fields": ["val"],
+        "field_labels": {"val": "商品类型"}, "group": "商品管理",
+        "dropdowns": {"val": ["实物", "虚拟"]},
+        "save_as_options": ["product_name"],
+    })
+    def add_product(self, data, parent=None):
+        cached = self.test_data               # 规范2: 必须缓存！否则每次访问新时间戳
+        ptype = data.get("val", "实物")
+        # 规范5+6: 每步有日志、每步有注释
+        self.click_app({"key": "商品管理"})     # 步骤1: 进入功能页
+        self.click_button({"key": "新增"})      # 步骤2: 新增
+        self.input_text({"key": "商品名称", "val": cached["name"]})  # 步骤3: 填表单
+        self.select_popup({"key": "商品类型", "val": ptype})
+        self.click_button({"key": "保存"})      # 步骤4: 提交
+        self._verify(cached["name"])           # 步骤5: 软断言验证
+        return cached["name"]                  # 供 Excel _save_as 引用
+
+    def _verify(self, name):
+        """验证商品出现在列表（软断言：失败不中断）—— 规范: 只在验证时加断言"""
+        loc = self.page.get_by_text(name)
+        try:
+            loc.first.wait_for(state="visible", timeout=10000)  # 规范7: 用内置等待
+            self.assertions.assert_pass(f"商品创建验证 - {name}")
+        except Exception:
+            self.assertions.assert_fail(f"商品创建验证 - {name}", "列表未找到")</code></pre>
+
+  <h3>8.7 ⑥ Excel 用例格式</h3>
+  <p>两列：<code>data_json</code>（步骤 JSON 数组）+ <code>running</code>（是/否）。注意第 2 行的 <code>_save_as</code> 和第 3 行的 <code>${pname}</code>——<strong>步骤间 / 行间变量传递</strong>。</p>
+<pre><code class="language-text">| data_json                                                                        | running |
+|----------------------------------------------------------------------------------|---------|
+| [{"type":"app","key":"商品管理"}]                                                 | 是      |
+| [{"type":"addproduct","val":"实物","_save_as":"pname"}]                           | 是      |
+| [{"type":"button","key":"查询"},{"type":"text","key":"搜索","val":"${pname}"}]    | 是      |
+| [{"type":"app","key":"订单管理"}]                                                 | 否      |</code></pre>
+
+  <h3>8.8 ⑦ 执行入口</h3>
+  <p>开浏览器 → 登录（占位，替换成你的系统）→ 调度器跑 Excel → 汇总结果。<strong>导入 handlers 即触发 <code>@register</code></strong>（生产版可做成自动扫描，这里显式导入更直观）。</p>
+<pre><code class="language-python">from playwright.sync_api import sync_playwright
+from runner import TestRunner
+import handlers.test_product   # 导入即触发 @register 注册
+# import handlers.test_order   # 更多 handler 模块...
+
+def login(page):
+    """替换成你的系统登录流程"""
+    page.goto("https://your-app.example.com/login")
+    page.get_by_placeholder("账号").fill("test_user")
+    page.get_by_placeholder("密码").fill("test_pass")
+    page.get_by_role("button", name="登录").click()
+    page.wait_for_load_state("networkidle")
+
+with sync_playwright() as p:
+    browser = p.chromium.launch(headless=False)
+    page = browser.new_context().new_page()
+    login(page)
+    runner = TestRunner(page, excel_path="data/用例.xlsx")
+    runner.run()
+    # 汇总断言（真实项目会生成 HTML 报告）
+    results = runner.base.assertions.drain()
+    passed = sum(1 for r in results if r["status"] == "PASS")
+    failed = sum(1 for r in results if r["status"] == "FAIL")
+    print(f"\n📊 汇总: 通过 {passed}, 失败 {failed}")
+    browser.close()</code></pre>
+
+  <h3>8.9 跑起来</h3>
+<pre><code class="language-bash">pip install playwright pandas openpyxl
+playwright install chromium
+# 1. 按上面 7 个文件搭好目录
+# 2. 把 base_page.py 里的定位换成你系统的
+# 3. 把 main.py 的 login() 换成你系统的登录
+# 4. 在 data/用例.xlsx 填步骤
+python main.py</code></pre>
+
+  <h3>8.10 从最小骨架到生产框架（扩展指南）</h3>
+  <p>这套骨架是生产级测试框架的"架构最小集"。要用到生产，按这个表扩展：</p>
+  <table>
+    <tr><th>骨架模块</th><th>生产化要补的</th></tr>
+    <tr><td>注册中心（装饰器 + get）</td><td>延迟加载 + 自动扫描 test_*.py + Web 处理器展示页</td></tr>
+    <tr><td>软断言</td><td>断言结果结构化、按用例分组、HTML 报告渲染</td></tr>
+    <tr><td>测试基类（通用定位）</td><td>你系统的 UI 定位库、iframe 处理、H5 设备模拟、文件上传</td></tr>
+    <tr><td>数据驱动调度器（Excel）</td><td>多文件、选择性执行、HTML 报告生成</td></tr>
+    <tr><td>执行入口</td><td>多环境配置、Web 管理界面、邮件通知</td></tr>
+    <tr><td>handler 示例</td><td>按你业务写更多 handler + editor_meta</td></tr>
+  </table>
+  <div class="key-conclusion" style="margin-top:16px"><p><strong>记住</strong>：这类框架的价值不在具体的 xpath（那些是业务特定的、不可复用），而在<strong>这套架构模式</strong>——数据驱动调度 + 注册中心 + 软断言 + type 路由 + 变量传递 + 元数据驱动编辑器。骨架给你了，业务特定部分（定位、登录、报告、Web 界面）按你的系统填。<strong>AI 的位置不变：录制 → Claude Code 按规范生成 handler → 人审 → 这套骨架执行</strong>。</p></div>
+
+  <h2>九、与教程主线的关系 + 落地清单</h2>
+  <p>这套方案不是孤立的，它印证了教程贯穿的几条主线：</p>
+  <ul>
+    <li><strong>呼应阶段 0</strong>：AI 只生成不执行、人审把关——正是"信任但验证"在测试领域的落地。</li>
+    <li><strong>呼应阶段 3</strong>：规范即 Prompt——把编写规范沉淀成 Skill，是"团队规范资产化"的典型实践。</li>
+    <li><strong>呼应阶段 6</strong>："录制 + AI 生成：人做一遍，AI 看会，批量复制"——四段式工作流就是这句话的展开。</li>
+  </ul>
+  <div class="roles">
+    <div class="role role-leader"><span class="role-tag">Leader</span><p>别被"AI 自动测试"的噱头带偏——务实路线是 AI 生成测试资产 + 框架确定性执行。盯"测试用例生产效率"和"运行稳定性"两个指标。</p></div>
+    <div class="role role-dev"><span class="role-tag">开发者</span><p>把测试类编写规范沉淀成 Skill；用 Claude Code 把录制脚本转标准测试类；逐行人审 + 补断言是质量关键。</p></div>
+    <div class="role role-pm"><span class="role-tag">测试 / 运营</span><p>在 Web 编辑器用元数据驱动表单编 Excel 用例，不碰代码；AI 生成的骨架降低手写门槛。</p></div>
+  </div>
+  <div class="checklist">
+    <div class="checklist-title">📋 AI 自动化测试落地清单</div>
+    <ul>
+      <li>已接受定位：AI 在编码期生成测试资产，运行期是确定性框架（不追求"AI 自动跑"）</li>
+      <li>已搭录制工具（Playwright Codegen / enableRecorder）作为 AI 的喂料源</li>
+      <li>已把测试类编写规范沉淀成 Claude Code Skill（8 规范 + 3 模板 + 断言规范）</li>
+      <li>AI 生成产物必带 editor_meta，驱动 Web 可视化编辑器（人机解耦）</li>
+      <li>动态数据（test_data 时间戳 + ENV_DATA）+ 软断言（只在验证时加）已规范落地</li>
+      <li>AI 产物<strong>必经人审 + 运行验证</strong>才入库（质量红线，规避虚假通过）</li>
+      <li>诚实区分已实现（录制转生成）与规划（AI 生数据 / AI 分析报告），不夸大</li>
+    </ul>
+  </div>
+
+  <div class="pager">
+    <a href="../stage6.html">← 阶段6 沉淀复用</a>
+    <a href="../appendix.html">附录 →</a>
+  </div>
+</main>
+<footer class="foot"><div class="wrap"><p>企业级 AI 战略转型方法论教程 · 作者 Johnson</p></div></footer>
+<script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/highlight.min.js"></script>
+<script>hljs.highlightAll();</script>
+</body>
+</html>

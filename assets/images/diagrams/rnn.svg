@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 580 270" font-family="'PingFang SC','Microsoft YaHei','Segoe UI',system-ui,sans-serif">
+  <defs>
+    <marker id="arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#1057cb"/>
+    </marker>
+    <marker id="arrG" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#64748b"/>
+    </marker>
+  </defs>
+
+  <rect x="6" y="6" width="568" height="258" rx="14" fill="#ffffff" stroke="#1057cb" stroke-width="2"/>
+  <text x="290" y="30" text-anchor="middle" font-size="15" font-weight="700" fill="#0f172a">RNN 循环神经网络（按时间步展开）</text>
+
+  <!-- 初始状态 S₀ -->
+  <text x="34" y="100" text-anchor="middle" font-size="12" font-weight="600" fill="#1057cb">S₀</text>
+  <line x1="34" y1="106" x2="60" y2="120" stroke="#1057cb" stroke-width="1.8" marker-end="url(#arr)"/>
+
+  <!-- 3 个 RNN 单元 -->
+  <rect x="60"  y="90" width="84" height="60" rx="8" fill="#eef4fc" stroke="#1057cb" stroke-width="1.8"/><text x="102" y="125" text-anchor="middle" font-size="12.5" font-weight="600" fill="#0f172a">RNN 单元</text>
+  <rect x="244" y="90" width="84" height="60" rx="8" fill="#eef4fc" stroke="#1057cb" stroke-width="1.8"/><text x="286" y="125" text-anchor="middle" font-size="12.5" font-weight="600" fill="#0f172a">RNN 单元</text>
+  <rect x="428" y="90" width="84" height="60" rx="8" fill="#eef4fc" stroke="#1057cb" stroke-width="1.8"/><text x="470" y="125" text-anchor="middle" font-size="12.5" font-weight="600" fill="#0f172a">RNN 单元</text>
+
+  <!-- 隐藏状态横向传递 -->
+  <line x1="144" y1="120" x2="244" y2="120" stroke="#1057cb" stroke-width="1.8" marker-end="url(#arr)"/>
+  <text x="194" y="112" text-anchor="middle" font-size="11" fill="#1057cb">S₁</text>
+  <text x="194" y="140" text-anchor="middle" font-size="13" fill="#94a3b8">···</text>
+  <line x1="328" y1="120" x2="428" y2="120" stroke="#1057cb" stroke-width="1.8" marker-end="url(#arr)"/>
+  <text x="378" y="112" text-anchor="middle" font-size="11" fill="#1057cb">S₂</text>
+
+  <!-- 最后单元 → Dense -->
+  <line x1="512" y1="120" x2="538" y2="120" stroke="#1057cb" stroke-width="1.8" marker-end="url(#arr)"/>
+  <text x="525" y="112" text-anchor="middle" font-size="11" fill="#1057cb">Sₙ</text>
+  <rect x="538" y="100" width="30" height="40" rx="6" fill="#dbeafe" stroke="#1057cb" stroke-width="1.6"/><text x="553" y="124" text-anchor="middle" font-size="10" fill="#0f172a">输出层</text>
+  <line x1="553" y1="100" x2="553" y2="76" stroke="#1057cb" stroke-width="1.8" marker-end="url(#arr)"/>
+  <text x="553" y="68" text-anchor="middle" font-size="11" fill="#0f172a">输出</text>
+
+  <!-- 输入 X -->
+  <line x1="102" y1="180" x2="102" y2="150" stroke="#64748b" stroke-width="1.6" marker-end="url(#arrG)"/>
+  <text x="102" y="196" text-anchor="middle" font-size="12" fill="#475569">X₀</text>
+  <line x1="286" y1="180" x2="286" y2="150" stroke="#64748b" stroke-width="1.6" marker-end="url(#arrG)"/>
+  <text x="286" y="196" text-anchor="middle" font-size="12" fill="#475569">X₁</text>
+  <line x1="470" y1="180" x2="470" y2="150" stroke="#64748b" stroke-width="1.6" marker-end="url(#arrG)"/>
+  <text x="470" y="196" text-anchor="middle" font-size="12" fill="#475569">Xₙ</text>
+
+  <!-- 时间步 -->
+  <text x="102" y="216" text-anchor="middle" font-size="10.5" fill="#94a3b8">t = 0</text>
+  <text x="286" y="216" text-anchor="middle" font-size="10.5" fill="#94a3b8">t = 1</text>
+  <text x="470" y="216" text-anchor="middle" font-size="10.5" fill="#94a3b8">t = n</text>
+
+  <text x="290" y="248" text-anchor="middle" font-size="12" fill="#0f172a">关键：上一步隐藏状态 S 传入下一步；所有时间步共享同一组权重（三个单元实为同一个）</text>
+</svg>

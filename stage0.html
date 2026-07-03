@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>阶段0 · 总纲：思想转变与AI原理 · AI 战略转型方法论</title>
+<link rel="stylesheet" href="assets/css/style.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/styles/atom-one-dark.min.css">
+</head>
+<body>
+<header class="topbar"><div class="wrap topbar-inner">
+  <a class="brand" href="index.html"><span class="brand-mark">⚡</span><span>AI 战略转型方法论</span></a>
+  <nav class="topnav"><a href="index.html">首页</a><a href="stage0.html">总纲</a><a href="appendix.html">附录</a></nav>
+</div></header>
+<div class="chapter">
+  <aside class="side">
+    <h4>转型阶段</h4>
+    <a href="stage0.html" class="cur">阶段0 总纲：思想+原理</a>
+    <a href="stage1.html">阶段1 战略启动</a>
+    <a href="stage2.html">阶段2 全员赋能</a>
+    <a href="stage3.html">阶段3 基础设施</a>
+    <a href="stage4.html">阶段4 闭环试点</a>
+    <a href="stage5.html">阶段5 推广度量</a>
+    <a href="stage6.html">阶段6 沉淀复用</a>
+    <h4>其他</h4>
+    <a href="index.html">首页</a>
+    <a href="appendix.html">附录</a>
+  </aside>
+  <main class="content">
+    <h1>阶段 0 · 总纲：思想转变与 AI 原理认知</h1>
+    <p class="subtitle">转型的前提是人的转变。先转变思想、拥抱 AI，再懂 AI 的基本原理——这是后续所有阶段的地基。</p>
+
+    <div class="key-conclusion"><p>AI 能提效、能大幅扩展人的能力边界，但 <strong>AI 不是万能的</strong>——最终依赖使用人的能力边界。所以转型的第一步不是上工具，而是<strong>转变思想 + 懂原理</strong>：先拥抱 AI，再理解它的原理，才能顺畅交互、精准下达指令。<strong>人 + AI，人是根本。</strong></p></div>
+
+    <h2>1. 为什么：AI 冲击与人的能力边界</h2>
+    <p>这不是"锦上添花"，而是"不转就出局"。传统软件巨头正被 AI 直接冲击（Salesforce、ServiceNow 等因 AI 颠覆其模式而估值承压）。对研发团队，AI 是<strong>重写生产关系</strong>的变量——先动的人用同样人数产出 2 倍代码。</p>
+    <p>但关键认知是：<strong>AI 扩展的是"会用 AI 的人"的能力边界</strong>。一个懂业务、懂原理、会精准下达指令的人，配上 AI 能放大 10 倍；一个不懂的人，AI 产出再多也用不起来、用不对。<strong>人的能力边界，决定了 AI 产出的上限。</strong></p>
+    <div class="tip"><strong>两个都要避免的极端</strong>：①<strong>抗拒 AI</strong>（觉得是噱头、怕被替代）→ 被时代抛下；②<strong>盲目崇拜 AI</strong>（觉得万能、全盘交付）→ 产出不可控、质量崩塌。正确姿态：<strong>拥抱 + 验证</strong>——信任但验证。</div>
+    <div class="tip"><strong>💡 思考一下</strong>：你的团队里，谁已经在用 AI？谁还在抗拒？差距有多大？半年后这个差距会变成什么？</div>
+    <figure style="margin:20px 0;text-align:center">
+      <img src="assets/images/ai4b/ai-intro.png" alt="AI 导论手绘图：强弱AI、自上而下/自下而上方法、图灵测试、AI 发展时间线" style="max-width:100%;border-radius:8px;border:1px solid var(--border)">
+      <figcaption style="font-size:12px;color:var(--muted);margin-top:6px">AI 导论手绘图（强弱 AI、方法论、图灵测试、历史里程碑）by <a href="https://twitter.com/girlie_mac">@girlie_mac</a> · <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a> · 来源 <a href="https://github.com/microsoft/AI-For-Beginners">微软 AI-For-Beginners</a></figcaption>
+      <div style="margin-top:10px;padding:12px 16px;background:#f1f5f9;border-left:3px solid #1057cb;border-radius:0 6px 6px 0;font-size:13px;line-height:1.85;color:#334155;text-align:left"><strong style="color:#1057cb">📖 图中要点（中英对照）：</strong>Introduction to AI = AI 导论；Strong AI / Weak AI = 强 / 弱人工智能；AGI = 通用人工智能；Top-down Approach = 自上而下（符号推理）、Bottom-up Approach = 自下而上（神经网络）两种实现 AI 的思路；Charles Babbage = 巴贝奇（计算机之父）、Alan Turing = 图灵（提出 Turing Test 图灵测试）；Recent Research = 近年里程碑——2015 图像分类、2016 语音识别、2018 机器翻译、2020 图像描述先后达到人类水平。</div>
+    </figure>
+
+    <h2>2. 转变思想：拥抱 AI（落地步骤）</h2>
+    <p>思想转变不能靠口号，要落到具体行为。研发序列全员的行动准则：</p>
+    <ul>
+      <li><strong>解放思想</strong>：主动思考"这个任务 AI 能怎么做"，而不是默认自己手写。</li>
+      <li><strong>把重复交给 AI</strong>：CRUD、模板代码、文档、测试用例、格式化——凡是重复的，先想 AI。</li>
+      <li><strong>把 AI 当协作者</strong>：它是"不知疲倦但会犯错的资深实习生"——委派任务，但<strong>审查验证</strong>它的产出。</li>
+      <li><strong>接受新分工</strong>：人的价值从"写代码"转向"定义问题、设计架构、审查验证、沉淀知识"。</li>
+    </ul>
+
+    <h2>3. 懂原理：才能精准交互（AI 原理速通）</h2>
+    <p>不懂原理就下达指令，等于瞎指挥。理解这 5 条原理，交互效率天差地别：</p>
+    <figure style="margin:20px 0;text-align:center">
+      <img src="assets/images/ai4b/ai-overview.png" alt="AI 知识全景手绘图：传统AI、神经网络/深度学习、计算机视觉、NLP、遗传算法、伦理" style="max-width:100%;border-radius:8px;border:1px solid var(--border)">
+      <figcaption style="font-size:12px;color:var(--muted);margin-top:6px">AI 全景手绘图 by <a href="https://twitter.com/girlie_mac">@girlie_mac</a> · <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a> · 来源 <a href="https://github.com/microsoft/AI-For-Beginners">微软 AI-For-Beginners</a></figcaption>
+      <div style="margin-top:10px;padding:12px 16px;background:#f1f5f9;border-left:3px solid #1057cb;border-radius:0 6px 6px 0;font-size:13px;line-height:1.85;color:#334155;text-align:left"><strong style="color:#1057cb">📖 图中要点（中英对照）：</strong>AI 全景的几大分支——GOFAI（Good Old-Fashioned AI，传统符号 AI）：知识表示、本体、专家系统、多智能体；Neural Networks / Deep Learning（神经网络 / 深度学习）：计算机视觉（卷积网络 CNN）、GAN / VAE（生成模型）；NLP（自然语言处理）：词向量 Word2Vec、循环网络、Transformer；Genetic Algorithms（遗传算法）；Machine Learning（机器学习）。</div>
+    </figure>
+
+    <h3>3.0 先搞懂：AI 到底是什么</h3>
+    <p>在讲"大模型怎么运作"前，先花 2 分钟搞清楚 AI 的本质。</p>
+    <ul>
+      <li><strong>定义</strong>：AI = 让计算机做"人擅长但无法显式编程"的事（如看照片判断年龄——我们自己也不知道大脑怎么算的）。</li>
+      <li><strong>弱 AI vs 强 AI（AGI）</strong>：当前所有 AI（包括 ChatGPT/Claude/GPT-5）都是<strong>弱 AI</strong>——擅长特定任务但无真正理解/意识。强 AI（AGI）目前只是理论概念。<strong>所以"AI 不是万能的"不是口号，是事实。</strong></li>
+      <li><strong>两大流派</strong>：① Top-down 符号推理（GOFAI，用规则模拟推理——已被神经网络取代）；② Bottom-up 神经网络（模拟大脑结构，从数据学习——当前主流）。大模型属于后者。</li>
+      <li><strong>图灵测试</strong>：如果人分不清对话对面是人还是机器，就算"智能"。但"通过图灵测试"不等于"有智能"——可能是巧妙的模仿。</li>
+    </ul>
+
+    <h3>3.1 大模型本质：预测下一个 token</h3>
+    <p>大模型的底层就是<strong>根据上文预测下一个 token（词元）</strong>。它不是"理解"了你的代码，而是基于海量模式生成最可能的续写。这解释了：为什么它会"一本正经地胡说"（幻觉）——因为生成的是"看起来对"的，不是"验证过对"的。所以<strong>必须验证</strong>。</p>
+    <p>大模型本质上是<strong>神经网络</strong>。下面这张手绘图把"生物神经元 → 人工神经元 → 感知机 → 多层网络/反向传播 → 框架"这条线一次画清，是理解大模型底层结构最快的入口：</p>
+    <figure style="margin:20px 0;text-align:center">
+      <img src="assets/images/ai4b/ai-neuralnetworks.png" alt="神经网络全景手绘图：生物神经元、感知机、激活函数、反向传播、深度学习框架" style="max-width:100%;border-radius:8px;border:1px solid var(--border)">
+      <figcaption style="font-size:12px;color:var(--muted);margin-top:6px">神经网络全景手绘图 by <a href="https://twitter.com/girlie_mac">@girlie_mac</a> · <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a> · 来源 <a href="https://github.com/microsoft/AI-For-Beginners">微软 AI-For-Beginners</a></figcaption>
+      <div style="margin-top:10px;padding:12px 16px;background:#f1f5f9;border-left:3px solid #1057cb;border-radius:0 6px 6px 0;font-size:13px;line-height:1.85;color:#334155;text-align:left"><strong style="color:#1057cb">📖 图中要点（中英对照）：</strong>从生物神经元到深度学习框架的完整脉络——Biological neuron（生物神经元，靠 synapse 突触连接）→ Artificial neuron（人工神经元：y = f(Σxᵢwᵢ)，输入 x 与权重 w 加权求和再经激活函数）→ Perceptron（感知机，1957 年 Rosenblatt，单层网络）→ Multi-layer network（多层网络：input 输入层 / hidden 隐藏层 / output 输出层，用 Backpropagation 反向传播训练）→ Frameworks（框架：TensorFlow、PyTorch、Keras 等）。</div>
+    </figure>
+    <p style="margin-top:10px;font-size:14px;font-weight:600">
+      <a href="assets/ref/大模型与Transformer底层原理报告.html" target="_blank">📖 Transformer 底层原理报告</a>
+      <span style="margin:0 8px;color:#94a3b8">|</span>
+      <a href="assets/ref/大模型完整历史线报告.html" target="_blank">🕓 大模型完整历史线报告</a>
+      <span style="color:#94a3b8;font-weight:400">（深入选读）</span>
+    </p>
+    <p style="margin-top:6px"><a href="https://github.com/microsoft/AI-For-Beginners/tree/master/translations/zh-CN" target="_blank" style="font-size:14px;font-weight:600">🎓 微软 AI-For-Beginners（中文版，12周24课完整 AI 基础课，MIT 开源）→</a><span style="color:#94a3b8;font-weight:400;font-size:13px;margin-left:6px">（想系统学 AI 基础：感知机→CNN→NLP→Transformer，含 PyTorch/TensorFlow 代码实践）</span></p>
+
+    <div style="margin-top:20px;padding:16px 18px;background:var(--bg-soft);border-radius:10px;border:1px solid var(--line)">
+      <p style="font-size:13px;font-weight:700;color:var(--primary);margin:0 0 6px">🎬 视频学习：一小时从函数到 Transformer</p>
+      <p style="font-size:13px;color:var(--text-soft);margin:0 0 12px">七个短视频，从"函数 → 神经网络 → CNN/RNN → Transformer → 大模型全貌"完整搭建直觉。视频来源：B站 up 主 <a href="https://space.bilibili.com/325864133" target="_blank" style="font-weight:600">【飞天闪客】</a></p>
+      <details>
+        <summary style="cursor:pointer;font-size:13px;color:var(--primary);font-weight:600;padding:6px 0">▶ 点击展开视频播放器</summary>
+        <div style="margin-top:8px">
+          <p style="font-size:13px;font-weight:600;margin:8px 0 4px">01 从函数到神经网络</p>
+          <video controls preload="none" width="100%" style="border-radius:8px;border:1px solid var(--line)" src="assets/video/一小时从函数到Transformer/01 从函数到神经网络.mp4"></video>
+          <p style="font-size:13px;font-weight:600;margin:14px 0 4px">02 计算神经网络的参数</p>
+          <video controls preload="none" width="100%" style="border-radius:8px;border:1px solid var(--line)" src="assets/video/一小时从函数到Transformer/02 计算神经网络的参数.mp4"></video>
+          <p style="font-size:13px;font-weight:600;margin:14px 0 4px">03 调教神经网络的方法</p>
+          <video controls preload="none" width="100%" style="border-radius:8px;border:1px solid var(--line)" src="assets/video/一小时从函数到Transformer/03 调教神经网络的方法.mp4"></video>
+          <p style="font-size:13px;font-weight:600;margin:14px 0 4px">04 从矩阵到 CNN</p>
+          <video controls preload="none" width="100%" style="border-radius:8px;border:1px solid var(--line)" src="assets/video/一小时从函数到Transformer/04 从矩阵到 CNN.mp4"></video>
+          <p style="font-size:13px;font-weight:600;margin:14px 0 4px">05 从词嵌入到 RNN</p>
+          <video controls preload="none" width="100%" style="border-radius:8px;border:1px solid var(--line)" src="assets/video/一小时从函数到Transformer/05 从词嵌入到 RNN.mp4"></video>
+          <p style="font-size:13px;font-weight:600;margin:14px 0 4px">06 简单而强大的 Transformer</p>
+          <video controls preload="none" width="100%" style="border-radius:8px;border:1px solid var(--line)" src="assets/video/一小时从函数到Transformer/06 简单而强大的 Transformer.mp4"></video>
+          <p style="font-size:13px;font-weight:600;margin:14px 0 4px">07 速览大模型 100 词</p>
+          <video controls preload="none" width="100%" style="border-radius:8px;border:1px solid var(--line)" src="assets/video/一小时从函数到Transformer/07 速览大模型 100 词.mp4"></video>
+        </div>
+      </details>
+      <p style="margin:14px 0 0"><a href="https://poloclub.github.io/transformer-explainer/" target="_blank" style="font-size:14px;font-weight:600">🖥️ Transformer 交互式可视化模拟 →</a><span style="color:#94a3b8;font-weight:400;font-size:13px;margin-left:6px">（浏览器里实时调参，看注意力怎么算）</span></p>
+    </div>
+
+    <h3>3.2 上下文窗口：1M 是一切用法的约束原点</h3>
+    <p>Claude 的上下文已达 1M tokens（百万级），<strong>虽大但仍会填满——大代码库、长会话、一堆 MCP 工具定义都会撑爆它，填满后性能下降</strong>。本教程几乎所有最佳实践（精简 CLAUDE.md、按需加载 Skill、干净会话、CLI 优于 MCP）都在围绕这一个约束。<strong>上下文仍是稀缺资源，每一段常驻内容都要挣它的一席之地。</strong></p>
+
+    <h3>3.3 Agent = 大模型 + 工具</h3>
+    <p>大模型只能输出文字，无法感知/改变外界（不能读文件、调接口、跑命令）。<strong>Agent = 把大模型和一堆工具组装起来</strong>，让它能感知和改变环境。模型"先思考再行动"的奥秘在<strong>系统提示词</strong>（定义何时调何工具），而非模型训练。</p>
+
+    <h3>3.4 REACT 模式：Agent 怎么循环跑</h3>
+    <p>最广泛的 Agent 运行模式——Thought（思考）→ Action（调工具）→ Observation（看结果）→ 循环 → Final Answer：</p>
+<pre><code class="language-python"># REACT 循环（伪代码）
+while not 完成:
+    thought = 模型思考("基于当前观察，下一步该做什么")
+    action  = 模型选择工具 + 参数
+    observation = 执行工具，拿到结果
+    把 (thought, action, observation) 加回上下文
+return 最终答案</code></pre>
+
+    <h3>3.5 精准下达指令：给上下文、明目标</h3>
+    <p>原理懂了，交互方式就变了。差的指令 vs 好的指令：</p>
+    <ul>
+      <li>❌ "帮我优化一下这个功能"（无上下文、无目标、无验证标准）</li>
+      <li>✅ "这个接口慢 SQL 18秒（附执行计划），目标降到 1 秒内。先分析瓶颈，给我方案，我确认后再改。改完用 EXPLAIN 验证。"（给现状、明目标、定流程、要验证）</li>
+    </ul>
+    <div class="tip"><strong>一句话总结</strong>：像给<strong>聪明的实习生</strong>下指令——给够上下文、说清目标、定好流程、要求验证。模型越强，越需要你定义清楚"做什么、为什么、怎么算对"。</div>
+
+    <h2>4. 角色视角：每个人怎么转变</h2>
+    <div class="roles">
+      <div class="role role-leader"><span class="role-tag">Leader / 管理者</span><p>定调"拥抱 AI"、带头用、推动全员培训、把 AI 掌握度纳入导向、组织规范沉淀。你的态度决定团队转变速度。</p></div>
+      <div class="role role-dev"><span class="role-tag">开发者</span><p>主动学原理、上手 Claude Code、把重复交 AI、专注架构与审查。这是你能力跃迁的最大杠杆。</p></div>
+      <div class="role role-pm"><span class="role-tag">PM / 测试 / 运维</span><p>找自己的 AI 切入点：PM 用 Codex 做原型、测试用<a href="assets/ref/AI自动化测试-方法论与实践.html" target="_blank">录制+AI 生成用例</a>、运维用 AI 分析性能。AI 不只是开发的事。</p></div>
+    </div>
+
+    <h2>5. 真实案例：团队的转变过程</h2>
+    <p>某企业学习平台研发中心（80+ 人）启动 AI 转型时，把<strong>"解放思想，拥抱 AI"</strong>写进全员行动准则，并配套：</p>
+    <ul>
+      <li><strong>动员与培训</strong>：AI 转型动员令 + Claude Code 安装使用培训 + AI 原理认知普及。</li>
+      <li><strong>岗位重构方向</strong>：打破前后端界限，推行"全栈工程师"，未来演进为产品经理/业务架构师/测试架构师/运营架构师四角色。</li>
+      <li><strong>知识沉淀</strong>：建立集中 AI 智能体作为团队知识中心，成员可提问、分享经验，每日生成日报复盘——让个体经验沉淀为组织资产。</li>
+    </ul>
+    <p>结果：3 个月内人均代码产出 +104%，AI 代码占比 76.6%——但前提是<strong>全员先过了"思想转变 + 懂原理"这一关</strong>。</p>
+
+    <h2>6. 常见坑 + 落地清单</h2>
+    <div class="warn"><strong>三个坑</strong>：①<strong>抗拒</strong>（觉得 AI 是噱头）→ 拿一小段时间上手，会发现真香；②<strong>盲目崇拜</strong>（全盘交付不验证）→ 必须审查验证 AI 产出；③<strong>不懂原理乱指挥</strong>（指令模糊）→ 先花 1 小时懂上下文/Agent/REACT 原理，交互效率翻倍。</div>
+    <div class="checklist">
+      <div class="checklist-title">📋 阶段0 落地清单（思想+原理就绪检查）</div>
+      <ul>
+        <li>全员已知晓并认同"AI 扩展人不万能、人是根本"的核心理念</li>
+        <li>Leader 已公开定调"拥抱 AI"并带头使用</li>
+        <li>全员理解 5 条原理（token 预测 / 上下文 1M / Agent / REACT / 精准指令）</li>
+        <li>每个人能区分"差指令"和"好指令"，并能写出带上下文+目标+验证的好指令</li>
+        <li>已建立"信任但验证"的协作习惯（AI 产出必过人工审查）</li>
+      </ul>
+    </div>
+    <p class="muted" style="font-size:13px;margin-top:18px">下一阶段：思想就绪后，进入<strong>阶段1 战略启动</strong>——把"拥抱 AI"变成有目标、有路线图、有组织的正式转型。</p>
+
+    <div class="pager">
+      <a href="index.html">← 返回首页</a>
+      <a href="stage1.html">阶段1 战略启动 →</a>
+    </div>
+  </main>
+</div>
+<footer class="foot"><div class="wrap"><p>企业级 AI 战略转型方法论教程 · 作者 Johnson</p></div></footer>
+<script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/highlight.min.js"></script>
+<script>hljs.highlightAll();</script>
+</body>
+</html>

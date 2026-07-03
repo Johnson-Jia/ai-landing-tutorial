@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title>商品管理 · demo 被测页</title>
+<style>
+  body{font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;max-width:720px;margin:24px auto;padding:0 20px;color:#0f172a}
+  nav{background:#1057cb;color:#fff;padding:12px 20px;border-radius:8px;margin-bottom:20px;font-weight:600}
+  nav a{color:#fff;cursor:pointer;text-decoration:none}
+  button{padding:6px 16px;background:#1057cb;color:#fff;border:none;border-radius:4px;cursor:pointer;margin:4px 4px 4px 0}
+  button.secondary{background:#94a3b8}
+  form{background:#f8fafc;padding:16px;border-radius:8px;border:1px solid #e2e8f0;margin:12px 0}
+  input,select{padding:6px 8px;margin:4px 8px 4px 0;border:1px solid #cbd5e1;border-radius:4px;font-size:14px}
+  ul{list-style:none;padding:0}
+  li{padding:8px 4px;border-bottom:1px solid #e2e8f0}
+  h3{margin-top:24px}
+</style>
+</head>
+<body>
+  <nav><a id="nav-product">商品管理</a></nav>
+
+  <button id="btn-add" type="button">新增</button>
+
+  <form id="form" hidden>
+    <input id="input-name" placeholder="商品名称" autocomplete="off">
+    <select id="select-type" aria-label="商品类型">
+      <option value="">请选择类型</option>
+      <option value="实物">实物</option>
+      <option value="虚拟">虚拟</option>
+    </select>
+    <button id="btn-save" type="button">保存</button>
+    <button id="btn-cancel" type="button" class="secondary">取消</button>
+  </form>
+
+  <h3>商品列表</h3>
+  <ul id="product-list"></ul>
+
+<script>
+  var form = document.getElementById('form');
+  document.getElementById('btn-add').onclick = function(){ form.hidden = false; };
+  document.getElementById('btn-cancel').onclick = function(){ form.hidden = true; };
+  document.getElementById('btn-save').onclick = function(){
+    var name = document.getElementById('input-name').value.trim();
+    var type = document.getElementById('select-type').value;
+    if(!name || !type){ alert('请填写名称并选择类型'); return; }
+    var li = document.createElement('li');
+    li.textContent = name + '（' + type + '）';
+    document.getElementById('product-list').appendChild(li);
+    document.getElementById('input-name').value = '';
+    document.getElementById('select-type').value = '';
+    form.hidden = true;
+  };
+</script>
+</body>
+</html>

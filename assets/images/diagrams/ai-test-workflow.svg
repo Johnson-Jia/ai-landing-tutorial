@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 660 270" font-family="'PingFang SC','Microsoft YaHei','Segoe UI',system-ui,sans-serif">
+  <defs>
+    <marker id="arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#1057cb"/>
+    </marker>
+  </defs>
+
+  <rect x="6" y="6" width="648" height="258" rx="14" fill="#ffffff" stroke="#1057cb" stroke-width="2"/>
+  <text x="330" y="32" text-anchor="middle" font-size="15" font-weight="700" fill="#0f172a">AI 自动化测试 · 四段式资产生产工作流</text>
+
+  <!-- ① 录制（人） -->
+  <rect x="16" y="58" width="140" height="118" rx="9" fill="#f1f5f9" stroke="#64748b" stroke-width="1.6"/>
+  <text x="86" y="82" text-anchor="middle" font-size="14" font-weight="700" fill="#0f172a">① 录制</text>
+  <text x="86" y="104" text-anchor="middle" font-size="12" fill="#334155">Playwright Codegen</text>
+  <text x="86" y="122" text-anchor="middle" font-size="11" fill="#475569">人操作业务流程</text>
+  <text x="86" y="138" text-anchor="middle" font-size="11" fill="#475569">产出原始脚本</text>
+  <rect x="58" y="150" width="56" height="20" rx="10" fill="#64748b"/>
+  <text x="86" y="164" text-anchor="middle" font-size="11" font-weight="600" fill="#fff">人</text>
+
+  <!-- ② AI 转换（AI，高亮） -->
+  <rect x="180" y="58" width="140" height="118" rx="9" fill="#dbeafe" stroke="#1057cb" stroke-width="2"/>
+  <text x="250" y="82" text-anchor="middle" font-size="14" font-weight="700" fill="#0f172a">② AI 转换</text>
+  <text x="250" y="104" text-anchor="middle" font-size="12" fill="#1d4ed8">Claude Code</text>
+  <text x="250" y="122" text-anchor="middle" font-size="11" fill="#1d4ed8">+ 编写规范 Skill</text>
+  <text x="250" y="138" text-anchor="middle" font-size="11" fill="#475569">脚本→标准测试类</text>
+  <rect x="222" y="150" width="56" height="20" rx="10" fill="#1057cb"/>
+  <text x="250" y="164" text-anchor="middle" font-size="11" font-weight="600" fill="#fff">AI</text>
+
+  <!-- ③ 人审验证（人） -->
+  <rect x="344" y="58" width="140" height="118" rx="9" fill="#f1f5f9" stroke="#64748b" stroke-width="1.6"/>
+  <text x="414" y="82" text-anchor="middle" font-size="14" font-weight="700" fill="#0f172a">③ 人审验证</text>
+  <text x="414" y="104" text-anchor="middle" font-size="12" fill="#334155">逐行审查调整</text>
+  <text x="414" y="122" text-anchor="middle" font-size="11" fill="#475569">补断言/修iframe</text>
+  <text x="414" y="138" text-anchor="middle" font-size="11" fill="#475569">运行修复</text>
+  <rect x="386" y="150" width="56" height="20" rx="10" fill="#64748b"/>
+  <text x="414" y="164" text-anchor="middle" font-size="11" font-weight="600" fill="#fff">人</text>
+
+  <!-- ④ 数据驱动执行（框架） -->
+  <rect x="508" y="58" width="140" height="118" rx="9" fill="#fef3c7" stroke="#b45309" stroke-width="1.6"/>
+  <text x="578" y="82" text-anchor="middle" font-size="14" font-weight="700" fill="#0f172a">④ 执行</text>
+  <text x="578" y="104" text-anchor="middle" font-size="12" fill="#92400e">数据驱动框架</text>
+  <text x="578" y="122" text-anchor="middle" font-size="11" fill="#92400e">读 Excel 用例</text>
+  <text x="578" y="138" text-anchor="middle" font-size="11" fill="#92400e">handler 分发</text>
+  <rect x="550" y="150" width="56" height="20" rx="10" fill="#b45309"/>
+  <text x="578" y="164" text-anchor="middle" font-size="11" font-weight="600" fill="#fff">框架</text>
+
+  <!-- 箭头 -->
+  <line x1="158" y1="117" x2="176" y2="117" stroke="#1057cb" stroke-width="2" marker-end="url(#arr)"/>
+  <line x1="322" y1="117" x2="340" y2="117" stroke="#1057cb" stroke-width="2" marker-end="url(#arr)"/>
+  <line x1="486" y1="117" x2="504" y2="117" stroke="#1057cb" stroke-width="2" marker-end="url(#arr)"/>
+
+  <!-- 底部说明 -->
+  <text x="330" y="208" text-anchor="middle" font-size="12.5" fill="#0f172a">AI 只在第 ② 段介入（编码期）；第 ④ 段运行期零 AI、确定性执行</text>
+  <text x="330" y="230" text-anchor="middle" font-size="12" fill="#b45309">→ 规避 LLM 幻觉导致的"虚假通过"，企业级最可信的形态</text>
+  <text x="330" y="252" text-anchor="middle" font-size="11" fill="#64748b">录制只是起点，人审调整 + 框架确定性执行才是质量关键</text>
+</svg>

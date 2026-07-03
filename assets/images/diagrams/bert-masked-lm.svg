@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 520 280" font-family="'PingFang SC','Microsoft YaHei','Segoe UI',system-ui,sans-serif">
+  <defs>
+    <marker id="arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#1057cb"/>
+    </marker>
+  </defs>
+
+  <rect x="6" y="6" width="508" height="268" rx="14" fill="#ffffff" stroke="#1057cb" stroke-width="2"/>
+  <text x="260" y="32" text-anchor="middle" font-size="15" font-weight="700" fill="#0f172a">BERT 掩码语言建模：让模型预测被遮住的词</text>
+
+  <!-- 输入序列外框 -->
+  <text x="42" y="56" font-size="11" fill="#64748b">输入序列（随机遮盖 15% 的词元）</text>
+  <rect x="30" y="62" width="460" height="58" rx="10" fill="none" stroke="#cbd5e1" stroke-width="1.4" stroke-dasharray="5 4"/>
+
+  <!-- 5 个 token 框 -->
+  <rect x="42"  y="70" width="76" height="44" rx="7" fill="#eef4fc" stroke="#1057cb" stroke-width="1.6"/>
+  <text x="80"  y="98" text-anchor="middle" font-size="15" fill="#0f172a">今天</text>
+  <rect x="132" y="70" width="76" height="44" rx="7" fill="#eef4fc" stroke="#1057cb" stroke-width="1.6"/>
+  <text x="170" y="98" text-anchor="middle" font-size="15" fill="#0f172a">天气</text>
+  <!-- [MASK] 高亮 -->
+  <rect x="222" y="70" width="76" height="44" rx="7" fill="#ede9fe" stroke="#7c3aed" stroke-width="2"/>
+  <text x="260" y="98" text-anchor="middle" font-size="15" font-weight="700" fill="#6d28d9">[MASK]</text>
+  <rect x="312" y="70" width="76" height="44" rx="7" fill="#eef4fc" stroke="#1057cb" stroke-width="1.6"/>
+  <text x="350" y="98" text-anchor="middle" font-size="15" fill="#0f172a">适合</text>
+  <rect x="402" y="70" width="76" height="44" rx="7" fill="#eef4fc" stroke="#1057cb" stroke-width="1.6"/>
+  <text x="440" y="98" text-anchor="middle" font-size="15" fill="#0f172a">出游</text>
+
+  <!-- [MASK] → 预测 -->
+  <line x1="260" y1="114" x2="260" y2="138" stroke="#1057cb" stroke-width="1.8" marker-end="url(#arr)"/>
+  <text x="270" y="132" font-size="11" fill="#475569">模型预测</text>
+
+  <!-- 候选预测 -->
+  <rect x="170" y="150" width="64" height="40" rx="7" fill="#fbbf24" stroke="#b45309" stroke-width="1.8"/>
+  <text x="202" y="176" text-anchor="middle" font-size="15" font-weight="700" fill="#7c2d12">很</text>
+  <rect x="250" y="150" width="64" height="40" rx="7" fill="#eef4fc" stroke="#94a3b8" stroke-width="1.4"/>
+  <text x="282" y="176" text-anchor="middle" font-size="15" fill="#475569">真</text>
+  <rect x="330" y="150" width="64" height="40" rx="7" fill="#eef4fc" stroke="#94a3b8" stroke-width="1.4"/>
+  <text x="362" y="176" text-anchor="middle" font-size="15" fill="#475569">最</text>
+  <text x="202" y="206" text-anchor="middle" font-size="10.5" fill="#92400e">↑ 概率最高</text>
+
+  <text x="260" y="244" text-anchor="middle" font-size="12" fill="#475569">训练目标：遮住部分词元，让模型依据上下文（双向）预测被遮的词</text>
+</svg>

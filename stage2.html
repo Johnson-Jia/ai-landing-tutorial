@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>阶段2 · 全员赋能 · AI 战略转型方法论</title>
+<link rel="stylesheet" href="assets/css/style.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/styles/atom-one-dark.min.css">
+</head>
+<body>
+<header class="topbar"><div class="wrap topbar-inner">
+  <a class="brand" href="index.html"><span class="brand-mark">⚡</span><span>AI 战略转型方法论</span></a>
+  <nav class="topnav"><a href="index.html">首页</a><a href="stage0.html">总纲</a><a href="appendix.html">附录</a></nav>
+</div></header>
+<div class="chapter">
+  <aside class="side">
+    <h4>转型阶段</h4>
+    <a href="stage0.html">阶段0 总纲：思想+原理</a>
+    <a href="stage1.html">阶段1 战略启动</a>
+    <a href="stage2.html" class="cur">阶段2 全员赋能</a>
+    <a href="stage3.html">阶段3 基础设施</a>
+    <a href="stage4.html">阶段4 闭环试点</a>
+    <a href="stage5.html">阶段5 推广度量</a>
+    <a href="stage6.html">阶段6 沉淀复用</a>
+    <h4>其他</h4><a href="index.html">首页</a><a href="appendix.html">附录</a>
+  </aside>
+  <main class="content">
+    <h1>阶段 2 · 全员赋能</h1>
+    <p class="subtitle">工具选对、全员会用、规范资产化——让团队整体跨过"会用 AI"的门槛。</p>
+
+    <div class="key-conclusion"><p><strong>选对工具（开发者 Claude Code / 非开发 Codex）+ 全员培训到 100% 覆盖 + 规范资产化（CLAUDE.md/Skills/Hooks 提交 Git）</strong>。工具选错差 2-3 倍产出，培训留死角就推不动，规范不沉淀就各搞各的。三件事做到位，团队才算"被赋能"。</p></div>
+
+    <div style="margin:18px 0;padding:14px 18px;background:#f0f7ff;border:1px solid #bcd9ff;border-radius:10px">
+      <div style="font-weight:700;color:#1057cb;font-size:14px;margin-bottom:8px">🧰 工具速查 <span style="font-weight:400;color:#64748b;font-size:12px">（不想读全文？直接用这些）</span></div>
+      <ul style="margin:0;padding-left:22px;font-size:14px;line-height:1.9;color:#334155">
+        <li><strong>开发工具</strong>：<a href="https://claude.com/claude-code" target="_blank">Claude Code</a>（开发者首选）/ <a href="https://codex.openai.com/" target="_blank">OpenAI Codex</a>（非开发友好）</li>
+        <li><strong>配套手册</strong>：<a href="assets/ref/Claude-Code-完全手册.html">《Claude Code 完全手册》</a>（15 章配置大全，本地自包含）</li>
+        <li><strong>底层模型</strong>：GLM-5.2（国内性价比）/ Claude 5 系列、GPT-5.5（顶配）</li>
+        <li><strong>角色手册</strong>：<a href="assets/ref/角色操作手册.html">开发 / 测试 / 组长 / 产品</a>（各级人员操作手册）</li>
+      </ul>
+    </div>
+
+    <h2>1. 为什么：工具选对差 2-3 倍</h2>
+    <p>"会用"和"用好"差着 2-3 倍产出。这个阶段解决三件事：选对工具（按角色）、全员都会用（培训不留死角）、把团队规范变成 AI 能读的资产。其中"规范资产化"是团队级提效的关键杠杆——个体再强，规范不沉淀就复制不开。</p>
+
+    <h2>2. 工具选型：按角色选</h2>
+    <table>
+      <tr><th>角色</th><th>首选</th><th>为什么</th></tr>
+      <tr><td>开发者 / 工程师</td><td><strong>Claude Code</strong>（当前最推荐）</td><td>终端原生、自主执行、MCP/Skills/Hooks 生态最完整、上下文管理最强</td></tr>
+      <tr><td>产品经理 / 非开发</td><td><strong>OpenAI Codex</strong></td><td>有云端委托 + ChatGPT 集成形态，不必碰终端，适合做原型、需求验证</td></tr>
+      <tr><td>想尝鲜的</td><td>Trae / Cursor / WorkBuddy / ZCode</td><td>各有特色（IDE 集成、国产、协作），可浅尝对比，主力仍建议 Claude Code</td></tr>
+    </table>
+    <div class="tip"><strong>Codex 说明</strong>：2025-04 发布的终端 agentic agent，2026 已平台化（CLI + 云委托 + ChatGPT 集成 + IDE 扩展）。<strong>云端/ChatGPT 形态对非开发友好</strong>，PM 可快速做原型；开发者要终端原生、深度集成时，Claude Code 仍首选。本章后续聚焦 Claude Code。</div>
+
+    <div class="tip"><strong>底层模型选择建议</strong>（工具选定后，按场景选模型）：<br>
+    • <strong>国内便宜又好用</strong>：推荐 <strong>GLM-5.2</strong>（智谱，开源 SOTA 代码模型，1M token 无损上下文，国产性价比之选）<br>
+    • <strong>有实力的选择</strong>：<strong>Claude 5 系列</strong>（最强编程 Agent 性能）/ <strong>GPT-5.5</strong>（统一路由系统，综合最强）</div>
+
+    <h2>3. Claude Code 最新要点（速通）</h2>
+    <p style="margin-top:10px"><a href="assets/ref/Claude-Code-完全手册.html" target="_blank" style="font-size:14px;font-weight:600">📖 Claude Code 完全手册（15 章配置大全：安装/认证/代理/MCP/Hooks/多智能体）→</a></p>
+    <h3>3.1 安装与认证</h3>
+<pre><code class="language-bash"># 官方已废弃 npm，用原生安装器
+curl -fsSL https://claude.ai/install.sh | bash   # macOS/Linux
+irm https://claude.ai/install.ps1 | iex           # Windows PowerShell
+# 认证：OAuth（个人）/ API Key（企业/CI）/ Bedrock（国内可达）/ apiKeyHelper（密钥轮换）</code></pre>
+    <h3>3.2 四层配置 + 权限（deny 优先）</h3>
+<pre><code class="language-json">// .claude/settings.json
+{
+  "permissions": {
+    "allow": ["Bash(git *)", "Write(src/**)"],
+    "deny": ["Bash(rm -rf*)", "Write(.env*)", "Write(test/**)"]
+  }
+}</code></pre>
+    <p>优先级：<code>企业托管 &gt; 用户级 &gt; 项目级 &gt; 本地</code>。deny 优先于 allow。</p>
+
+    <div class="tip" style="margin-top:16px"><strong>📋 完整配置样例</strong> · 文件：<code>~/.claude/settings.json</code>（用户目录下，对所有项目生效）。实战验证，可直接用——<strong>替换 Token 和 Base URL 为你自己的即可</strong>。</div>
+    <div class="warn"><strong>⚠️ 使用前必改</strong>：<code>ANTHROPIC_AUTH_TOKEN</code> 和 <code>ANTHROPIC_BASE_URL</code> 必须替换为你自己的值。下方为示例配置。</div>
+
+    <p style="margin-top:14px"><strong>① 环境变量（env）</strong> <span style="font-size:13px;color:var(--muted)">📁 <code>~/.claude/settings.json</code></span>——API 认证、模型映射、超时、功能开关：</p>
+<pre><code class="language-json">{
+  "env": {
+    "ANTHROPIC_AUTH_TOKEN": "your-api-token",
+    "ANTHROPIC_BASE_URL": "https://your-proxy.example.com",
+    "API_TIMEOUT_MS": "3000000",
+    "ANTHROPIC_DEFAULT_HAIKU_MODEL": "glm-5.1",
+    "ANTHROPIC_DEFAULT_SONNET_MODEL": "glm-5.2",
+    "ANTHROPIC_DEFAULT_OPUS_MODEL": "glm-5.2",
+    "CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC": "1",
+    "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1",
+    "CLAUDE_CODE_FORK_SUBAGENT": "1",
+    "CLAUDE_AUTOCOMPACT_PCT_OVERRIDE": "90"
+  }
+}</code></pre>
+    <p style="font-size:13px;color:var(--text-soft)">逐项：<strong>AUTH_TOKEN + BASE_URL</strong> = 国内中转认证（不登录 OAuth）；<strong>TIMEOUT</strong> 300万ms=50分钟防长任务超时；<strong>模型映射</strong> haiku→glm-5.1、sonnet/opus→glm-5.2（按实际模型调整）；<strong>DISABLE_NONESSENTIAL</strong> 禁用遥测；<strong>AGENT_TEAMS</strong> 开启团队协作；<strong>FORK_SUBAGENT</strong> 子代理 fork 模式；<strong>AUTOCOMPACT</strong> 上下文到 90% 自动压缩。</p>
+
+    <p><strong>② 权限 + ③ 插件 + ④ 其他</strong> <span style="font-size:13px;color:var(--muted)">📁 <code>~/.claude/settings.json</code>（续）</span></p>
+<pre><code class="language-json">{
+  "permissions": { "defaultMode": "default" },
+  "enabledPlugins": {
+    "claude-hud@claude-hud": true,
+    "superpowers@claude-plugins-official": true,
+    "superpowers-chrome@superpowers-marketplace": true
+  },
+  "extraKnownMarketplaces": {
+    "superpowers-marketplace": { "source": { "source": "github", "repo": "obra/superpowers-marketplace" } },
+    "claude-hud": { "source": { "source": "github", "repo": "jarrodwatts/claude-hud" } }
+  },
+  "worktree": { "baseRef": "fresh" },
+  "language": "chinese",
+  "skipDangerousModePermissionPrompt": true,
+  "verbose": false,
+  "teammateMode": "auto"
+}</code></pre>
+    <p style="font-size:13px;color:var(--text-soft)">逐项：<strong>defaultMode=default</strong>（最安全，每次确认）；<strong>三插件</strong> = HUD 状态栏 + Superpowers 工作流 + Chrome 控制；<strong>marketplaces</strong> = 插件市场源（GitHub）；<strong>worktree</strong> fresh = 从远程默认分支拉；<strong>language</strong> 中文；<strong>teammateMode</strong> auto = Agent Teams 自动模式。状态栏（statusLine）配合 claude-hud 插件安装后自动配置。</p>
+
+    <h3>3.3 进阶能力（决定产出 2-3 倍差距）</h3>
+    <ul>
+      <li><strong>Effort Level</strong>（Opus 4.6）：low/medium/high，复杂任务用 high。配置：<code>/model</code> 滑块 / 环境变量 / settings.json。</li>
+      <li><strong>五大扩展组件</strong>：CLAUDE.md（始终注入）/ Slash Commands（显式调）/ Subagents（独立上下文专家）/ Skills（按需加载）/ MCP（工具协议）。</li>
+      <li><strong>Subagents vs Agent Teams</strong>：Subagents 向主代理汇报；Agent Teams 队友互发消息、自协调（需 <code>CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1</code>）。</li>
+      <li><strong>上下文三件套</strong>：<code>/clear</code>（修正两次后必用）/ <code>/btw</code>（有上下文无工具）/ <code>/rewind</code>（4 种回退，跨会话）。</li>
+      <li><strong>Hooks 确定性</strong>：Hooks 保证操作一定发生，CLAUDE.md 只是建议——关键规则用 Hook。</li>
+    </ul>
+
+    <h2>4. 全员培训 + 规范资产化</h2>
+    <p><strong>培训到 100% 覆盖</strong>：直播动员 + Claude Code 安装使用 + AI 原理认知 + 实操练习 + 知识考核。留死角的团队推不动。</p>
+    <p><strong>规范资产化</strong>（团队级提效杠杆）：把隐性规范固化成 AI 自动加载的文件，提交 Git 团队共享：</p>
+<pre><code class="language-markdown"># CLAUDE.md 示例（精简，每行都要挣位置）
+## 技术栈
+Java 21 / Spring Boot 3 / PostgreSQL / Redis。
+## 提交规范
+- 必须通过 `mvn verify` 才能提交
+- 禁止修改 test/ 下测试文件（防 AI 偷改）
+## 不要做
+- 不要引入 Lombok；不要用 System.out，用 slf4j</code></pre>
+    <div class="warn"><strong>CLAUDE.md 检验标准</strong>：对每一行问——"删掉这行，Claude 会犯错吗？"不会就删。详细指令移进 Skill（按需加载），别堆在 CLAUDE.md 里烧上下文。</div>
+    <div class="tip"><strong>💡 思考一下</strong>：你的团队培训覆盖率是多少？如果只有 60%，那 40% 的人在拖后腿——他们半年后还能跟上吗？</div>
+
+    <h2>5. 角色视角</h2>
+    <div class="roles">
+      <div class="role role-leader"><span class="role-tag">Leader</span><p>定工具标准、组织全员培训到 100%、推动规范资产化、配权限策略。</p></div>
+      <div class="role role-dev"><span class="role-tag">开发者</span><p>精通 Claude Code（Effort Level/扩展组件/上下文管理）、写好 CLAUDE.md、把重复操作沉淀成 Skill。</p></div>
+      <div class="role role-pm"><span class="role-tag">PM / 非开发</span><p>用 Codex 云端形态做原型与需求验证，不必碰终端。</p></div>
+    </div>
+
+    <h2>6. 真实案例 + 常见坑 + 清单</h2>
+    <p>某团队全员 Claude Code 培训覆盖率达 <strong>100%</strong>，沉淀《基于 AI 的研发提效方案》《AI 自动化编程落地实现方案》，并把规范固化进 <code>.claude/rules/</code> + 团队 Skill 仓库（共享技能平台）。结果：AI 提效从口号变成团队能力。</p>
+    <div class="warn"><strong>坑</strong>：①全员开全权限（<code>--dangerously-skip-permissions</code>）当入门配置；②CLAUDE.md 写了就忘、越来越臃肿；③过度装 MCP 不审计消耗。</div>
+    <div class="checklist">
+      <div class="checklist-title">📋 阶段2 落地清单</div>
+      <ul>
+        <li>已按角色定工具标准（开发 Claude Code / 非开发 Codex）</li>
+        <li>全员培训覆盖率 100%，含原理 + 实操 + 考核</li>
+        <li>团队统一权限策略（allow/deny，最小权限起步）</li>
+        <li>CLAUDE.md 提交 Git，每行经"删掉会犯错吗"检验</li>
+        <li>重复操作已沉淀成 Skill（见阶段6）</li>
+      </ul>
+    </div>
+    <div class="pager"><a href="stage1.html">← 阶段1 战略启动</a><a href="stage3.html">阶段3 基础设施 →</a></div>
+  </main>
+</div>
+<footer class="foot"><div class="wrap"><p>企业级 AI 战略转型方法论教程 · 作者 Johnson</p></div></footer>
+<script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/highlight.min.js"></script>
+<script>hljs.highlightAll();</script>
+</body>
+</html>

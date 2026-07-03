@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>角色操作手册 · AI 战略转型方法论</title>
+<link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+<header class="topbar"><div class="wrap topbar-inner">
+  <a class="brand" href="../index.html"><span class="brand-mark">⚡</span><span>AI 战略转型方法论</span></a>
+  <nav class="topnav"><a href="../index.html">首页</a><a href="../stage0.html">总纲</a><a href="../appendix.html">附录</a></nav>
+</div></header>
+<main class="wrap" style="max-width:940px;padding:32px 24px 64px">
+  <h1>角色操作手册</h1>
+  <p class="subtitle">转型全员参与——开发、测试、组长、产品，各自怎么做，一份手册讲清。</p>
+
+  <div class="key-conclusion"><p>4 个角色 4 份手册，覆盖转型全员。每份含：<strong>定位 + 核心任务 + 怎么做 + 工具箱 + 检查清单 + 常见坑</strong>。各级人员拿自己那份照做即可——不需要通读全教程，也能知道「我该干什么」。</p></div>
+
+  <h2>一、为什么需要角色手册</h2>
+  <p>转型不是一个人的事，是全员的事。但各角色职责不同：开发用 AI 写代码、测试用 AI 生成用例、组长推动落地、产品用 AI 验证需求。<strong>没有角色手册，大家不知道自己该做什么</strong>——开发以为只是自己的事，测试不知道怎么介入，组长不知道怎么推，产品还在等排期。</p>
+  <p>本模块给每个角色一份<strong>专属操作手册</strong>，让全员各司其职。</p>
+
+  <h2>二、4 个角色概览</h2>
+  <table>
+    <tr><th>角色</th><th>AI 时代的定位</th><th>核心任务</th><th>手册</th></tr>
+    <tr><td><strong>开发</strong></td><td>AI 主力执行者——把重复交出去，聚焦架构/审查/定义问题</td><td>用 AI 提效 + 把关质量 + 沉淀能力</td><td><a href="../../demos/role-handbooks/开发手册.md">开发手册</a></td></tr>
+    <tr><td><strong>测试</strong></td><td>测试资产设计者 + 质量把关人</td><td>录制转生成 + 度量 + 防偷改</td><td><a href="../../demos/role-handbooks/测试手册.md">测试手册</a></td></tr>
+    <tr><td><strong>组长</strong></td><td>基层推动者——上接战略，下带团队</td><td>培训 + 规范 + 试点 + 汇报</td><td><a href="../../demos/role-handbooks/组长手册.md">组长手册</a></td></tr>
+    <tr><td><strong>产品</strong></td><td>需求验证加速者</td><td>AI 原型 + 需求结构化 + 协作</td><td><a href="../../demos/role-handbooks/产品手册.md">产品手册</a></td></tr>
+  </table>
+
+  <h2>三、各角色核心要点</h2>
+
+  <h3>开发：用 AI 把重复交出去，聚焦架构 / 审查 / 定义问题</h3>
+  <p>精通 Claude Code（Effort/扩展组件/上下文）→ 写好 CLAUDE.md（规范资产化）→ 改代码前跑 impact（代码图谱）→ <strong>人审 AI 产出</strong>（不让错误溜进去）→ 沉淀 Skill（从自己快到团队快）。</p>
+  <div class="tip"><strong>关键转变</strong>：价值从「写代码」转向「<strong>定义问题 + 设计架构 + 审查验证 + 沉淀知识</strong>」。AI 扩展你的能力边界，但不替代你的判断。</div>
+
+  <h3>测试：从手写测试到「录制 + AI 生成」</h3>
+  <p>录制转生成（<a href="../../demos/ai-test-frame/">ai-test-frame</a>）→ 测试编写规范沉淀成 Skill → AI 占比 + Bug 度量（<a href="../../demos/ai-metrics/">ai-metrics</a>）→ <strong>防偷改测试</strong>（不让 AI 改测试迎合错误）。</p>
+
+  <h3>组长：把战略变成团队动作，把效果变成可汇报数据</h3>
+  <p>全员培训 100% → 规范资产化（CLAUDE.md/Skill/Hook）→ 带 1-2 个试点跑通闭环 → 用 <a href="汇报材料-AI生成指南.html">汇报材料模板</a> + ai-metrics 数据向上汇报。<strong>试点不拿数据，就推不动投入</strong>。</p>
+
+  <h3>产品：用 AI 加速需求验证，不必干等开发排期</h3>
+  <p>Codex 做原型/需求验证 → 需求文档结构化（AI 可读）→ 用 OpenSpec spec 与开发协作（需求 → AI 实现的清晰交接）。</p>
+
+  <h2>四、与其他模块的衔接</h2>
+  <ul>
+    <li><strong>开发/测试手册</strong> → <a href="../stage2.html">阶段 2 全员赋能</a> + <a href="../stage3.html">阶段 3 基础设施</a> + <a href="../stage4.html">阶段 4 闭环</a> + <a href="AI自动化测试-方法论与实践.html">ai-test-frame/ai-metrics</a></li>
+    <li><strong>组长手册</strong> → 贯穿 <a href="../stage0.html">阶段 0</a>~<a href="../stage6.html">阶段 6</a> + <a href="汇报材料-AI生成指南.html">汇报材料模块</a></li>
+    <li><strong>产品手册</strong> → <a href="../stage2.html">阶段 2（Codex）</a> + <a href="../stage4.html">阶段 4（OpenSpec）</a></li>
+  </ul>
+  <div class="key-conclusion" style="margin-top:20px"><p><strong>记住</strong>：4 份手册覆盖全员，是「<strong>下级各级人员怎么做</strong>」的解法。配合<a href="汇报材料-AI生成指南.html">汇报材料模块</a>（向上汇报），转型就形成「<strong>向上汇报 + 向下指导</strong>」的完整闭环。</p></div>
+
+  <div class="pager">
+    <a href="汇报材料-AI生成指南.html">← 汇报材料指南</a>
+    <a href="../appendix.html">附录 →</a>
+  </div>
+</main>
+<footer class="foot"><div class="wrap"><p>企业级 AI 战略转型方法论教程 · 作者 Johnson</p></div></footer>
+</body>
+</html>

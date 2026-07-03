@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>阶段3 · 基础设施 · AI 战略转型方法论</title>
+<link rel="stylesheet" href="assets/css/style.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/styles/atom-one-dark.min.css">
+</head>
+<body>
+<header class="topbar"><div class="wrap topbar-inner">
+  <a class="brand" href="index.html"><span class="brand-mark">⚡</span><span>AI 战略转型方法论</span></a>
+  <nav class="topnav"><a href="index.html">首页</a><a href="stage0.html">总纲</a><a href="appendix.html">附录</a></nav>
+</div></header>
+<div class="chapter">
+  <aside class="side">
+    <h4>转型阶段</h4>
+    <a href="stage0.html">阶段0 总纲：思想+原理</a>
+    <a href="stage1.html">阶段1 战略启动</a>
+    <a href="stage2.html">阶段2 全员赋能</a>
+    <a href="stage3.html" class="cur">阶段3 基础设施</a>
+    <a href="stage4.html">阶段4 闭环试点</a>
+    <a href="stage5.html">阶段5 推广度量</a>
+    <a href="stage6.html">阶段6 沉淀复用</a>
+    <h4>其他</h4><a href="index.html">首页</a><a href="appendix.html">附录</a>
+  </aside>
+  <main class="content">
+    <h1>阶段 3 · 基础设施（可跳过）</h1>
+    <p class="subtitle">给 AI 装上"眼睛和记忆"——业务知识 RAG、代码知识图谱、Skill 仓库、MCP 网关。</p>
+
+    <div class="key-conclusion"><p>基础设施 = <strong>让 AI 从"概率性盲读"升级为"确定性查证"</strong>。业务 RAG 让 AI 懂私有知识，代码图谱让 AI 改代码前看到影响范围，Skill 仓库复用团队能力，MCP 网关把企业服务暴露给 Agent。<strong>四件套是为大代码库/复杂业务准备的，小团队可跳过。</strong></p></div>
+
+    <div class="warn"><strong>跳过前提（重要）</strong>：本阶段是<strong>知识基础设施</strong>，专为"代码量大、项目多、业务复杂"的团队设计。如果你的情况是：①代码库不大（单仓库、几万行内）；②项目少（没有多仓库微服务）；③业务知识不算复杂——<strong>请直接跳过本阶段</strong>，用 CLAUDE.md + grep + 良好代码组织就够，强行建基础设施是过度工程。本阶段适合：多仓库微服务、百万行级代码、复杂业务知识库、跨团队协作的大型组织。</div>
+
+    <div style="margin:18px 0;padding:14px 18px;background:#f0f7ff;border:1px solid #bcd9ff;border-radius:10px">
+      <div style="font-weight:700;color:#1057cb;font-size:14px;margin-bottom:8px">🧰 工具速查 <span style="font-weight:400;color:#64748b;font-size:12px">（不想读全文？直接用这些）</span></div>
+      <ul style="margin:0;padding-left:22px;font-size:14px;line-height:1.9;color:#334155">
+        <li><strong>代码知识图谱</strong>：<a href="https://github.com/DeusData/codebase-memory-mcp" target="_blank">codebase-memory-mcp</a>（主推） / <a href="https://github.com/AsyncFuncAI/deepwiki-open" target="_blank">deepwiki-open</a> / <a href="https://github.com/sourcebot-dev/sourcebot" target="_blank">sourcebot</a> / <a href="https://github.com/abhigyanpatwari/GitNexus" target="_blank">GitNexus</a></li>
+        <li><strong>Skill 共享平台</strong>：<a href="https://github.com/iflytek/skillhub" target="_blank">iflytek/skillhub</a>（自托管私有 Skill 注册中心）</li>
+        <li><strong>深度文档</strong>：<a href="assets/ref/代码知识图谱-架构深度解析.html">《代码知识图谱：架构深度解析》</a></li>
+      </ul>
+    </div>
+
+    <h2>1. 业务知识 RAG 服务</h2>
+    <p>通用大模型不懂你的业务（产品手册、内部规范）。RAG = 先检索知识库片段再喂给模型，让它"开卷考试"。自研业务 RAG 服务（基于 DB-GPT）的核心：<strong>向量库抽象 + 两阶段检索（多路召回→CrossEncoder 重排）+ 多租户隔离</strong>。</p>
+<pre><code class="language-python"># milvus_store.py · 两阶段检索（召回率优先→精排提精度）
+with concurrent.futures.ThreadPoolExecutor() as executor:
+    future_default = executor.submit(self.similar_search_plus, text, topk, expr, None)
+    future_v3      = executor.submit(self.similar_search_plus, text, topk, expr, self.embedding_v3)
+    future_new     = executor.submit(self.similar_search_new,   text, topk, new_expr or expr)
+# 三路并发召回 → 按原文去重 → CrossEncoder 重排 → min_score 过滤</code></pre>
+<pre><code class="language-python"># 多租户隔离：把租户标识拼进 Milvus 过滤表达式
+expr = 'corp_code in ["{0}", "default"] and resource_type in ["knowledge","course"]'.format(body.corp_code)
+all_docs = client.similar_search(body.current_question, 5, expr)  # default = 全租户共享</code></pre>
+
+    <h2>2. 代码知识图谱（开源推荐：codebase-memory-mcp）</h2>
+    <div class="tip"><strong>🎯 实践建议</strong>：直接使用开源项目 <a href="https://github.com/DeusData/codebase-memory-mcp" target="_blank"><strong>codebase-memory-mcp</strong></a>（Tree-sitter → 知识图谱 → MCP 工具，158 语言，开箱即用）。本节讲透设计原理帮你理解"为什么这么设计、怎么用好"；想深入架构或自研可看 <a href="assets/ref/代码知识图谱-架构深度解析.html" target="_blank">《代码知识图谱：架构深度解析》</a>。</div>
+
+    <h3>2.1 为什么用知识图谱，不用 RAG</h3>
+    <p>AI 改代码常因"看不见全貌"酿成事故。传统 Graph RAG 让 LLM 发 4+ 次查询才拼出完整上下文；代码知识图谱在<strong>索引期</strong>就把关系预算好，<strong>一次调用拿全</strong>。三大价值：① <strong>可靠</strong>——LLM 漏不掉上下文（工具响应已塞满）；② <strong>省 token</strong>——不用 10 次查询去理解一个函数；③ <strong>解放小模型</strong>——工具做了重活，降低对顶级模型的依赖（企业成本杀手锏）。</p>
+    <div class="tip"><strong>图谱和 RAG 不是二选一，而是分层共存</strong>：确定性关系（CALLS / IMPORTS / EXTENDS）走<strong>图查询</strong>（一次拿全调用链）；语义相似走 <strong>BM25 + 向量搜索</strong>（找符号）。图谱管"结构/影响"，搜索管"找符号"，各司其职。</div>
+
+    <h3>2.2 图谱建模设计</h3>
+    <p>用<strong>属性图</strong>（Property Graph，非 RDF 三元组）——能跑 Cypher、能存向量、LLM 好写查询。</p>
+    <ul>
+      <li><strong>节点</strong>（按类型分表）：代码元素（File / Function / Class / Interface / Method）+ <strong>抽象语义</strong>（Community 功能域 / Process 执行流 / Route API 端点 / Tool MCP 工具）。把"代码结构事实"和"分析后的抽象语义"都做成一等节点，Cypher 一次查询就能跨层（如"找认证社区里被登录流程调用的所有函数"）。</li>
+      <li><strong>边</strong>（单张 <code>CodeRelation</code> 表 + <code>type</code> 属性区分）：所有关系进同一张表——CALLS / IMPORTS / EXTENDS / IMPLEMENTS / ACCESSES / OVERRIDES / HANDLES_ROUTE 等 16 种。这让 LLM 写 <code>MATCH (a)-[r:CodeRelation {type:'CALLS'}]->(b)</code> 即可，不必记几十种边表名（AI 友好的关键）。</li>
+      <li>每条边带 <code>confidence</code>（置信度）+ <code>reason</code>（来源：leiden-algorithm / trace-detection / route-handler-entry-point），<strong>可审计</strong>。</li>
+    </ul>
+
+    <h3>2.3 索引管线（6 阶段）</h3>
+    <table>
+      <tr><th>阶段</th><th>做什么</th><th>关键技术</th></tr>
+      <tr><td>① 扫描 + 结构</td><td>建 File / Folder + CONTAINS 边</td><td>路径扫描，不读内容</td></tr>
+      <tr><td>② 分块解析</td><td>Tree-sitter 多语言（14+ 语言）解析 AST，提取符号 + 关系</td><td>Worker 线程池并行（8 线程）、20MB 字节预算分块控内存</td></tr>
+      <tr><td>③ 跨文件类型传播</td><td>沿 import 依赖拓扑排序（Kahn 算法），上游导出类型"播种"到下游</td><td>分层并行重解析，解决 <code>user.address.getCity().save()</code> 链式调用</td></tr>
+      <tr><td>④ 社区发现</td><td>Leiden 算法按 CALLS 边聚类 → Community 功能域</td><td>modularity 评分，自动识别"认证模块""支付模块"等功能边界</td></tr>
+      <tr><td>⑤ 执行流追踪</td><td>从入口点（无调用者的函数）沿 CALLS BFS 前向追踪 → Process</td><td>maxDepth=10、去重、标记 intra/cross_community（跨社区流程更值得关注）</td></tr>
+      <tr><td>⑥ 业务概念提取</td><td>Route（API 端点）/ Tool（MCP 定义）/ ORM 数据流 / Entity→Table 映射</td><td>框架感知（Next.js / Laravel / MyBatis / Prisma 等）</td></tr>
+    </table>
+    <div class="warn"><strong>企业级缺口</strong>：当前主流工具是 <strong>commit 级全量重建</strong>。上百项目必须实现<strong>文件级增量</strong>（<code>git diff --name-only</code> 只重解析变更文件 + 受影响 import 闭包），配 CI webhook（merge 触发）+ 夜间 cron（活跃仓库全量刷新）双轨刷新。</div>
+
+    <h3>2.4 MCP 工具设计（14 个工具，三大类）</h3>
+<pre><code class="language-typescript">// 通用 MCP Server 创建（基于 @modelcontextprotocol/sdk）
+const server = new Server(
+  { name: 'code-graph', version: pkgVersion },
+  { capabilities: { tools: {}, resources: {}, prompts: {} },
+    instructions: CODEGRAPH_INSTRUCTIONS });   // ~80 行 MUST/NEVER 工作流</code></pre>
+    <table>
+      <tr><th>类别</th><th>工具</th><th>做什么</th></tr>
+      <tr><td><strong>理解类</strong></td><td>context / route_map / topic_map / table_context</td><td>看清结构：360° 符号视图（含读写/调用链/MQ）、路由→handler→消费方、表外键关系</td></tr>
+      <tr><td><strong>变更类</strong></td><td>impact / detect_changes / rename / api_impact</td><td>评估影响：爆炸半径 + 风险等级（LOW/MEDIUM/HIGH/CRITICAL）、git diff→受影响符号、安全改名（图+文本双路径）</td></tr>
+      <tr><td><strong>查询类</strong></td><td>cypher / cross_repo_search</td><td>自由 Cypher 图查询 / 跨仓库文本搜索（补图谱盲区）</td></tr>
+    </table>
+    <p>每个工具响应末尾自动追加 <strong>"Next 提示"</strong>（如 context 之后提示跑 impact），对抗"LLM 调一次工具就停"，形成<strong>自引导工作流</strong>。</p>
+    <div class="danger"><strong>两条铁律</strong>（写进 instructions）：① <strong>NEVER</strong> edit code without first running <code>impact</code>（改任何符号前必跑影响分析）；② <strong>NEVER</strong> commit without running <code>detect_changes</code>（提交前必跑变更映射）。</div>
+    <div class="tip"><strong>指令工程实测</strong>：instructions 控制在 ~80 行（超 120 行依从度衰减）；用 RFC 2119 措辞（MUST/NEVER）；关键工作流<strong>内联</strong>（skill 文件被忽略率 56%，所以不能依赖 skill）。</div>
+
+    <h3>2.5 企业级建设方案（上百项目团队）</h3>
+    <p><strong>整体架构四层</strong>：索引层（Tree-sitter 管线）→ 图存储层 → MCP 暴露层（统一网关）→ Agent 集成层（hooks 自动注入）。</p>
+    <p><strong>图存储双轨</strong>：</p>
+    <ul>
+      <li><strong>日常开发</strong>：每仓库<strong>嵌入式</strong>图库（零运维 + 代码不出本机，隐私卖点）</li>
+      <li><strong>企业治理</strong>：中心<strong>服务端</strong>图库（Neo4j / FalkorDB），各仓库图定期 ETL 进中心，做跨库架构治理 + 全局影响分析</li>
+    </ul>
+    <p><strong>多仓库索引策略</strong>：</p>
+    <ul>
+      <li><strong>CI webhook</strong>：merge 到主干 → 触发该仓库 analyze</li>
+      <li><strong>夜间 cron</strong>：活跃仓库全量刷新，低频仓库周末跑</li>
+      <li><strong>跨库 sidecar 索引</strong>：消费者索引（谁调了我的接口）+ MQ topic 索引（谁消费了我的消息）+ SOA 服务注册表——"改一个接口谁会炸"必须能跨库秒答</li>
+    </ul>
+    <div class="warn"><strong>N+1 反模式警示</strong>：跨库高频查询必须建<strong>预聚合 sidecar 索引</strong>，别每次现查（早期版本 route_map 每次开 240+ 数据库连接，后来用 sidecar 解决）。</div>
+    <p><strong>推广路径</strong>：① <strong>试点</strong>（3-5 个高频改动核心服务，量化"漏改率下降"）→ ② <strong>标准化</strong>（AGENTS.md 模板 + CI 强制 detect_changes 门槛 + GUARDRAILS 失败模式沉淀）→ ③ <strong>全员</strong>（中心 MCP 网关 + SSO + 项目级权限，普通开发者只读，架构治理角色开放跨库查询）。</p>
+
+    <div class="tip"><strong>📂 开源推荐</strong>：这类工具基于开源组件（<a href="https://tree-sitter.github.io/" target="_blank">Tree-sitter</a> 解析 + 图存储 + <a href="https://modelcontextprotocol.io/" target="_blank">MCP</a> 暴露）。推荐：<br>• <a href="https://github.com/DeusData/codebase-memory-mcp" target="_blank"><strong>codebase-memory-mcp</strong></a>（功能最对标：Tree-sitter → 知识图谱 → MCP 工具，158 语言 + 爆炸半径 + arXiv 论文）<br>• <a href="https://github.com/AsyncFuncAI/deepwiki-open" target="_blank">deepwiki-open</a>（仓库→可交互 wiki + RAG 问答，DeepWiki 开源版）<br>• <a href="https://github.com/sourcebot-dev/sourcebot" target="_blank">sourcebot</a>（自托管代码搜索 + MCP，开源 Sourcegraph 替代）<br>
+• <a href="https://github.com/abhigyanpatwari/GitNexus" target="_blank">GitNexus</a>（零服务器本地运行，<code>npx gitnexus setup</code> 一键配置，多仓库 + 架构可视化，适合快速上手）</div>
+
+    <h2>3. Skill 仓库（团队 Skill 仓库）</h2>
+    <p>把团队重复工作流沉淀成可复用 Skill，编排 OpenSpec（规范）+ Superpowers（执行）。核心：<strong>阶段路由表（6 阶段拆独立 .md，每次只读当前阶段）+ Hook 强制激活</strong>。</p>
+<pre><code class="language-markdown">| 阶段 | 调用技能 | 代码图谱工具 |
+| Stage 1 需求探索 | superpowers:brainstorming | — |
+| Stage 3 计划拆分 | superpowers:writing-plans | impact, locate |
+| Stage 5 验证 | verification-before-completion | detect_changes |
+每次只读取当前执行的 Stage 文件（渐进式披露，省 Token）</code></pre>
+
+    <h3>3.1 两层 Skill 架构 + RAG 联动（降 Token 关键）</h3>
+    <p>团队 Skill 仓库要分两层，核心是<strong>把"业务数据"和"能力逻辑"分离</strong>，让 Skill 保持轻量、Token 大幅下降：</p>
+    <table>
+      <tr><th>层级</th><th>放什么</th><th>谁维护</th></tr>
+      <tr><td><strong>公共 Skill</strong></td><td>公司级通用能力：代码生成、自检查、测试用例生成、代码提交部署等</td><td>架构组统一维护</td></tr>
+      <tr><td><strong>项目级 Skill</strong></td><td><strong>只</strong>含 RAG 调用逻辑 + 项目专属规则（编码规范、接口风格）</td><td>项目负责人维护</td></tr>
+    </table>
+    <div class="tip"><strong>🔑 降 Token 的关键</strong>：业务数据（项目结构、代码注释、功能描述）<strong>不塞进 Skill</strong>，而是入 RAG 向量库按需检索。这样项目级 Skill 极轻（只有规则 + 检索逻辑），不必每次把整个项目知识塞进上下文——与本节"代码图谱省 token""CLI 优于 MCP 省 token"是同一思路：<strong>能检索/查证的就不盲读</strong>。</div>
+    <p style="font-size:13px;color:var(--text-soft)">Skill 生命周期：AI 生成初始 → 人工审核（符合规范）→ 试点验证 → 持续优化 → 复用推广，并与 RAG 数据更新保持同步。</p>
+
+    <div class="tip"><strong>📂 开源平台推荐：SkillHub</strong>——上面讲的是"团队 Skill 仓库怎么做"，想直接用现成开源平台的，推荐 <a href="https://github.com/iflytek/skillhub" target="_blank"><strong>iflytek/skillhub</strong></a>（科大讯飞出品，Apache 2.0）：一个<strong>自托管的私有智能体技能注册中心</strong>，专为内网/防火墙后部署设计，能力正好覆盖本节需求：①<strong>发布 + 语义化版本</strong>（beta/stable/latest 标签）；②<strong>团队命名空间</strong>（Owner/Admin/Member 角色 + 发布策略）；③<strong>审核与治理</strong>（命名空间审核 + 全局推广 + 审计日志）；④<strong>全文搜索 + 收藏/评分/下载量</strong>；⑤<strong>CLI 优先</strong>（兼容 ClawHub 协议，一条命令装到 <code>~/.claude/skills</code>）；⑥<strong>安全扫描器</strong>（vetter 规则审核 Skill 安全性）。技术栈 Java 21 + Spring Boot + React 19 + PostgreSQL，Docker Compose / K8s 一键部署。<strong>适合想要"私有化 + 治理"的团队 Skill 共享平台、又不想从零造的中大型团队</strong>。</div>
+
+    <h2>4. MCP 工具网关</h2>
+    <p>把企业内部 Nacos 注册的 Dubbo/Spring 服务<strong>零代码封装成 MCP 工具</strong>，供 AI Agent 调用。基于 Spring AI Alibaba MCP Gateway：</p>
+<pre><code class="language-java">// GatewayController.java · 暴露 Nacos 工具
+@GetMapping("/tools")
+public List&lt;Map&lt;String,String&gt;&gt; listTools() {
+    McpGatewayToolCallbackProvider provider = McpGatewayToolCallbackProvider.builder()
+            .toolCallbacks(mcpGatewayToolsInitializer.initializeTools()).build();
+    // 从 Nacos 动态拉取注册的 MCP Server → 封装成 ToolCallback[]
+    return Arrays.stream(provider.getToolCallbacks()).map(t -&gt; Map.of(
+            "name", t.getToolDefinition().name(),
+            "description", t.getToolDefinition().description())).toList();
+}</code></pre>
+    <div class="tip"><strong>CLI 优于 MCP</strong>：每个 MCP 服务器的工具定义默认常驻烧 token。能用 <code>gh/aws/kubectl</code> 完成的别用 MCP；MCP 只用于"没有 CLI 等价物"的场景（如连接企业内部服务）。</div>
+
+    <h2>5. 角色视角 + 案例 + 清单</h2>
+    <div class="roles">
+      <div class="role role-leader"><span class="role-tag">Leader</span><p>先判断是否需要本阶段（看代码量/项目数）；需要时优先建代码图谱（改代码安全）和 Skill 仓库（能力复用）。</p></div>
+      <div class="role role-dev"><span class="role-tag">开发者</span><p>改代码前必跑 impact；用 Skill 仓库的团队工作流；通过 MCP 调企业服务。</p></div>
+      <div class="role role-pm"><span class="role-tag">PM</span><p>业务知识库交给 RAG；业务问答准确率上去后，PM 写需求可基于 RAG 的事实。</p></div>
+    </div>
+    <p><strong>案例</strong>：某团队用代码知识图谱工具给 AI 装"代码眼睛"，bug 排查时 <code>cross-repo-search</code> 定位跨仓库调用链，累计排查 144 个生产 bug（覆盖率 80.4%）；用业务 RAG 服务让 AI 准确回答业务知识问题，幻觉大幅下降。</p>
+    <div class="checklist">
+      <div class="checklist-title">📋 阶段3 落地清单（仅大型团队）</div>
+      <ul>
+        <li>已判断确实需要基础设施（多仓库/百万行/复杂业务），非过度工程</li>
+        <li>业务知识 RAG：向量库抽象 + 两阶段检索 + 多租户隔离</li>
+        <li>代码图谱：MCP 工具集 + 两条铁律（impact/detect_changes）+ Claude hooks 自动注入</li>
+        <li>Skill 仓库：团队工作流编排 + Hook 强制激活</li>
+        <li>MCP 网关：企业服务零代码暴露，但 CLI 优先、定期审计消耗</li>
+      </ul>
+    </div>
+    <div class="pager"><a href="stage2.html">← 阶段2 全员赋能</a><a href="stage4.html">阶段4 闭环试点 →</a></div>
+  </main>
+</div>
+<footer class="foot"><div class="wrap"><p>企业级 AI 战略转型方法论教程 · 作者 Johnson</p></div></footer>
+<script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/highlight.min.js"></script>
+<script>hljs.highlightAll();</script>
+</body>
+</html>

@@ -1,0 +1,66 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 340" font-family="'PingFang SC','Microsoft YaHei','Segoe UI',system-ui,sans-serif">
+  <defs>
+    <marker id="arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#1057cb"/>
+    </marker>
+  </defs>
+
+  <rect x="6" y="6" width="588" height="328" rx="14" fill="#ffffff" stroke="#1057cb" stroke-width="2"/>
+  <text x="300" y="30" text-anchor="middle" font-size="15" font-weight="700" fill="#0f172a">人工智能简史</text>
+
+  <!-- 时间轴 -->
+  <line x1="24" y1="180" x2="576" y2="180" stroke="#1057cb" stroke-width="2" marker-end="url(#arr)"/>
+
+  <!-- 节点坐标：46,120,194,268,342,416,490,554 -->
+  <!-- 上方卡片：1950 / 1970 / 1990 / 2010 -->
+  <line x1="46" y1="128" x2="46" y2="174" stroke="#94a3b8" stroke-width="1.4"/>
+  <circle cx="46" cy="180" r="6" fill="#1057cb"/>
+  <rect x="8" y="80" width="76" height="48" rx="6" fill="#eef4fc" stroke="#1057cb" stroke-width="1.5"/>
+  <text x="46" y="98" text-anchor="middle" font-size="12" font-weight="700" fill="#1057cb">1950</text>
+  <text x="46" y="116" text-anchor="middle" font-size="11" fill="#0f172a">图灵测试</text>
+
+  <line x1="194" y1="128" x2="194" y2="174" stroke="#94a3b8" stroke-width="1.4"/>
+  <circle cx="194" cy="180" r="6" fill="#1057cb"/>
+  <rect x="156" y="80" width="76" height="48" rx="6" fill="#eef4fc" stroke="#1057cb" stroke-width="1.5"/>
+  <text x="194" y="98" text-anchor="middle" font-size="12" font-weight="700" fill="#1057cb">1970</text>
+  <text x="194" y="116" text-anchor="middle" font-size="11" fill="#0f172a">AI 寒冬</text>
+
+  <line x1="342" y1="128" x2="342" y2="174" stroke="#94a3b8" stroke-width="1.4"/>
+  <circle cx="342" cy="180" r="6" fill="#1057cb"/>
+  <rect x="304" y="80" width="76" height="48" rx="6" fill="#eef4fc" stroke="#1057cb" stroke-width="1.5"/>
+  <text x="342" y="98" text-anchor="middle" font-size="12" font-weight="700" fill="#1057cb">1990</text>
+  <text x="342" y="116" text-anchor="middle" font-size="11" fill="#0f172a">深蓝胜人类</text>
+
+  <line x1="490" y1="128" x2="490" y2="174" stroke="#94a3b8" stroke-width="1.4"/>
+  <circle cx="490" cy="180" r="6" fill="#fbbf24" stroke="#b45309" stroke-width="1.5"/>
+  <rect x="452" y="80" width="76" height="48" rx="6" fill="#fef3c7" stroke="#b45309" stroke-width="1.8"/>
+  <text x="490" y="98" text-anchor="middle" font-size="12" font-weight="700" fill="#b45309">2010</text>
+  <text x="490" y="116" text-anchor="middle" font-size="11" font-weight="600" fill="#7c2d12">深度学习爆发</text>
+
+  <!-- 下方卡片：1960 / 1980 / 2000 / 2014+ -->
+  <line x1="120" y1="186" x2="120" y2="232" stroke="#94a3b8" stroke-width="1.4"/>
+  <circle cx="120" cy="180" r="6" fill="#1057cb"/>
+  <rect x="82" y="232" width="76" height="48" rx="6" fill="#eef4fc" stroke="#1057cb" stroke-width="1.5"/>
+  <text x="120" y="250" text-anchor="middle" font-size="12" font-weight="700" fill="#1057cb">1960</text>
+  <text x="120" y="268" text-anchor="middle" font-size="11" fill="#0f172a">ELIZA</text>
+
+  <line x1="268" y1="186" x2="268" y2="232" stroke="#94a3b8" stroke-width="1.4"/>
+  <circle cx="268" cy="180" r="6" fill="#1057cb"/>
+  <rect x="230" y="232" width="76" height="48" rx="6" fill="#eef4fc" stroke="#1057cb" stroke-width="1.5"/>
+  <text x="268" y="250" text-anchor="middle" font-size="12" font-weight="700" fill="#1057cb">1980</text>
+  <text x="268" y="268" text-anchor="middle" font-size="11" fill="#0f172a">专家系统</text>
+
+  <line x1="416" y1="186" x2="416" y2="232" stroke="#94a3b8" stroke-width="1.4"/>
+  <circle cx="416" cy="180" r="6" fill="#1057cb"/>
+  <rect x="378" y="232" width="76" height="48" rx="6" fill="#eef4fc" stroke="#1057cb" stroke-width="1.5"/>
+  <text x="416" y="250" text-anchor="middle" font-size="12" font-weight="700" fill="#1057cb">2000</text>
+  <text x="416" y="268" text-anchor="middle" font-size="11" fill="#0f172a">机器学习成熟</text>
+
+  <line x1="554" y1="186" x2="554" y2="232" stroke="#94a3b8" stroke-width="1.4"/>
+  <circle cx="554" cy="180" r="6" fill="#fbbf24" stroke="#b45309" stroke-width="1.5"/>
+  <rect x="514" y="232" width="80" height="48" rx="6" fill="#fef3c7" stroke="#b45309" stroke-width="1.8"/>
+  <text x="554" y="250" text-anchor="middle" font-size="12" font-weight="700" fill="#b45309">2014+</text>
+  <text x="554" y="268" text-anchor="middle" font-size="11" font-weight="600" fill="#7c2d12">大模型时代</text>
+
+  <text x="300" y="312" text-anchor="middle" font-size="11" fill="#475569">从符号推理到神经网络：经历寒冬后，数据与算力催生深度学习与大模型（金色 = 关键转折）</text>
+</svg>

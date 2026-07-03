@@ -1,0 +1,856 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>全球 LLM 大模型发展完整历史线（2017–2026.06）</title>
+<style>
+  :root{
+    --primary:#6C5CE7; --primary-dark:#5A4BD1; --primary-light:#F0EDFF;
+    --success:#00B894; --success-light:#E6FFF7;
+    --info:#0984E3; --info-light:#EBF5FF;
+    --warning:#E8A317; --warning-light:#FFF7E0;
+    --danger:#E17055; --danger-light:#FFF0EC;
+    --gray-50:#F9FAFB; --gray-100:#F3F4F6; --gray-200:#E5E7EB; --gray-300:#D1D5DB;
+    --gray-500:#6B7280; --gray-600:#4B5563; --gray-700:#374151; --gray-800:#1F2937; --gray-900:#111827;
+    --radius:10px; --shadow:0 1px 3px rgba(0,0,0,.1),0 1px 2px rgba(0,0,0,.06); --shadow-lg:0 10px 15px -3px rgba(0,0,0,.1),0 4px 6px -4px rgba(0,0,0,.1);
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth;scroll-padding-top:90px}
+  body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;color:var(--gray-800);line-height:1.8;background:var(--gray-50)}
+  #progress-bar{position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,var(--primary),#a29bfe);z-index:9999;transition:width .15s}
+
+  #sidebar{position:fixed;top:0;left:0;width:280px;height:100vh;background:#fff;border-right:1px solid var(--gray-200);overflow-y:auto;z-index:100;padding:22px 0}
+  #sidebar .logo{padding:0 24px 18px;border-bottom:1px solid var(--gray-200)}
+  #sidebar .logo .logo-icon{font-size:26px;margin-bottom:4px}
+  #sidebar .logo .logo-text{font-size:17px;font-weight:800;color:var(--primary);line-height:1.4}
+  #sidebar .logo small{display:block;font-size:11.5px;font-weight:400;color:var(--gray-500);margin-top:4px}
+  #sidebar nav{padding:12px 0}
+  #sidebar nav a{display:block;padding:8px 24px;color:var(--gray-700);text-decoration:none;font-size:13.5px;transition:all .15s;border-left:3px solid transparent}
+  #sidebar nav a:hover{background:var(--gray-50);color:var(--primary)}
+  #sidebar nav a.active{background:var(--primary-light);color:var(--primary);border-left-color:var(--primary);font-weight:600}
+  #sidebar nav .nav-group{padding:14px 24px 4px;font-size:10.5px;text-transform:uppercase;letter-spacing:1px;color:var(--gray-300);font-weight:800}
+
+  #main{margin-left:280px;max-width:1000px;padding:0 48px 140px}
+  .hero{padding:48px 0 28px;border-bottom:2px solid var(--gray-200);margin-bottom:8px}
+  .hero h1{font-size:34px;font-weight:800;color:var(--gray-900);line-height:1.3;margin-bottom:10px}
+  .hero .subtitle{font-size:15px;color:var(--gray-500);margin-bottom:18px}
+  .hero .meta-row{display:flex;flex-wrap:wrap;gap:8px}
+
+  h2.section-title{font-size:25px;font-weight:800;margin:56px 0 8px;color:var(--gray-900);scroll-margin-top:90px}
+  h2.section-title .emoji{margin-right:8px}
+  .section-desc{font-size:14px;color:var(--gray-500);margin-bottom:22px}
+  h3{font-size:19px;font-weight:700;margin:30px 0 12px;color:var(--gray-800)}
+  p{margin-bottom:14px}
+  a{color:var(--primary);text-decoration:none}a:hover{text-decoration:underline}
+  strong{color:var(--gray-900)}
+  ul,ol{margin:8px 0 16px 24px}li{margin-bottom:5px}
+  code{background:var(--gray-100);padding:2px 6px;border-radius:4px;font-family:"JetBrains Mono","Consolas",monospace;font-size:12.5px;color:var(--danger)}
+  table{width:100%;border-collapse:collapse;margin:14px 0 18px;font-size:13.5px}
+  th{background:var(--primary-light);text-align:left;padding:10px 12px;font-weight:700;color:var(--gray-800);border:1px solid var(--gray-200)}
+  td{padding:10px 12px;border:1px solid var(--gray-200);vertical-align:top}
+  tr:nth-child(even){background:var(--gray-50)}
+
+  .badge{display:inline-block;padding:2px 9px;border-radius:11px;font-size:11.5px;font-weight:700;line-height:1.6}
+  .b-zheng{background:var(--success-light);color:var(--success);border:1px solid #bff3e6}
+  .b-can{background:var(--info-light);color:var(--info);border:1px solid #bfe0fb}
+  .b-yi{background:var(--warning-light);color:#b7791f;border:1px solid #f5dfa3}
+
+  .tag{display:inline-block;padding:1px 8px;border-radius:6px;font-size:11px;font-weight:600;margin-right:4px}
+  .t-openai{background:#fef3e7;color:#c2410c}.t-google{background:#e8f0fe;color:#1a56db}.t-huawei{background:#fde8e8;color:#b91c1c}
+  .t-deepseek{background:#ede9fe;color:#6d28d9}.t-meta{background:#e7f3ff;color:#2563eb}.t-anthropic{background:#fef3c7;color:#92400e}
+  .t-alibaba{background:#fff1f2;color:#be123c}.t-apple{background:#f3f4f6;color:#374151}.t-academic{background:#ecfdf5;color:#047857}.t-other{background:#f1f5f9;color:#475569}
+  .t-glm{background:#e0f2fe;color:#0369a1}.t-mistral{background:#fef3c7;color:#92400e}.t-kimi{background:#f3e8ff;color:#6b21a8}.t-grok{background:#f0fdf4;color:#166534}.t-phi{background:#e0e7ff;color:#3730a3}
+
+  .legend-bar{position:sticky;top:0;background:rgba(255,255,255,.96);backdrop-filter:blur(8px);z-index:50;padding:14px 0;margin:0 -48px 24px;border-bottom:1px solid var(--gray-200);padding-left:48px;padding-right:48px}
+  .legend-row{display:flex;flex-wrap:wrap;gap:18px;align-items:center;font-size:12.5px;color:var(--gray-600);margin-bottom:10px}
+  .legend-row strong{font-size:12px;color:var(--gray-700);margin-right:2px}
+  .filter-row{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+  .filter-row .flabel{font-size:11.5px;color:var(--gray-500);margin-right:6px;font-weight:700;text-transform:uppercase;letter-spacing:.5px}
+  .fbtn{padding:4px 11px;border:1px solid var(--gray-300);background:#fff;border-radius:14px;font-size:12px;cursor:pointer;color:var(--gray-600);transition:all .15s}
+  .fbtn:hover{border-color:var(--primary);color:var(--primary)}
+  .fbtn.active{background:var(--primary);color:#fff;border-color:var(--primary)}
+  .filter-count{font-size:11.5px;color:var(--gray-500);margin-left:auto}
+
+  .timeline{position:relative;padding-left:34px;margin-top:8px}
+  .timeline::before{content:'';position:absolute;left:9px;top:6px;bottom:6px;width:3px;background:linear-gradient(180deg,var(--primary),#a29bfe 40%,var(--info) 80%,var(--success));border-radius:2px}
+  .phase{margin-bottom:14px;scroll-margin-top:90px}
+  .phase-header{display:flex;align-items:center;gap:12px;margin:18px 0 16px;position:relative}
+  .phase-header::before{content:'';position:absolute;left:-34px;top:50%;transform:translateY(-50%);width:20px;height:20px;border-radius:50%;background:#fff;border:4px solid var(--primary);box-shadow:0 0 0 4px var(--primary-light);z-index:2}
+  .phase-tag{display:inline-block;background:var(--primary);color:#fff;font-size:12px;font-weight:700;padding:3px 12px;border-radius:14px}
+  .phase-title{font-size:18px;font-weight:800;color:var(--gray-900)}
+  .phase-years{font-size:12.5px;color:var(--gray-500);font-weight:600}
+
+  .event{position:relative;margin-bottom:18px}
+  .event::before{content:'';position:absolute;left:-30px;top:20px;width:11px;height:11px;border-radius:50%;background:#fff;border:3px solid var(--primary);z-index:2;box-shadow:0 0 0 3px #fff}
+  .event.conf-zheng::before{border-color:var(--success)}
+  .event.conf-can::before{border-color:var(--info)}
+  .event.conf-yi::before{border-color:var(--warning)}
+  .event.hidden{display:none}
+
+  .ev-card{background:#fff;border-radius:var(--radius);padding:18px 22px;box-shadow:var(--shadow);border:1px solid var(--gray-200);border-left:4px solid var(--primary)}
+  .event.conf-zheng .ev-card{border-left-color:var(--success)}
+  .event.conf-can .ev-card{border-left-color:var(--info)}
+  .event.conf-yi .ev-card{border-left-color:var(--warning)}
+
+  .ev-head{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-bottom:8px}
+  .ev-date{font-family:"JetBrains Mono","Consolas",monospace;font-size:12.5px;font-weight:700;color:var(--primary);background:var(--primary-light);padding:2px 9px;border-radius:6px}
+  .ev-name{font-size:16.5px;font-weight:800;color:var(--gray-900);flex:1;min-width:200px}
+  .ev-tags{display:flex;flex-wrap:wrap;gap:3px;margin:4px 0 8px}
+  .ev-body{font-size:14px;color:var(--gray-700)}
+  .ev-body ul{margin:6px 0 0}
+  .ev-source{margin-top:10px;padding-top:10px;border-top:1px dashed var(--gray-200);font-size:12.5px;color:var(--gray-500)}
+  .ev-source strong{color:var(--gray-600)}
+  .ev-role{display:inline-block;background:var(--primary-light);color:var(--primary-dark);font-size:12px;font-weight:700;padding:2px 10px;border-radius:6px;margin-top:8px}
+
+  .tier-card{background:#fff;border-radius:var(--radius);padding:18px 22px;margin:12px 0;box-shadow:var(--shadow);border:1px solid var(--gray-200)}
+  .tier-label{display:inline-block;font-size:13px;font-weight:800;padding:3px 12px;border-radius:6px;margin-bottom:10px;color:#fff}
+  .t0{background:#111827}.t1{background:var(--primary)}.t2{background:var(--info)}.t3{background:var(--danger)}.t4{background:var(--success)}
+  .tier-items{font-size:14px;color:var(--gray-700)}.tier-items li{margin-bottom:6px}
+
+  .kpi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px;margin:20px 0}
+  .kpi{background:#fff;border-radius:var(--radius);padding:18px;text-align:center;box-shadow:var(--shadow);border-top:3px solid var(--primary)}
+  .kpi .num{font-size:26px;font-weight:800;color:var(--primary);line-height:1.1}
+  .kpi .lbl{font-size:12px;color:var(--gray-500);margin-top:4px}
+
+  #back-top{position:fixed;bottom:30px;right:30px;width:44px;height:44px;background:var(--primary);color:#fff;border:none;border-radius:50%;cursor:pointer;font-size:20px;box-shadow:var(--shadow-lg);opacity:0;transition:opacity .3s;z-index:200}
+  #back-top.show{opacity:1}
+  @media(max-width:900px){#sidebar{transform:translateX(-100%)}#main{margin-left:0;padding:0 20px 100px}.legend-bar{margin:0 -20px 20px;padding-left:20px;padding-right:20px}}
+</style>
+</head>
+<body>
+<div id="progress-bar"></div>
+
+<aside id="sidebar">
+  <div class="logo">
+    <div class="logo-icon">🧠</div>
+    <div class="logo-text">全球 LLM 发展历史线</div>
+    <small>完整时间线 · 2017 – 2026.06</small>
+  </div>
+  <nav id="nav">
+    <div class="nav-group">七阶段时间轴</div>
+    <a href="#phase1" class="active">① 技术奠基 2017</a>
+    <a href="#phase2">② 预训练范式 2018–19</a>
+    <a href="#phase3">③ 千亿跃迁 2020–21</a>
+    <a href="#phase4">④ 对话革命 2022</a>
+    <a href="#phase5">⑤ 开源爆发 2023</a>
+    <a href="#phase6">⑥ 推理范式 2024</a>
+    <a href="#phase7">⑦ 推理深化 2025–26</a>
+    <div class="nav-group">专题</div>
+    <a href="#tiers">里程碑分级 T0–T4</a>
+    <a href="#sources">引用来源清单</a>
+  </nav>
+</aside>
+
+<main id="main">
+
+  <section class="hero" id="top">
+    <h1>全球 LLM 大模型发展完整历史线</h1>
+    <p class="subtitle">从 2017 年 Transformer 诞生到 2026 年 6 月 openPangu 2.0 开源 · 完整发展脉络</p>
+    <div class="meta-row">
+      <span class="badge b-zheng">多源核实</span>
+      <span class="badge b-can">截至 2026 年 6 月</span>
+      <span class="tag t-academic">primary 源优先</span>
+    </div>
+    <div class="kpi-grid">
+      <div class="kpi"><div class="num">9+</div><div class="lbl">年跨度</div></div>
+      <div class="kpi"><div class="num">7</div><div class="lbl">发展阶段</div></div>
+      <div class="kpi"><div class="num">49</div><div class="lbl">里程碑事件</div></div>
+      <div class="kpi"><div class="num">3</div><div class="lbl">置信度等级</div></div>
+    </div>
+  </section>
+
+  <div class="legend-bar">
+    <div class="legend-row">
+      <strong>置信度图例：</strong>
+      <span class="badge b-zheng">【证】primary 源证实</span>
+      <span class="badge b-can">【参】secondary 源支持</span>
+      <span class="badge b-yi">【疑】厂商自述，需谨慎</span>
+    </div>
+    <div class="filter-row">
+      <span class="flabel">厂商</span>
+      <button class="fbtn active" data-filter="vendor" data-val="all">全部</button>
+      <button class="fbtn" data-filter="vendor" data-val="openai">OpenAI</button>
+      <button class="fbtn" data-filter="vendor" data-val="google">Google</button>
+      <button class="fbtn" data-filter="vendor" data-val="huawei">华为</button>
+      <button class="fbtn" data-filter="vendor" data-val="deepseek">DeepSeek</button>
+      <button class="fbtn" data-filter="vendor" data-val="meta">Meta</button>
+      <button class="fbtn" data-filter="vendor" data-val="anthropic">Anthropic</button>
+      <button class="fbtn" data-filter="vendor" data-val="alibaba">阿里</button>
+      <button class="fbtn" data-filter="vendor" data-val="glm">智谱GLM</button>
+      <button class="fbtn" data-filter="vendor" data-val="mistral">Mistral</button>
+      <button class="fbtn" data-filter="vendor" data-val="kimi">Kimi</button>
+      <button class="fbtn" data-filter="vendor" data-val="grok">Grok</button>
+      <button class="fbtn" data-filter="vendor" data-val="academic">学术</button>
+    </div>
+    <div class="filter-row" style="margin-top:6px">
+      <span class="flabel">置信度</span>
+      <button class="fbtn active" data-filter="confidence" data-val="all">全部</button>
+      <button class="fbtn" data-filter="confidence" data-val="zheng">证</button>
+      <button class="fbtn" data-filter="confidence" data-val="can">参</button>
+      <button class="fbtn" data-filter="confidence" data-val="yi">疑</button>
+      <span class="filter-count" id="filterCount"></span>
+    </div>
+  </div>
+
+  <h2 class="section-title" style="margin-top:64px"><span class="emoji">🗓️</span>完整发展时间轴</h2>
+  <p class="section-desc">点击上方筛选器按厂商或置信度过滤事件。时间轴沿轴线自上而下按时间顺序排列。</p>
+  <figure style="margin:18px 0;text-align:center">
+    <img src="../images/diagrams/history-of-ai.svg" alt="人工智能发展史（1950-2014+）：图灵测试、AI寒冬、专家系统、深蓝、深度学习、大模型等经典里程碑" style="max-width:680px;width:100%;border-radius:8px">
+    <figcaption style="font-size:12px;color:var(--gray-500);margin-top:6px">大模型之前的 AI 发展史（1950—2014+）：图灵测试 → AI 寒冬 → 专家系统 → 深蓝 → 深度学习爆发 → 大模型时代——这是下方 LLM 时间轴的前置背景</figcaption>
+  </figure>
+
+  <div class="timeline">
+
+    <!-- 第一阶段 -->
+    <div class="phase" id="phase1">
+      <div class="phase-header">
+        <span class="phase-tag">第一阶段</span>
+        <span class="phase-title">技术奠基期</span>
+        <span class="phase-years">2017</span>
+      </div>
+      <p style="font-size:13.5px;color:var(--gray-500);margin:-6px 0 16px">LLM 底层架构诞生。</p>
+
+      <div class="event conf-zheng" data-vendor="google,academic" data-confidence="zheng">
+        <div class="ev-card">
+          <div class="ev-head"><span class="ev-date">2017-06</span><span class="ev-name">Google《Attention Is All You Need》—— Transformer 架构</span><span class="badge b-zheng">证</span></div>
+          <div class="ev-tags"><span class="tag t-google">Google</span><span class="tag t-academic">学术</span></div>
+          <div class="ev-body">首创纯自注意力（Self-Attention）+ 编码器-解码器架构，取代 RNN/LSTM 循环结构，实现<strong>序列并行训练</strong>。所有现代 LLM 与多模态大模型的<strong>唯一技术原点</strong>，全表唯一的 T0 基石级节点。</div>
+          <div class="ev-source"><strong>来源：</strong>Vaswani et al., arXiv:1706.03762（NeurIPS 2017）</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 第二阶段 -->
+    <div class="phase" id="phase2">
+      <div class="phase-header">
+        <span class="phase-tag">第二阶段</span>
+        <span class="phase-title">预训练范式确立期</span>
+        <span class="phase-years">2018 – 2019</span>
+      </div>
+      <p style="font-size:13.5px;color:var(--gray-500);margin:-6px 0 16px">生成与理解双技术路线定型。</p>
+
+      <div class="event conf-zheng" data-vendor="openai" data-confidence="zheng">
+        <div class="ev-card">
+          <div class="ev-head"><span class="ev-date">2018-06</span><span class="ev-name">OpenAI GPT-1（约 1.17 亿参数）</span><span class="badge b-zheng">证</span></div>
+          <div class="ev-tags"><span class="tag t-openai">OpenAI</span></div>
+          <div class="ev-body">Decoder-only 单向预训练 + 下游微调范式，确立<strong>生成式路线</strong>。</div>
+          <div class="ev-source"><strong>来源：</strong>Radford et al.《Improving Language Understanding by Generative Pre-Training》</div>
+        </div>
+      </div>
+
+      <div class="event conf-zheng" data-vendor="google,academic" data-confidence="zheng">
+        <div class="ev-card">
+          <div class="ev-head"><span class="ev-date">2018-10</span><span class="ev-name">Google BERT（1.1 亿 / 3.4 亿参数）</span><span class="badge b-zheng">证</span></div>
+          <div class="ev-tags"><span class="tag t-google">Google</span><span class="tag t-academic">学术</span></div>
+          <div class="ev-body">Encoder-only 双向掩码语言模型（MLM），多项 NLU 榜单碾压传统模型。与 GPT 形成<strong>"生成（GPT）+ 理解（BERT）"双路线</strong>，沿用至今；带动全球预训练模型研发浪潮。</div>
+          <div class="ev-source"><strong>来源：</strong>Devlin et al., arXiv:1810.04805</div>
+        </div>
+      </div>
+
+      <div class="event conf-zheng" data-vendor="openai" data-confidence="zheng">
+        <div class="ev-card">
+          <div class="ev-head"><span class="ev-date">2019-02</span><span class="ev-name">OpenAI GPT-2（15 亿参数）</span><span class="badge b-zheng">证</span></div>
+          <div class="ev-tags"><span class="tag t-openai">OpenAI</span></div>
+          <div class="ev-body">取消下游微调，展现<strong>零样本（zero-shot）泛化</strong>。建立"大数据 + 大参数 → 强通用能力"的工程认知。</div>
+          <div class="ev-source"><strong>来源：</strong>Radford et al.《Language Models are Unsupervised Multitask Learners》</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 第三阶段 -->
+    <div class="phase" id="phase3">
+      <div class="phase-header">
+        <span class="phase-tag">第三阶段</span>
+        <span class="phase-title">千亿规模跃迁 + 产业落地萌芽</span>
+        <span class="phase-years">2020 – 2021</span>
+      </div>
+
+      <div class="event conf-zheng" data-vendor="openai,academic" data-confidence="zheng">
+        <div class="ev-card">
+          <div class="ev-head"><span class="ev-date">2020-05</span><span class="ev-name">OpenAI GPT-3（1750 亿参数）</span><span class="badge b-zheng">证</span></div>
+          <div class="ev-tags"><span class="tag t-openai">OpenAI</span><span class="tag t-academic">学术</span></div>
+          <div class="ev-body">首个千亿级通用模型，45TB 文本预训练（raw，过滤后实际约 570GB / 300B tokens），支持零样本/少样本跨任务生成。验证规模定律（Scaling Law），完成"实验室模型 → 产业工具"跨越，触发全球大模型军备竞赛。
+            <span class="ev-role">T1 产业范式级 · 千亿产业化起点</span>
+          </div>
+          <div class="ev-source"><strong>来源：</strong>Brown et al., arXiv:2005.14165</div>
+        </div>
+      </div>
+
+      <div class="event conf-zheng" data-vendor="google,academic" data-confidence="zheng">
+        <div class="ev-card">
+          <div class="ev-head"><span class="ev-date">2020 / 2021</span><span class="ev-name">Google T5 ／ FLAN</span><span class="badge b-zheng">证</span></div>
+          <div class="ev-tags"><span class="tag t-google">Google</span><span class="tag t-academic">学术</span></div>
+          <div class="ev-body">T5 统一 NLP 为"文本到文本"框架；FLAN 落地<strong>大规模指令微调</strong>。奠定"预训练 + 指令微调 + 对齐"的现代生产流水线。</div>
+          <div class="ev-source"><strong>来源：</strong>Raffel et al.（T5, arXiv:1910.10683）；Wei et al.（FLAN, arXiv:2109.01652）</div>
+        </div>
+      </div>
+
+      <div class="event conf-can" data-vendor="huawei" data-confidence="can">
+        <div class="ev-card">
+          <div class="ev-head"><span class="ev-date">2021-07</span><span class="ev-name">华为盘古大模型首次官方发布</span><span class="badge b-can">参</span></div>
+          <div class="ev-tags"><span class="tag t-huawei">华为</span></div>
+          <div class="ev-body">国内较早的千亿级中文大模型之一，官方口径为<strong>"超千亿参数的中文预训练大模型"</strong>，基于昇腾 + MindSpore。国产"芯片 + 框架 + 模型"全栈能力的早期证明。</div>
+          <div class="ev-source"><strong>来源：</strong>英文维基 Pangu 条目（"officially launched on July 2021"）；华为云官方页面</div>
+        </div>
+      </div>
+
+      <div class="event conf-zheng" data-vendor="openai" data-confidence="zheng">
+        <div class="ev-card">
+          <div class="ev-head"><span class="ev-date">2021-10</span><span class="ev-name">Microsoft × GitHub Copilot（Codex）</span><span class="badge b-zheng">证</span></div>
+          <div class="ev-tags"><span class="tag t-openai">OpenAI</span></div>
+          <div class="ev-body">首个现象级垂直 AI 工具，实时代码补全/生成。完成大模型<strong>生产力工具商业化闭环</strong>，重构开发者工作流。</div>
+        </div>
+      </div>
+
+      <div class="event conf-zheng" data-vendor="glm,academic" data-confidence="zheng">
+        <div class="ev-card">
+          <div class="ev-head"><span class="ev-date">2021-03</span><span class="ev-name">GLM 架构论文——自回归空白填充</span><span class="badge b-zheng">证</span></div>
+          <div class="ev-tags"><span class="tag t-glm">智谱GLM</span><span class="tag t-academic">学术</span></div>
+          <div class="ev-body">提出 <strong>autoregressive blank infilling</strong> 预训练目标 + 2D 位置编码，统一 NLU/NLG，区别于 GPT 的 decoder-only 路线。是后来 <strong>GLM 全家桶架构的根基</strong>。</div>
+          <div class="ev-source"><strong>来源：</strong>arXiv:2103.10360；ACL 2022</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 第四阶段 -->
+    <div class="phase" id="phase4">
+      <div class="phase-header">
+        <span class="phase-tag">第四阶段</span>
+        <span class="phase-title">对话革命 + RLHF 对齐成熟</span>
+        <span class="phase-years">2022</span>
+      </div>
+
+      <div class="event conf-zheng" data-vendor="openai,academic" data-confidence="zheng">
+        <div class="ev-card">
+          <div class="ev-head"><span class="ev-date">2022-01</span><span class="ev-name">OpenAI InstructGPT（GPT-3.5 雏形）</span><span class="badge b-zheng">证</span></div>
+          <div class="ev-tags"><span class="tag t-openai">OpenAI</span><span class="tag t-academic">学术</span></div>
+          <div class="ev-body">落地 <strong>SFT + RLHF</strong>（人类反馈强化学习）完整对齐体系，成为对话大模型标配，为 ChatGPT 奠基。论文于 2022 年 3 月 4 日提交。</div>
+          <div class="ev-source"><strong>来源：</strong>Ouyang et al., arXiv:2203.02155</div>
+        </div>
+      </div>
+
+      <div class="event conf-zheng" data-vendor="huawei,academic" data-confidence="zheng">
+        <div class="ev-card">
+          <div class="ev-head"><span class="ev-date">2022</span><span class="ev-name">华为盘古气象大模型（Nature 正刊）</span><span class="badge b-zheng">证</span></div>
+          <div class="ev-tags"><span class="tag t-huawei">华为</span><span class="tag t-academic">学术</span></div>
+          <div class="ev-body">三维神经网络中期全球天气预报，将传统数值预报（数小时级）压缩至<strong>秒级</strong>；地表分辨率 0.25°（25×25 km）、时间分辨率 1 小时。开创 <strong>AI for Science 大模型赛道</strong>，颠覆传统数值模拟范式。</div>
+          <div class="ev-source"><strong>来源：</strong>Bi et al.《Accurate medium-range global weather forecasting with 3D neural networks》, Nature；华为云官方页面</div>
+        </div>
+      </div>
+
+      <div class="event conf-zheng" data-vendor="openai" data-confidence="zheng">
+        <div class="ev-card">
+          <div class="ev-head"><span class="ev-date">2022-11-30</span><span class="ev-name">OpenAI ChatGPT（GPT-3.5-turbo）</span><span class="badge b-zheng">证</span></div>
+          <div class="ev-tags"><span class="tag t-openai">OpenAI</span></div>
+          <div class="ev-body">RLHF 优化的多轮对话模型，免费向全民开放。成为人类史上普及最快的消费级科技产品之一（公开报道 2 个月用户破亿），倒逼全球科技公司战略转向 AI，开启"闭源商用 vs 开源普惠"双格局。
+            <span class="ev-role">T1 产业范式级 · 全民 AI 普及</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="event conf-zheng" data-vendor="glm,academic" data-confidence="zheng">
+        <div class="ev-card">
+          <div class="ev-head"><span class="ev-date">2022-08</span><span class="ev-name">GLM-130B 开源</span><span class="badge b-zheng">证</span></div>
+          <div class="ev-tags"><span class="tag t-glm">智谱GLM</span><span class="tag t-academic">学术</span></div>
+          <div class="ev-body">开源 <strong>130B 双语 dense 模型</strong>，是首批 100B+ 量级开源模型之一；<strong>INT4 量化后 4×RTX 3090 即可推理</strong>。被视为<strong>国产开源大模型的标志性起点</strong>。</div>
+          <div class="ev-source"><strong>来源：</strong>arXiv:2210.02414；ICLR 2023</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 第五阶段 -->
+    <div class="phase" id="phase5">
+      <div class="phase-header">
+        <span class="phase-tag">第五阶段</span>
+        <span class="phase-title">开源爆发 + 多模态登顶 + 国产崛起</span>
+        <span class="phase-years">2023</span>
+      </div>
+
+      <div class="event conf-zheng" data-vendor="meta,academic" data-confidence="zheng">
+        <div class="ev-card">
+          <div class="ev-head"><span class="ev-date">2023-02</span><span class="ev-name">Meta LLaMA（7B–65B）</span><span class="badge b-zheng">证</span></div>
+          <div class="ev-tags"><span class="tag t-meta">Meta</span><span class="tag t-academic">学术</span></div>
+          <div class="ev-body">高质量开源基础模型，以"研究预览"形式发布权重后社区广泛二次开发。<strong>技术民主化革命</strong>——打破闭源垄断，催生 Alpaca、Vicuna 等大量衍生模型，开源生态成型。
+            <span class="ev-role">T1 产业范式级 · 开源民主化</span>
+          </div>
+          <div class="ev-source"><strong>来源：</strong>Touvron et al., arXiv:2302.13971</div>
+        </div>
+      </div>
+
+      <div class="event conf-zheng" data-vendor="openai" data-confidence="zheng">
+        <div class="ev-card">
+          <div class="ev-head"><span class="ev-date">2023-03</span><span class="ev-name">OpenAI GPT-4（多模态）</span><span class="badge b-zheng">证</span></div>
+          <div class="ev-tags"><span class="tag t-openai">OpenAI</span></div>
+          <div class="ev-body">图文多模态输入、长上下文、顶级推理，多项专业考试超越人类专家水平。确立高端大模型"多模态 + 强推理"标准，全行业进入"GPT-4 对标时代”。
+            <span class="ev-role">T2 能力范式级 · 多模态 + 强推理标杆</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="event conf-zheng" data-vendor="huawei,academic" data-confidence="zheng">
+        <div class="ev-card">
+          <div class="ev-head"><span class="ev-date">2023-03</span><span class="ev-name">华为 PanGu-Σ（万亿级，1085B 参数）</span><span class="badge b-zheng">证</span></div>
+          <div class="ev-tags"><span class="tag t-huawei">华为</span><span class="tag t-academic">学术</span></div>
+          <div class="ev-body">1085B 参数、329B tokens、覆盖 40+ 自然/编程语言，512 颗昇腾 910 训练 100+ 天，采用 Random Routed Experts（RRE）。</div>
+          <div class="ev-source"><strong>来源：</strong>arXiv:2303.10845（2023-03-20 提交）；维基百科条目</div>
+        </div>
+      </div>
+
+      <div class="event conf-zheng" data-vendor="alibaba,huawei,other" data-confidence="zheng">
+        <div class="ev-card">
+          <div class="ev-head"><span class="ev-date">2023 年中</span><span class="ev-name">中国大模型集体爆发（"百模大战"元年）</span><span class="badge b-zheng">证</span></div>
+          <div class="ev-tags"><span class="tag t-alibaba">阿里</span><span class="tag t-huawei">华为</span><span class="tag t-other">百度/讯飞/字节</span></div>
+          <div class="ev-body">
+            <ul>
+              <li><strong>百度文心一言</strong>（2023-03-16 邀请测试）</li>
+              <li><strong>阿里通义千问</strong>：2023-04-07 内测，<strong>2023-04-11 阿里云峰会对发布</strong>，2023-09-13 公众开放</li>
+              <li><strong>讯飞星火</strong>、<strong>字节豆包</strong>等集中发布</li>
+            </ul>
+            开启中国大模型元年，形成中美双极竞争格局。
+          </div>
+          <div class="ev-source"><strong>来源：</strong>百度百科通义千问条目（载明 04-07 / 04-11 / 09-13 时间点）；媒体报道</div>
+        </div>
+      </div>
+
+      <div class="event conf-zheng" data-vendor="glm" data-confidence="zheng">
+        <div class="ev-card">
+          <div class="ev-head"><span class="ev-date">2023-03</span><span class="ev-name">智谱 ChatGLM-6B</span><span class="badge b-zheng">证</span></div>
+          <div class="ev-tags"><span class="tag t-glm">智谱GLM</span></div>
+          <div class="ev-body"><strong>62 亿参数双语对话模型</strong>，消费级显卡仅需 <strong>6GB 显存</strong>即可本地部署。社区爆款，被认为是<strong> ChatGPT 的国产开源替代品</strong>。</div>
+          <div class="ev-source"><strong>来源：</strong>GitHub THUDM/ChatGLM-6B</div>
+        </div>
+      </div>
+
+      <div class="event conf-zheng" data-vendor="mistral,academic" data-confidence="zheng">
+        <div class="ev-card">
+          <div class="ev-head"><span class="ev-date">2023-09</span><span class="ev-name">Mistral 7B</span><span class="badge b-zheng">证</span></div>
+          <div class="ev-tags"><span class="tag t-mistral">Mistral</span><span class="tag t-academic">学术</span></div>
+          <div class="ev-body"><strong>7B dense 开源（Apache 2.0）</strong>，以小博大超越 Llama 2 13B，是<strong>欧洲开源大模型代表</strong>。</div>
+          <div class="ev-source"><strong>来源：</strong>mistral.ai/news/announcing-mistral-7b</div>
+        </div>
+      </div>
+
+      <div class="event conf-zheng" data-vendor="mistral,academic" data-confidence="zheng">
+        <div class="ev-card">
+          <div class="ev-head"><span class="ev-date">2023-12</span><span class="ev-name">Mixtral 8x7B（MoE）</span><span class="badge b-zheng">证</span></div>
+          <div class="ev-tags"><span class="tag t-mistral">Mistral</span><span class="tag t-academic">学术</span></div>
+          <div class="ev-body">稀疏 <strong>MoE 架构，总参~47B / 激活~13B</strong>，开源多项基准超越 GPT-3.5，是<strong>开源 MoE 里程碑</strong>。</div>
+          <div class="ev-source"><strong>来源：</strong>mistral.ai/news/mixtral-of-experts</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 第六阶段 -->
+    <div class="phase" id="phase6">
+      <div class="phase-header">
+        <span class="phase-tag">第六阶段</span>
+        <span class="phase-title">推理范式革命 + 全模态 + MoE 工程化</span>
+        <span class="phase-years">2024</span>
+      </div>
+
+      <div class="event conf-zheng" data-vendor="google" data-confidence="zheng">
+        <div class="ev-card">
+          <div class="ev-head"><span class="ev-date">2024-02</span><span class="ev-name">Google Gemini 1.5（100 万 token 上下文）</span><span class="badge b-zheng">证</span></div>
+          <div class="ev-tags"><span class="tag t-google">Google</span></div>
+          <div class="ev-body">MoE 架构，<strong>100 万 token 上下文窗口（限量开放，标准 128K）</strong>——上下文长度的重大跃迁。</div>
+          <div class="ev-source"><strong>来源：</strong>维基百科 Gemini 条目（2024-02 发布）</div>
+        </div>
+      </div>
+
+      <div class="event conf-zheng" data-vendor="deepseek,academic" data-confidence="zheng">
+        <div class="ev-card">
+          <div class="ev-head"><span class="ev-date">2024-05</span><span class="ev-name">DeepSeek-V2 开源（236B/21B MoE）</span><span class="badge b-zheng">证</span></div>
+          <div class="ev-tags"><span class="tag t-deepseek">DeepSeek</span></div>
+          <div class="ev-body">开源第二代 MoE，引入 <strong>MLA（多头潜在注意力）+ DeepSeekMoE</strong>，性能对标 GPT-4 Turbo。奠定 DeepSeek 的 MoE 技术路线。</div>
+        </div>
+      </div>
+
+      <div class="event conf-zheng" data-vendor="openai" data-confidence="zheng">
+        <div class="ev-card">
+          <div class="ev-head"><span class="ev-date">2024-05</span><span class="ev-name">OpenAI GPT-4o（全模态实时交互）</span><span class="badge b-zheng">证</span></div>
+          <div class="ev-tags"><span class="tag t-openai">OpenAI</span></div>
+          <div class="ev-body">文本/图像/音频超低延迟实时交互。多模态从"高端配置"变为"基础能力"。</div>
+        </div>
+      </div>
+
+      <div class="event conf-zheng" data-vendor="openai" data-confidence="zheng">
+        <div class="ev-card">
+          <div class="ev-head"><span class="ev-date">2024-09-12</span><span class="ev-name">OpenAI o1 —— 首个"推理模型"</span><span class="badge b-zheng">证</span></div>
+          <div class="ev-tags"><span class="tag t-openai">OpenAI</span></div>
+          <div class="ev-body">强化长思维链（chain-of-thought）推理，模拟"系统 2"深度思考。维基百科将其定义为<strong>首个被称为 "reasoning model" 的 LLM</strong>，推动大模型从"内容生成"进阶到复杂逻辑推理 / 科研创新，开启"推理模型"范式。
+            <span class="ev-role">T2 能力范式级 · 推理模型范式</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="event conf-zheng" data-vendor="deepseek,academic" data-confidence="zheng">
+        <div class="ev-card">
+          <div class="ev-head"><span class="ev-date">2024-12-26</span><span class="ev-name">DeepSeek-V3 开源（671B / 37B 激活 MoE）</span><span class="badge b-zheng">证</span></div>
+          <div class="ev-tags"><span class="tag t-deepseek">DeepSeek</span><span class="tag t-academic">学术</span></div>
+          <div class="ev-body">671B 总参 / <strong>37B 激活</strong>，14.8T tokens 预训练，仅需 <strong>2.788M H800 GPU 小时</strong>；首创<strong>无辅助损失（auxiliary-loss-free）负载均衡 + 多 token 预测（MTP）</strong>；全程训练无不可恢复 loss spike、无回滚。以极低算力达到闭源前沿水平，<strong>重新定义大模型训练成本预期</strong>。</div>
+          <div class="ev-source"><strong>来源：</strong>arXiv:2412.19437（DeepSeek-V3 技术报告）；维基百科</div>
+        </div>
+      </div>
+
+      <div class="event conf-zheng" data-vendor="glm,academic" data-confidence="zheng">
+        <div class="ev-card">
+          <div class="ev-head"><span class="ev-date">2024-01</span><span class="ev-name">智谱 GLM-4 / GLM-4V</span><span class="badge b-zheng">证</span></div>
+          <div class="ev-tags"><span class="tag t-glm">智谱GLM</span><span class="tag t-academic">学术</span></div>
+          <div class="ev-body">API 上线 <strong>128K 上下文对标 GPT-4</strong>；GLM-4V 提供视觉理解；同期开源 <strong>GLM-4-9B</strong> 并发布技术报告《ChatGLM: A Family of Large Language Models》。</div>
+          <div class="ev-source"><strong>来源：</strong>arXiv:2406.12793</div>
+        </div>
+      </div>
+
+      <div class="event conf-can" data-vendor="kimi" data-confidence="can">
+        <div class="ev-card">
+          <div class="ev-head"><span class="ev-date">2024-03</span><span class="ev-name">月之暗面 Kimi 200 万字长上下文</span><span class="badge b-can">参</span></div>
+          <div class="ev-tags"><span class="tag t-kimi">Kimi</span></div>
+          <div class="ev-body">消费级最长上下文（<strong>200 万汉字</strong>），掀起国内<strong>长上下文军备竞赛</strong>。</div>
+          <div class="ev-source"><strong>来源：</strong>Wikipedia Kimi 条目</div>
+        </div>
+      </div>
+
+      <div class="event conf-zheng" data-vendor="grok" data-confidence="zheng">
+        <div class="ev-card">
+          <div class="ev-head"><span class="ev-date">2024-03</span><span class="ev-name">xAI Grok-1 开源</span><span class="badge b-zheng">证</span></div>
+          <div class="ev-tags"><span class="tag t-grok">Grok</span></div>
+          <div class="ev-body">xAI 开源 <strong>Grok-1 base 权重 + JAX 代码</strong>，社区可本地运行。</div>
+          <div class="ev-source"><strong>来源：</strong>GitHub xai-org/grok-1</div>
+        </div>
+      </div>
+
+      <div class="event conf-zheng" data-vendor="phi,academic" data-confidence="zheng">
+        <div class="ev-card">
+          <div class="ev-head"><span class="ev-date">2024-12</span><span class="ev-name">微软 Phi-4</span><span class="badge b-zheng">证</span></div>
+          <div class="ev-tags"><span class="tag t-phi">Phi</span><span class="tag t-academic">学术</span></div>
+          <div class="ev-body"><strong>14B 小模型（SLM）</strong>，以<strong>数据质量为核心</strong>的训练法，证明"小而精 + 高质量数据"路线，是<strong>端侧/低延迟代表</strong>。</div>
+          <div class="ev-source"><strong>来源：</strong>Phi-4 技术报告</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 第七阶段 -->
+    <div class="phase" id="phase7">
+      <div class="phase-header">
+        <span class="phase-tag">第七阶段</span>
+        <span class="phase-title">推理深化 + 开源重塑 + 国产软硬件突围</span>
+        <span class="phase-years">2025 – 2026.06</span>
+      </div>
+
+      <div class="event conf-zheng" data-vendor="deepseek,academic" data-confidence="zheng">
+        <div class="ev-card">
+          <div class="ev-head"><span class="ev-date">2025-01-20</span><span class="ev-name">DeepSeek-R1 开源（671B/37B MoE，MIT 协议）</span><span class="badge b-zheng">证</span></div>
+          <div class="ev-tags"><span class="tag t-deepseek">DeepSeek</span><span class="tag t-academic">学术</span></div>
+          <div class="ev-body">
+            基于 V3-Base 的推理模型：<strong>R1-Zero 首次公开验证"纯 RL（GRPO，无 SFT）即可激发推理能力"</strong>——AIME 2024 pass@1 从 15.6% 升至 71.0%（自一致性达 86.7%）；完整 R1 模型达 79.8% 对标 OpenAI-o1（MATH-500 97.3 vs 96.4，AIME 2024 79.8 vs 79.2）。
+            <ul style="margin-top:6px">
+              <li><strong>开源</strong>：MIT 协议，含 R1-Zero、R1 及 6 个蒸馏小模型（1.5B/7B/8B/14B/32B/70B，基于 Qwen2.5 与 Llama3）；R1-Distill-Qwen-32B 在 AIME 2024 超越 o1-mini（72.6 vs 63.6）。</li>
+            </ul>
+            <span class="ev-role">T2 能力范式级 · 开源推理分水岭</span>
+          </div>
+          <div class="ev-source"><strong>来源：</strong>arXiv:2501.12948（2025-01-22 v1 提交）；HuggingFace 模型卡</div>
+        </div>
+      </div>
+
+      <div class="event conf-can" data-vendor="deepseek" data-confidence="can">
+        <div class="ev-card">
+          <div class="ev-head"><span class="ev-date">2025-02</span><span class="ev-name">DeepSeek"开源周"（基础设施全开源）</span><span class="badge b-can">参</span></div>
+          <div class="ev-tags"><span class="tag t-deepseek">DeepSeek</span></div>
+          <div class="ev-body">2-24 起 5 天连续开源 <strong>FlashMLA / DeepEP / DeepGEMM / DualPipe / 优化并行策略</strong>，把训练/推理底层基础设施全面开源，震动英伟达 CUDA 生态话语权。</div>
+        </div>
+      </div>
+
+      <div class="event conf-zheng" data-vendor="google" data-confidence="zheng">
+        <div class="ev-card">
+          <div class="ev-head"><span class="ev-date">2025-03-25</span><span class="ev-name">Google Gemini 2.5 Pro 登顶 LMArena</span><span class="badge b-zheng">证</span></div>
+          <div class="ev-tags"><span class="tag t-google">Google</span></div>
+          <div class="ev-body">带思维链推理、原生多模态，发布即登 LMArena 榜首。</div>
+          <div class="ev-source"><strong>来源：</strong>维基百科 Gemini 条目</div>
+        </div>
+      </div>
+
+      <div class="event conf-zheng" data-vendor="huawei,academic" data-confidence="zheng">
+        <div class="ev-card">
+          <div class="ev-head"><span class="ev-date">2025-04-10</span><span class="ev-name">华为 Pangu Ultra（135B dense）</span><span class="badge b-zheng">证</span></div>
+          <div class="ev-tags"><span class="tag t-huawei">华为</span><span class="tag t-academic">学术</span></div>
+          <div class="ev-body">135B 参数 <strong>dense（非 MoE）</strong>，13.2T tokens，<strong>8192 颗昇腾 NPU</strong> 训练；提出"depth-scaled sandwich normalization"消除 loss spike。基准自称优于 Llama 405B、Mistral Large 2；<strong>模型不开源，仅限华为商业客户使用</strong>。</div>
+          <div class="ev-source"><strong>来源：</strong>Pangu Ultra 技术报告（2025-04-10 提交）</div>
+        </div>
+      </div>
+
+      <div class="event conf-zheng" data-vendor="alibaba" data-confidence="zheng">
+        <div class="ev-card">
+          <div class="ev-head"><span class="ev-date">2025-04-29</span><span class="ev-name">阿里 Qwen3 开源（0.6B–235B，8 款，Apache 2.0）</span><span class="badge b-zheng">证</span></div>
+          <div class="ev-tags"><span class="tag t-alibaba">阿里</span></div>
+          <div class="ev-body">235B 旗舰（36T tokens 为全系列预训练量）+ 0.6B 起，共 8 款（2 MoE + 6 Dense）；<strong>国内首个支持"思考/非思考"模式切换的混合推理模型</strong>，支持 119 种语言。通义系列截至此时已开源 200+ 模型、全球下载超 3 亿、派生超 10 万。</div>
+          <div class="ev-source"><strong>来源：</strong>维基百科 Qwen 条目；百度百科</div>
+        </div>
+      </div>
+
+      <div class="event conf-zheng" data-vendor="anthropic" data-confidence="zheng">
+        <div class="ev-card">
+          <div class="ev-head"><span class="ev-date">2025-05-22</span><span class="ev-name">Anthropic Claude 4（Opus 4 / Sonnet 4）</span><span class="badge b-zheng">证</span></div>
+          <div class="ev-tags"><span class="tag t-anthropic">Anthropic</span></div>
+          <div class="ev-body">hybrid 模型（即时响应 + 扩展思考）；Claude Opus 4 SWE-bench Verified <strong>72.5%</strong>（Terminal-bench 43.2%），Sonnet 4 SWE-bench 72.7%；支持扩展思考中<strong>并行调用工具</strong>；可连续自主工作数小时（Rakuten 7 小时重构案例）。确立 <strong>AI 编程 Agent 性能前沿</strong>。</div>
+          <div class="ev-source"><strong>来源：</strong>Anthropic 官方博客</div>
+        </div>
+      </div>
+
+      <div class="event conf-zheng" data-vendor="huawei" data-confidence="zheng">
+        <div class="ev-card">
+          <div class="ev-head"><span class="ev-date">2025-06-20</span><span class="ev-name">华为盘古 5.5（HDC 2025，718B MoE）</span><span class="badge b-zheng">证</span></div>
+          <div class="ev-tags"><span class="tag t-huawei">华为</span></div>
+          <div class="ev-body">NLP 深度思考 <strong>718B MoE（256 专家）</strong>；30B CV 模型（号称业内最大 CV）；5 个行业专用深度思考模型（医疗/金融/政务/工业/汽车）；<strong>盘古世界模型（World Model）</strong>——生成数字物理空间训练智驾与具身机器人。</div>
+          <div class="ev-source"><strong>来源：</strong>华为云官方新闻稿（东莞，2025-06-20）</div>
+        </div>
+      </div>
+
+      <div class="event conf-zheng" data-vendor="huawei" data-confidence="zheng">
+        <div class="ev-card">
+          <div class="ev-head"><span class="ev-date">2025-06-30</span><span class="ev-name">华为 openPangu 首次开源（openPangu 1.0）</span><span class="badge b-zheng">证</span></div>
+          <div class="ev-tags"><span class="tag t-huawei">华为</span></div>
+          <div class="ev-body">开源 <strong>7B openPangu（dense）+ 72B openPangu Pro MoE（16B 激活）</strong>，推理针对昇腾优化。<strong>华为首次正式进入全球开源大模型主赛道</strong>，是 openPangu 2.0 的直接前序。
+            <span class="ev-role">T3 中国产业级 · 华为入局开源</span>
+          </div>
+          <div class="ev-source"><strong>来源：</strong>维基百科 Pangu 条目（2025-06-30）</div>
+        </div>
+      </div>
+
+      <div class="event conf-can" data-vendor="huawei,alibaba" data-confidence="can">
+        <div class="ev-card">
+          <div class="ev-head"><span class="ev-date">2025-07-04</span><span class="ev-name">Pangu Pro MoE ↔ Qwen 参数相似性争议</span><span class="badge b-can">参</span></div>
+          <div class="ev-tags"><span class="tag t-huawei">华为</span><span class="tag t-alibaba">阿里</span></div>
+          <div class="ev-body">研究者于 GitHub 指控 Pangu Pro MoE 注意力参数分布与阿里 Qwen "极高相似"；华为诺亚方舟实验室<strong>否认</strong>在其他模型上增量训练，称已按开源协议合规署名；指控仓库后被删除。开源合规与署名争议的真实案例。</div>
+          <div class="ev-source"><strong>来源：</strong>维基百科 Pangu 条目</div>
+        </div>
+      </div>
+
+      <div class="event conf-zheng" data-vendor="kimi" data-confidence="zheng">
+        <div class="ev-card">
+          <div class="ev-head"><span class="ev-date">2025-07</span><span class="ev-name">月之暗面 Kimi K2 开源</span><span class="badge b-zheng">证</span></div>
+          <div class="ev-tags"><span class="tag t-kimi">Kimi</span></div>
+          <div class="ev-body"><strong>1 万亿总参 / 32B 激活 MoE</strong>，主打 agent 与代码，<strong>128K 上下文</strong>，开源。</div>
+          <div class="ev-source"><strong>来源：</strong>moonshot.cn</div>
+        </div>
+      </div>
+
+      <div class="event conf-zheng" data-vendor="grok" data-confidence="zheng">
+        <div class="ev-card">
+          <div class="ev-head"><span class="ev-date">2025-07</span><span class="ev-name">xAI Grok-4</span><span class="badge b-zheng">证</span></div>
+          <div class="ev-tags"><span class="tag t-grok">Grok</span></div>
+          <div class="ev-body">号称<strong>"世界最聪明模型"</strong>，原生工具调用 + 实时搜索；SuperGrok Heavy 档 $300/月。</div>
+          <div class="ev-source"><strong>来源：</strong>x.ai/news/grok-4</div>
+        </div>
+      </div>
+
+      <div class="event conf-zheng" data-vendor="openai" data-confidence="zheng">
+        <div class="ev-card">
+          <div class="ev-head"><span class="ev-date">2025-08-07</span><span class="ev-name">OpenAI GPT-5（统一系统 + 路由）</span><span class="badge b-zheng">证</span></div>
+          <div class="ev-tags"><span class="tag t-openai">OpenAI</span></div>
+          <div class="ev-body"><strong>统一系统</strong>，自动实时路由"快速模型 / 深度推理（GPT-5 thinking）"，替代 GPT-4o、o3、o4-mini、GPT-4.1、GPT-4.5；SOTA：AIME 2025 <strong>94.6%</strong>、SWE-bench Verified <strong>74.9%</strong>、MMMU 84.2%；引入 <strong>"safe completions"</strong> 安全范式（取代二元拒绝）；GPT-5 pro 替代 o3-pro。从"多模型矩阵"收敛为"单系统智能路由"，重构产品形态。
+            <span class="ev-role">T2 能力范式级 · 统一路由系统</span>
+          </div>
+          <div class="ev-source"><strong>来源：</strong>OpenAI 官方博客</div>
+        </div>
+      </div>
+
+      <div class="event conf-zheng" data-vendor="huawei" data-confidence="zheng">
+        <div class="ev-card">
+          <div class="ev-head"><span class="ev-date">2025-09-29</span><span class="ev-name">华为 Connect 2025：全栈开源路线图</span><span class="badge b-zheng">证</span></div>
+          <div class="ev-tags"><span class="tag t-huawei">华为</span></div>
+          <div class="ev-body">宣布 2025-12-31 前开源 MindSpore 工具链、openPangu 模型、CANN 接口——<strong>国产 AI 软件栈系统性开源</strong>。</div>
+        </div>
+      </div>
+
+      <div class="event conf-zheng" data-vendor="google" data-confidence="zheng">
+        <div class="ev-card">
+          <div class="ev-head"><span class="ev-date">2025-11-18</span><span class="ev-name">Google Gemini 3 Pro / 3 Deep Think</span><span class="badge b-zheng">证</span></div>
+          <div class="ev-tags"><span class="tag t-google">Google</span></div>
+          <div class="ev-body">sparse MoE，最长 64K 输出。该发布据报<strong>促使 OpenAI 加速</strong>于 2025-12-11 推出 <strong>GPT-5.2</strong> 应战——双巨头节奏对抗的典型案例。</div>
+          <div class="ev-source"><strong>来源：</strong>维基百科 Gemini 条目</div>
+        </div>
+      </div>
+
+      <div class="event conf-can" data-vendor="apple,google" data-confidence="can">
+        <div class="ev-card">
+          <div class="ev-head"><span class="ev-date">2026-01-12</span><span class="ev-name">Apple Siri 接入 Gemini</span><span class="badge b-can">参</span></div>
+          <div class="ev-tags"><span class="tag t-apple">Apple</span><span class="tag t-google">Google</span></div>
+          <div class="ev-body">苹果宣布在新版 Siri 中使用 Gemini，标志性跨厂集成。</div>
+        </div>
+      </div>
+
+      <div class="event conf-zheng" data-vendor="glm" data-confidence="zheng">
+        <div class="ev-card">
+          <div class="ev-head"><span class="ev-date">2025-09</span><span class="ev-name">智谱 GLM-4.6（开源 Coding 标杆）</span><span class="badge b-zheng">证</span></div>
+          <div class="ev-tags"><span class="tag t-glm">智谱GLM</span></div>
+          <div class="ev-body"><strong>355B 总参 / 32B 激活 MoE</strong>，主打代码与 Agent，Intelligence Index v4.0 得 42 分，<strong>国产开源 Coding 模型标杆</strong>。</div>
+          <div class="ev-source"><strong>来源：</strong>z.ai/blog/glm-4.6；GitHub zai-org/GLM-4.6</div>
+        </div>
+      </div>
+
+      <div class="event conf-zheng" data-vendor="glm" data-confidence="zheng">
+        <div class="ev-card">
+          <div class="ev-head"><span class="ev-date">2026-02</span><span class="ev-name">智谱 GLM-5</span><span class="badge b-zheng">证</span></div>
+          <div class="ev-tags"><span class="tag t-glm">智谱GLM</span></div>
+          <div class="ev-body">旗舰发布，主打<strong>复杂系统工程与长程 Agent</strong>；Intelligence Index v4.0 得 50 分，新一代<strong>开源权重标杆</strong>。</div>
+          <div class="ev-source"><strong>来源：</strong>z.ai/blog/glm-5；Reuters</div>
+        </div>
+      </div>
+
+      <div class="event conf-can" data-vendor="alibaba" data-confidence="can">
+        <div class="ev-card">
+          <div class="ev-head"><span class="ev-date">2026-02</span><span class="ev-name">阿里 Qwen3.5 开源</span><span class="badge b-can">参</span></div>
+          <div class="ev-tags"><span class="tag t-alibaba">阿里</span></div>
+          <div class="ev-body">Qwen3-Next/VL/Max（2025-09）→ Qwen3.5（2026-02）。</div>
+          <div class="ev-source"><strong>来源：</strong>百度百科通义千问时间线</div>
+        </div>
+      </div>
+
+      <div class="event conf-can" data-vendor="huawei" data-confidence="can">
+        <div class="ev-card">
+          <div class="ev-head"><span class="ev-date">2026-06-12</span><span class="ev-name">华为 openPangu 2.0 开源（HDC 2026）</span><span class="badge b-can">参</span></div>
+          <div class="ev-tags"><span class="tag t-huawei">华为</span></div>
+          <div class="ev-body">
+            <ul>
+              <li><strong>Pro 版 505B 总参 / 18B 激活</strong>；<strong>Flash 版 92B 总参 / 6B 激活</strong>；均支持 <strong>512K 上下文</strong></li>
+              <li>计划 6-30 起陆续开源 7 大组件（含<strong>新增预训练代码、后训练代码、训练算子</strong>）；深度适配昇腾与鸿蒙 Agent</li>
+            </ul>
+            与 DeepSeek 形成"双国产顶级开源"格局；余承东解释 505B 体量系因"算力大量支持国内其他企业，自留有限"，并强调聚焦<strong>时延/吞吐而非堆参数</strong>。
+            <span class="ev-role">T3 中国产业级 · 国产开源生态深化</span>
+          </div>
+          <div class="ev-source"><strong>来源：</strong>2026-06-12 华为 HDC 2026 主题演讲，余承东发布（中文科技媒体报道）</div>
+        </div>
+      </div>
+
+      <div class="event conf-zheng" data-vendor="glm" data-confidence="zheng">
+        <div class="ev-card">
+          <div class="ev-head"><span class="ev-date">2026</span><span class="ev-name">智谱 GLM-5.2</span><span class="badge b-zheng">证</span></div>
+          <div class="ev-tags"><span class="tag t-glm">智谱GLM</span></div>
+          <div class="ev-body">开源 <strong>SOTA 代码模型</strong>，<strong>1M token 无损上下文</strong>，长程任务更稳定，定位<strong>"长任务时代"</strong>。</div>
+          <div class="ev-source"><strong>来源：</strong>bigmodel.cn；z.ai</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- 里程碑分级 -->
+  <section id="tiers">
+    <h2 class="section-title"><span class="emoji">🏆</span>全球 LLM 历史顶级里程碑（按行业变革权重）</h2>
+    <p class="section-desc">按"对行业变革的权重"而非单纯时间排序。</p>
+
+    <div class="tier-card">
+      <span class="tier-label t0">T0 基石级（无替代）</span>
+      <ul class="tier-items"><li>2017 Transformer（arXiv:1706.03762）</li></ul>
+    </div>
+    <div class="tier-card">
+      <span class="tier-label t1">T1 产业范式级</span>
+      <ul class="tier-items">
+        <li>2020 GPT-3（千亿产业化起点）</li>
+        <li>2022 ChatGPT（全民 AI 普及）</li>
+        <li>2023 LLaMA（开源民主化）</li>
+      </ul>
+    </div>
+    <div class="tier-card">
+      <span class="tier-label t2">T2 能力范式级</span>
+      <ul class="tier-items">
+        <li>2023 GPT-4（多模态 + 强推理标杆）</li>
+        <li>2024 o1（推理模型范式）</li>
+        <li>2025-01 DeepSeek-R1（开源推理 + 纯 RL 范式）</li>
+        <li>2025-08 GPT-5（统一路由系统）</li>
+      </ul>
+    </div>
+    <div class="tier-card">
+      <span class="tier-label t3">T3 中国特色产业级（不可替代）</span>
+      <ul class="tier-items">
+        <li>2021 盘古首次发布（国产全栈千亿破冰）</li>
+        <li>2022 盘古气象大模型登 Nature（AI for Science 赛道开创）</li>
+        <li>2025-06-30 openPangu 1.0 开源（华为入局开源）</li>
+        <li>2026-06-12 openPangu 2.0（国产软硬件开源生态深化）</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- 来源清单 -->
+  <section id="sources">
+    <h2 class="section-title"><span class="emoji">📚</span>引用与数据来源清单（primary 优先）</h2>
+    <h3>arXiv 论文（一手）</h3>
+    <ol>
+      <li>Vaswani et al. 2017 — Attention Is All You Need — arXiv:1706.03762</li>
+      <li>Devlin et al. 2018 — BERT — arXiv:1810.04805</li>
+      <li>Brown et al. 2020 — GPT-3 — arXiv:2005.14165</li>
+      <li>Ouyang et al. 2022 — InstructGPT — arXiv:2203.02155</li>
+      <li>Touvron et al. 2023 — LLaMA — arXiv:2302.13971</li>
+      <li>PanGu-Σ 2023 — arXiv:2303.10845</li>
+      <li>DeepSeek-V3 2024 — arXiv:2412.19437</li>
+      <li>DeepSeek-R1 2025 — arXiv:2501.12948</li>
+      <li>Raffel et al. 2019 — T5 — arXiv:1910.10683；Wei et al. 2021 — FLAN — arXiv:2109.01652</li>
+      <li>GLM 架构 — arXiv:2103.10360；GLM-130B — arXiv:2210.02414；ChatGLM 技术报告 — arXiv:2406.12793</li>
+    </ol>
+    <h3>Nature</h3>
+    <ol start="10">
+      <li>Bi et al. — Accurate medium-range global weather forecasting with 3D neural networks — Nature（盘古气象）</li>
+    </ol>
+    <h3>厂商官方</h3>
+    <ol start="11">
+      <li>OpenAI 官方博客（GPT-4 / GPT-4o / o1 / GPT-5 / GPT-5.2）</li>
+      <li>Anthropic 官方博客（Claude 4）</li>
+      <li>华为云官方新闻稿（盘古 5.5，2025-06-20）；华为 HDC 2026（openPangu 2.0，2026-06-12）</li>
+      <li>DeepSeek GitHub / HuggingFace 模型卡（R1、V3）</li>
+      <li>阿里云（Qwen3）</li>
+      <li>智谱AI（z.ai）；Mistral AI（mistral.ai）；xAI（x.ai）；月之暗面（moonshot.cn）；微软 Phi（azure.microsoft.com）</li>
+    </ol>
+    <h3>百科（secondary / 参考）</h3>
+    <ol start="16">
+      <li>维基百科（英）：Pangu、DeepSeek、Gemini、Qwen、OpenAI o1 等条目</li>
+      <li>百度百科：通义千问、盘古大模型条目</li>
+    </ol>
+  </section>
+
+</main>
+
+<button id="back-top" title="回到顶部">↑</button>
+
+<script>
+  const pb=document.getElementById('progress-bar');
+  window.addEventListener('scroll',()=>{
+    const h=document.documentElement;
+    pb.style.width=(h.scrollTop/(h.scrollHeight-h.clientHeight)*100)+'%';
+    document.getElementById('back-top').classList.toggle('show',h.scrollTop>400);
+    let cur='phase1';
+    document.querySelectorAll('div.phase[id],section[id]').forEach(s=>{
+      if(window.scrollY>=s.offsetTop-120)cur=s.id;
+    });
+    document.querySelectorAll('#sidebar nav a').forEach(a=>a.classList.toggle('active',a.getAttribute('href')==='#'+cur));
+  });
+  document.getElementById('back-top').onclick=()=>window.scrollTo({top:0,behavior:'smooth'});
+
+  const state={vendor:'all',confidence:'all'};
+  const events=document.querySelectorAll('.event');
+  const countEl=document.getElementById('filterCount');
+  function apply(){
+    let shown=0;
+    events.forEach(e=>{
+      const vendors=(e.dataset.vendor||'').split(',');
+      const conf=e.dataset.confidence;
+      const vOk=state.vendor==='all'||vendors.includes(state.vendor);
+      const cOk=state.confidence==='all'||conf===state.confidence;
+      const ok=vOk&&cOk;
+      e.classList.toggle('hidden',!ok);
+      if(ok)shown++;
+    });
+    countEl.textContent='显示 '+shown+' / '+events.length+' 个事件';
+  }
+  document.querySelectorAll('.fbtn').forEach(b=>{
+    b.onclick=()=>{
+      const f=b.dataset.filter,v=b.dataset.val;
+      document.querySelectorAll('.fbtn[data-filter="'+f+'"]').forEach(x=>x.classList.remove('active'));
+      b.classList.add('active');
+      state[f]=v;apply();
+    };
+  });
+  apply();
+</script>
+</body>
+</html>

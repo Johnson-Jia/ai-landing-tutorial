@@ -1,0 +1,1415 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>代码知识图谱：设计哲学与架构深度解析</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<style>
+  :root {
+    --primary: #2563eb;
+    --primary-dark: #1d4ed8;
+    --primary-light: #dbeafe;
+    --accent: #0891b2;
+    --text: #1e293b;
+    --text-light: #475569;
+    --muted: #94a3b8;
+    --bg: #ffffff;
+    --bg-alt: #f8fafc;
+    --bg-code: #f1f5f9;
+    --border: #e2e8f0;
+    --border-strong: #cbd5e1;
+    --danger: #dc2626;
+    --warning: #d97706;
+    --success: #16a34a;
+    --shadow: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+    --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.08), 0 2px 4px -2px rgba(0,0,0,0.05);
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", Roboto, Helvetica, Arial, sans-serif;
+    color: var(--text);
+    background: var(--bg);
+    line-height: 1.7;
+    font-size: 15px;
+  }
+  /* Layout */
+  .layout { display: flex; max-width: 1400px; margin: 0 auto; }
+  nav.toc {
+    position: sticky;
+    top: 0;
+    align-self: flex-start;
+    width: 280px;
+    height: 100vh;
+    overflow-y: auto;
+    padding: 24px 18px;
+    border-right: 1px solid var(--border);
+    background: var(--bg-alt);
+    flex-shrink: 0;
+  }
+  main { flex: 1; min-width: 0; padding: 0 48px; max-width: 1040px; }
+  /* TOC */
+  .toc-title { font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); margin: 0 0 12px; }
+  nav.toc ol { list-style: none; padding: 0; margin: 0; counter-reset: chapter; }
+  nav.toc li { margin: 2px 0; }
+  nav.toc a {
+    display: block;
+    padding: 6px 10px;
+    color: var(--text-light);
+    text-decoration: none;
+    border-radius: 6px;
+    font-size: 13.5px;
+    counter-increment: chapter;
+    transition: all 0.15s;
+  }
+  nav.toc a::before { content: counter(chapter) ". "; color: var(--primary); font-weight: 600; }
+  nav.toc a:hover { background: var(--primary-light); color: var(--primary-dark); }
+  /* Headers */
+  h1 { font-size: 32px; font-weight: 700; margin: 56px 0 8px; letter-spacing: -0.02em; }
+  h2 { font-size: 26px; font-weight: 700; margin: 56px 0 16px; padding-bottom: 10px; border-bottom: 2px solid var(--primary); color: var(--text); letter-spacing: -0.01em; scroll-margin-top: 20px; }
+  h3 { font-size: 19px; font-weight: 600; margin: 32px 0 12px; color: var(--primary-dark); scroll-margin-top: 20px; }
+  h4 { font-size: 16px; font-weight: 600; margin: 22px 0 10px; color: var(--text); }
+  p { margin: 0 0 14px; }
+  .subtitle { font-size: 17px; color: var(--text-light); margin-bottom: 8px; }
+  .meta { color: var(--muted); font-size: 13px; margin-bottom: 40px; }
+  /* Hero */
+  .hero { background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 60%, #0891b2 100%); color: #fff; padding: 64px 0; margin-bottom: 16px; }
+  .hero-inner { max-width: 1040px; margin: 0 auto; padding: 0 48px; }
+  .hero h1 { color: #fff; margin-top: 0; }
+  .hero .subtitle { color: rgba(255,255,255,0.9); }
+  /* Code */
+  pre {
+    background: #282c34;
+    color: #abb2bf;
+    padding: 18px 20px;
+    border-radius: 8px;
+    overflow-x: auto;
+    font-size: 13px;
+    line-height: 1.55;
+    margin: 16px 0;
+    box-shadow: var(--shadow);
+  }
+  code { font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace; }
+  :not(pre) > code {
+    background: var(--bg-code);
+    color: var(--danger);
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 0.88em;
+  }
+  pre code { background: transparent; color: inherit; padding: 0; }
+  /* Tables */
+  table { border-collapse: collapse; width: 100%; margin: 16px 0; font-size: 14px; box-shadow: var(--shadow); }
+  th, td { padding: 10px 14px; text-align: left; border: 1px solid var(--border); }
+  th { background: var(--primary); color: #fff; font-weight: 600; }
+  tbody tr:nth-child(even) { background: var(--bg-alt); }
+  tbody tr:hover { background: var(--primary-light); }
+  /* Callouts */
+  .callout { border-left: 4px solid var(--primary); background: var(--bg-alt); padding: 14px 18px; margin: 16px 0; border-radius: 0 8px 8px 0; }
+  .callout.warn { border-left-color: var(--warning); background: #fffbeb; }
+  .callout.danger { border-left-color: var(--danger); background: #fef2f2; }
+  .callout.success { border-left-color: var(--success); background: #f0fdf4; }
+  .callout p:last-child { margin-bottom: 0; }
+  .callout-title { font-weight: 700; margin-bottom: 6px; display: block; }
+  /* Details */
+  details { border: 1px solid var(--border); border-radius: 8px; margin: 16px 0; background: var(--bg); box-shadow: var(--shadow); }
+  details > summary { padding: 12px 18px; font-weight: 600; cursor: pointer; color: var(--primary-dark); user-select: none; list-style: none; }
+  details > summary::-webkit-details-marker { display: none; }
+  details > summary::before { content: "▸ "; color: var(--primary); transition: transform 0.15s; display: inline-block; }
+  details[open] > summary::before { transform: rotate(90deg); }
+  details[open] > summary { border-bottom: 1px solid var(--border); }
+  details .details-body { padding: 16px 18px; }
+  /* Diagram */
+  .diagram { background: var(--bg-alt); border: 1px solid var(--border); border-radius: 8px; padding: 22px; margin: 18px 0; text-align: center; overflow-x: auto; }
+  .diagram pre { background: transparent; text-align: left; box-shadow: none; }
+  /* Source cite */
+  .cite { display: inline-block; font-size: 12px; color: var(--muted); background: var(--bg-code); padding: 1px 7px; border-radius: 4px; margin-left: 4px; font-family: "SFMono-Regular", Consolas, monospace; }
+  /* Lists */
+  ul, ol { padding-left: 22px; }
+  li { margin: 4px 0; }
+  /* Pill */
+  .pill { display: inline-block; padding: 2px 10px; border-radius: 12px; font-size: 12px; font-weight: 600; }
+  .pill.blue { background: var(--primary-light); color: var(--primary-dark); }
+  .pill.green { background: #dcfce7; color: #166534; }
+  .pill.amber { background: #fef3c7; color: #92400e; }
+  .pill.red { background: #fee2e2; color: #991b1b; }
+  /* Footer */
+  footer { margin-top: 80px; padding: 32px 0; border-top: 1px solid var(--border); color: var(--muted); font-size: 13px; text-align: center; }
+  hr { border: none; border-top: 1px solid var(--border); margin: 40px 0; }
+  .tag-row { margin: 8px 0 24px; }
+  strong { color: var(--text); }
+  .arch-box { display: inline-block; border: 2px solid var(--primary); background: var(--primary-light); color: var(--primary-dark); padding: 8px 16px; border-radius: 8px; font-weight: 600; margin: 4px; }
+  @media (max-width: 1024px) {
+    nav.toc { display: none; }
+    main { padding: 0 24px; }
+    .hero-inner { padding: 0 24px; }
+  }
+</style>
+</head>
+<body>
+
+<section class="hero">
+  <div class="hero-inner">
+    <h1>代码知识图谱：设计哲学与架构深度解析</h1>
+    <p class="subtitle">让 AI Agent 真正理解你的代码库 —— 从原理到原型到扩展</p>
+    <p class="subtitle" style="opacity:0.85;">确定性关系图谱 × 索引管线工程 × MCP 工具设计 × Agent 三层集成</p>
+  </div>
+</section>
+
+<div class="layout">
+<nav class="toc">
+  <div class="toc-title">章节导航</div>
+  <ol>
+    <li><a href="#ch1">设计哲学</a></li>
+    <li><a href="#ch2">架构总览</a></li>
+    <li><a href="#ch3">图谱建模深度</a></li>
+    <li><a href="#ch4">索引管线工程化</a></li>
+    <li><a href="#ch5">社区发现与执行流</a></li>
+    <li><a href="#ch6">MCP 工具设计</a></li>
+    <li><a href="#ch7">指令工程</a></li>
+    <li><a href="#ch8">Agent 集成三层</a></li>
+    <li><a href="#ch9">企业级扩展</a></li>
+    <li><a href="#ch10">从零实现路线</a></li>
+  </ol>
+  <hr style="margin:18px 0; border-color:var(--border);">
+  <div class="toc-title">阅读建议</div>
+  <p style="font-size:12.5px;color:var(--text-light);line-height:1.6;">主体通俗可读；<code>&lt;details&gt;</code> 折叠的是技术细节与可复现代码；灰色 <span class="cite">cite</span> 标注源码出处。</p>
+</nav>
+
+<main>
+
+<div class="tag-row">
+  <span class="pill blue">知识图谱</span>
+  <span class="pill blue">属性图</span>
+  <span class="pill green">Tree-sitter</span>
+  <span class="pill green">Leiden 社区</span>
+  <span class="pill amber">MCP 协议</span>
+  <span class="pill amber">Agent Hooks</span>
+  <span class="pill red">TypeScript</span>
+</div>
+<p class="meta">读完本文，你能：① 理解代码知识图谱的设计原理 ② 搭出最小可用原型 ③ 知道怎么扩展到企业级。</p>
+
+<!-- ======================= 第 1 章 ======================= -->
+<h2 id="ch1">1. 设计哲学</h2>
+
+<h3>1.1 为什么知识图谱，而不是 RAG？</h3>
+<p>传统 Agent 工具（Cursor、Claude Code、Codex 等）擅长语义匹配，但<strong>不真正知道你的代码库结构</strong>。典型故障：AI 修改了 <code>UserService.validate()</code>，却不知道有 47 个函数依赖它的返回类型，于是<strong>破坏性变更被悄然合并</strong>。</p>
+
+<p>检索增强生成（RAG，含 Graph RAG）的根本问题是<strong>概率性</strong>：它把原始图边喂给 LLM，指望它探索够多次。结果是 LLM 要连续做 4+ 次查询（先找调用者、再找文件、再过滤测试、再判高风险），每一跳都可能漏。知识图谱的做法相反——<strong>在索引时就预计算结构</strong>（聚类、追踪、打分、置信度），让工具在一次调用内返回完整上下文。</p>
+
+<div class="callout">
+  <span class="callout-title">确定性 vs 概率性</span>
+  <p>"谁调用了 <code>validateUser</code>"——这是一道<strong>确定性的图查询</strong>，答案是闭集。把它交给概率检索等于把简单的集合运算降级成模糊猜测。图谱用 <code>MATCH (a)-[:CALLS]-&gt;(b:Function {name:"validateUser"}) RETURN a</code> 在毫秒内返回精确答案，零幻觉。</p>
+</div>
+
+<h3>1.2 三大价值</h3>
+<table>
+<thead><tr><th>价值</th><th>含义</th><th>对比 RAG</th></tr></thead>
+<tbody>
+<tr><td><strong>可靠（Reliability）</strong></td><td>LLM 不会漏上下文——关系已经在工具返回里</td><td>RAG 的 Top-K 永远在漏边</td></tr>
+<tr><td><strong>省 Token（Token efficiency）</strong></td><td>不需要 10 次查询链去理解一个函数</td><td>RAG 每跳都消耗上下文窗口</td></tr>
+<tr><td><strong>解放小模型（Model democratization）</strong></td><td>工具承担重活，小模型也能拿到完整架构视图，可与巨兽模型竞争</td><td>RAG 依赖模型自己做图推理</td></tr>
+</tbody>
+</table>
+<p><span class="cite">README.md L304-308</span></p>
+
+<h3>1.3 图谱与 RAG 不是二选一，而是分层共存</h3>
+<p>正确的架构是<strong>分层共存</strong>：确定性的关系（谁调用谁、谁继承谁、谁实现哪个接口、字段被谁读/写）走图；语义相似度（"哪个函数在做用户鉴权"）走向量检索。这类工具同时维护：</p>
+<ul>
+<li><strong>属性图</strong>（关系数据库）——结构化、可审计、可 Cypher 查询；</li>
+<li><strong>向量索引</strong>（HNSW + cosine）——语义召回；</li>
+<li><strong>BM25 + RRF 融合</strong>——关键词与语义混合排序。<span class="cite">README.md L458 Tech Stack</span></li>
+</ul>
+<p>这种分层让"硬"问题（影响分析、变更检测、协调重命名）走图的强保证路径，让"软"问题（自然语言定位）走向量路径，互不替代。</p>
+
+<!-- ======================= 第 2 章 ======================= -->
+<h2 id="ch2">2. 架构总览</h2>
+
+<h3>2.1 四层架构</h3>
+<div class="diagram">
+<pre><code>┌─────────────────────────────────────────────────────────────────┐
+│  L4  Agent 集成层                                                 │
+│      SessionStart hook（注入工具清单）                              │
+│      PreToolUse hook（拦截 grep → 增强引擎，&lt;500ms）                │
+│      MCP instructions（连接时注入 system 级指令）                   │
+│      Skills（探索/调试/影响分析/重构 4 类）                          │
+├─────────────────────────────────────────────────────────────────┤
+│  L3  MCP 暴露层                                                   │
+│      14 工具（理解类 / 变更类 / 查询类）                            │
+│      Resources（codegraph://repo/{name}/context、/processes…）       │
+│      Prompts（detect_impact、generate_map）                        │
+│      Next 提示（工具返回末尾自引导下一步）                            │
+├─────────────────────────────────────────────────────────────────┤
+│  L2  图存储层                                                     │
+│      属性图：节点表（File/Function/Class/.../Community/Process）     │
+│      单 CodeRelation 表（type/confidence/reason/step 四属性）       │
+│      Embedding 表（独立建表，HNSW 向量索引）                        │
+│      嵌入式 LadybugDB（本地） / 服务端（治理）双轨                   │
+├─────────────────────────────────────────────────────────────────┤
+│  L1  索引层（6 阶段管线）                                          │
+│      扫描 → Tree-sitter 解析 → 跨文件传播                          │
+│            → Leiden 社区 → 执行流追踪 → 业务概念提取                │
+│      Worker 池并行（20MB 字节预算分块 / 8 线程 / 子批 1500）         │
+└─────────────────────────────────────────────────────────────────┘</code></pre>
+</div>
+
+<h3>2.2 端到端数据流</h3>
+<p>代码进入，智能出来，整条链路是<strong>纯本地、零网络</strong>的（CLI 模式）：</p>
+<div class="diagram">
+<pre><code>源代码文件
+   │  walkRepositoryPaths 扫描文件树（只看路径，不读内容）
+   ▼
+File/Folder 节点 + CONTAINS 边
+   │  Tree-sitter 解析（多语言 14+）→ AST
+   ▼
+Symbol 节点（Function/Class/Method/Interface/...）
+   │  关系提取：IMPORTS / CALLS / EXTENDS / IMPLEMENTS / ACCESSES
+   │  Kahn 拓扑排序跨文件传播类型绑定（解决链式调用）
+   ▼
+完整的关系图（带 confidence + reason 审计字段）
+   │  Leiden 聚类（基于 CALLS 边）→ Community 节点
+   │  BFS 执行流追踪（入口点 → Process 节点，跨社区标记）
+   ▼
+可查询的语义图（Community = 功能域，Process = 执行流）
+   │  落库 LadybugDB + 可选 Embedding（384 维 HNSW）
+   ▼
+MCP 工具集（context / impact / detect_changes / rename / ...）
+   │  Agent 调用 → 一次返回完整上下文
+   ▼
+Agent 输出可靠答案 / 安全变更</code></pre>
+</div>
+
+<h3>2.3 关键技术选型理由</h3>
+<details>
+<summary>为什么是属性图（而非 RDF 三元组）？为什么是嵌入式（而非 Neo4j 服务端）？为什么是 MCP（而非自定义协议）？</summary>
+<div class="details-body">
+<ul>
+<li><strong>属性图 vs RDF 三元组</strong>：属性图允许节点带任意属性、关系带属性（confidence/reason），查询语义更贴近代码心智模型。RDF 一切皆三元组，写"带置信度的调用关系"要绕成 reification，对 LLM 写 Cypher 不友好。<span class="cite">schema.ts L7-10 注释</span></li>
+<li><strong>嵌入式图库（LadybugDB，前身 KuzuDB）</strong>：CLI 模式下，索引落在仓库的 <code>.codegraph/</code> 目录里（gitignored），零网络、零部署、隐私不外泄。LadybugDB 用列式存储 + Cypher 查询，对属性图 + 向量混合查询原生友好。<span class="cite">README.md L456-457</span></li>
+<li><strong>MCP（Model Context Protocol）</strong>：它是 Anthropic 推出的开放标准，Cursor / Claude Code / Codex / Windsurf / OpenCode 都支持。一次集成，多 Editor 受益。自定义协议意味着每接一个 Agent 写一遍适配层。</li>
+<li><strong>Tree-sitter（native bindings for CLI，WASM for Web）</strong>：增量解析、容错（语法错误也能产出部分 AST）、统一 14+ 语言的查询接口。是代码索引的事实标准。</li>
+</ul>
+</div>
+</details>
+
+<!-- ======================= 第 3 章 ======================= -->
+<h2 id="ch3">3. 图谱建模深度</h2>
+
+<h3>3.1 节点设计：代码元素 + 抽象语义</h3>
+<p>这类工具把节点分成两大类：<strong>代码元素节点</strong>（直接来自 AST）和<strong>抽象语义节点</strong>（索引时计算出来的高阶概念）。</p>
+<table>
+<thead><tr><th>类别</th><th>节点类型</th><th>来源</th></tr></thead>
+<tbody>
+<tr><td rowspan="3">代码元素</td><td><code>File</code>、<code>Folder</code></td><td>文件系统扫描</td></tr>
+<tr><td><code>Function</code>、<code>Class</code>、<code>Interface</code>、<code>Method</code></td><td>Tree-sitter AST</td></tr>
+<tr><td>多语言：<code>Struct</code>、<code>Enum</code>、<code>Trait</code>、<code>Impl</code>、<code>Macro</code>、<code>Module</code>、<code>Constructor</code>、<code>Property</code>、<code>Annotation</code>、<code>Template</code>…</td><td>各语言的 native AST 节点</td></tr>
+<tr><td rowspan="2">抽象语义</td><td><code>Community</code>（社区/功能域）</td><td>Leiden 算法聚类</td></tr>
+<tr><td><code>Process</code>（执行流）</td><td>入口点 BFS 追踪</td></tr>
+<tr><td>业务扩展</td><td><code>Route</code>（API 路由）、<code>Tool</code>（MCP 工具）、<code>Section</code>（Markdown 章节）</td><td>框架/协议感知提取</td></tr>
+</tbody>
+</table>
+
+<h4>为什么要分表？而不是一个大 Node 表用 label 区分？</h4>
+<p>这是属性图的核心取舍。<strong>每种节点类型一张表，每张表有专属字段</strong>。比如 <code>Method</code> 表有 <code>parameterCount</code>、<code>returnType</code>；<code>Class</code> 表有 <code>tableName</code>、<code>tableSource</code>（标记数据库实体映射）；<code>Route</code> 表有 <code>responseKeys</code>、<code>middleware</code>。这让 Cypher 查询能精准带上类型与字段约束，且利于存储引擎按类型裁剪。<span class="cite">schema.ts L22-200</span></p>
+
+<h3>3.2 单 CodeRelation 表设计（最重要的建模决策）</h3>
+<p>所有关系——不管是什么类型——都进<strong>同一张 <code>CodeRelation</code> 表</strong>，用 <code>type</code> 属性区分。<span class="cite">schema.ts L221-428</span></p>
+
+<pre><code class="language-sql">CREATE REL TABLE CodeRelation (
+  FROM File TO File,
+  FROM File TO Function,
+  FROM Function TO Function,
+  FROM Class TO Method,
+  -- ... 几百种 FROM-TO 组合 ...
+  type STRING,         -- 'CALLS' | 'IMPORTS' | 'EXTENDS' | 'IMPLEMENTS' | ...
+  confidence DOUBLE,   -- 0.0-1.0，模糊匹配的置信度
+  reason STRING,       -- 'ast-call' | 'fuzzy-global' | 'leiden-algorithm' | ...
+  step INT32           -- 仅 STEP_IN_PROCESS 用：1-indexed 步骤号
+)</code></pre>
+
+<h4>为什么不分表（CALLS 一张表、IMPORTS 一张表）？</h4>
+<div class="callout success">
+  <span class="callout-title">AI 友好是第一原则</span>
+  <p>LLM 写 Cypher 时，记住"所有边都在一张表，用 <code>{type:'CALLS'}</code> 过滤"远比记住"CALLS 在 Calls 表、IMPORTS 在 Imports 表"轻松。源码注释写得很直白：<em>"This allows LLMs to write natural Cypher queries like: MATCH (f:Function)-[r:CodeRelation {type: 'CALLS'}]-&gt;(g:Function) RETURN f, g"</em>。<span class="cite">schema.ts L7-10</span></p>
+</div>
+
+<h3>3.3 confidence + reason：可审计的关系</h3>
+<p>每条边带两个审计字段，是工程上区别于玩具图的关键：</p>
+<ul>
+<li><code>confidence: 1.0</code> = AST 静态确认（如显式 <code>import</code>）；<code>&lt;0.8</code> = 模糊匹配（如全局函数名猜测）；<code>0.3</code> = 最弱的 fuzzy-global。</li>
+<li><code>reason: 'ast-call'</code>、<code>'fuzzy-global'</code>、<code>'leiden-algorithm'</code>、<code>'trace-detection'</code>、<code>'route-handler-entry-point'</code>——告诉你这条边是怎么来的。</li>
+</ul>
+<p>下游工具就能做过滤：<code>WHERE r.confidence &gt;= 0.5</code> 只信强关系；影响分析默认 <code>minConfidence: 0.7</code>；执行流追踪用 <code>MIN_TRACE_CONFIDENCE = 0.5</code> 滤掉会让路径乱跳的模糊匹配。<span class="cite">process-processor.ts L228</span></p>
+
+<h3>3.4 Embedding 独立建表（性能取舍）</h3>
+<p>向量没有和符号节点存在一起，而是独立 <code>Embedding</code> 表，靠 <code>nodeId</code> 外键关联。<span class="cite">schema.ts L444-457</span></p>
+<details>
+<summary>为什么不存进符号表？</summary>
+<div class="details-body">
+<p>源码注释解释：<strong>"Separate table for vector storage to avoid copy-on-write overhead"</strong>（独立表避免写时复制开销）。向量是 384 维浮点数组（默认 snowflake-arctic-embed-xs），每个符号约 1.5KB。若存在符号表里，每次更新符号的任一属性都会触发整行的写时复制。独立表后，符号属性更新不影响向量，反之亦然。向量索引用 HNSW（Hierarchical Navigable Small World）算法 + cosine 相似度。<code>CODEGRAPH_EMBEDDING_DIMS</code> 环境变量可调维度。<span class="cite">schema.ts L435-457</span></p>
+</div>
+</details>
+
+<h3>3.5 核心：图 schema 完整定义（可复现）</h3>
+<p>下面是从源码精炼的 TypeScript schema 定义。读者可以照着在任何属性图数据库（LadybugDB / Neo4j / Memgraph）上复刻：</p>
+
+<pre><code class="language-typescript">// ============================================================================
+// 节点表：每种代码元素一张表，带专属字段
+// ============================================================================
+const NODE_SCHEMAS = {
+  // 代码元素
+  File:       'CREATE NODE TABLE File (id STRING, name STRING, filePath STRING, content STRING, PRIMARY KEY (id))',
+  Function:   'CREATE NODE TABLE Function (id STRING, name STRING, filePath STRING, startLine INT64, endLine INT64, isExported BOOLEAN, content STRING, description STRING, PRIMARY KEY (id))',
+  Class:      'CREATE NODE TABLE Class (id STRING, name STRING, filePath STRING, startLine INT64, endLine INT64, isExported BOOLEAN, content STRING, tableName STRING, tableSource STRING, PRIMARY KEY (id))',
+  Method:     'CREATE NODE TABLE Method (id STRING, name STRING, filePath STRING, parameterCount INT32, returnType STRING, PRIMARY KEY (id))',
+  Interface:  'CREATE NODE TABLE Interface (id STRING, name STRING, filePath STRING, soaPrefix STRING, crossRepoProvider STRING, PRIMARY KEY (id))',
+
+  // 抽象语义（索引时计算）
+  Community:  'CREATE NODE TABLE Community (id STRING, heuristicLabel STRING, keywords STRING[], cohesion DOUBLE, symbolCount INT32, PRIMARY KEY (id))',
+  Process:    'CREATE NODE TABLE Process (id STRING, heuristicLabel STRING, processType STRING, stepCount INT32, communities STRING[], entryPointId STRING, terminalId STRING, PRIMARY KEY (id))',
+
+  // 业务扩展
+  Route:      'CREATE NODE TABLE Route (id STRING, name STRING, filePath STRING, responseKeys STRING[], middleware STRING[], PRIMARY KEY (id))',
+  Tool:       'CREATE NODE TABLE Tool (id STRING, name STRING, filePath STRING, description STRING, PRIMARY KEY (id))',
+};
+
+// ============================================================================
+// 关系表：所有关系共享一张表，用 type/confidence/reason/step 四属性
+// 这是 AI 友好的核心 —— LLM 只需记一个表名 + {type: 'XXX'} 过滤
+// ============================================================================
+const RELATION_SCHEMA = `
+CREATE REL TABLE CodeRelation (
+  FROM File TO Function, FROM Function TO Function,
+  FROM Class TO Method, FROM Function TO Class,
+  FROM Class TO Interface, FROM Interface TO Method,
+  FROM Function TO Community, FROM Function TO Process,
+  -- ... 所有 FROM-TO 组合 ...
+  type STRING,           -- CALLS | IMPORTS | EXTENDS | IMPLEMENTS | ACCESSES | OVERRIDES | MEMBER_OF | STEP_IN_PROCESS | HANDLES_ROUTE | FETCHES | HANDLES_TOOL | ENTRY_POINT_OF | QUERIES
+  confidence DOUBLE,     -- 1.0=AST确认, &lt;0.8=模糊匹配
+  reason STRING,         -- 这条边是怎么来的（可审计）
+  step INT32             -- 仅 STEP_IN_PROCESS 用
+)`;
+
+// ============================================================================
+// Embedding 表：独立建表，避免符号属性更新时的写时复制开销
+// ============================================================================
+const EMBEDDING_SCHEMA = `
+CREATE NODE TABLE Embedding (nodeId STRING, embedding FLOAT[384], PRIMARY KEY (nodeId))
+CALL CREATE_VECTOR_INDEX('Embedding', 'code_embedding_idx', 'embedding', metric := 'cosine')`;
+
+// 关系类型枚举（17 种）
+type RelType =
+  | 'CONTAINS' | 'DEFINES' | 'CALLS' | 'IMPORTS' | 'EXTENDS' | 'IMPLEMENTS'
+  | 'HAS_METHOD' | 'HAS_PROPERTY' | 'ACCESSES' | 'OVERRIDES' | 'MEMBER_OF'
+  | 'STEP_IN_PROCESS' | 'HANDLES_ROUTE' | 'FETCHES' | 'HANDLES_TOOL'
+  | 'ENTRY_POINT_OF' | 'QUERIES';</code></pre>
+<p><span class="cite">schema.ts 全文精炼</span></p>
+
+<!-- ======================= 第 4 章 ======================= -->
+<h2 id="ch4">4. 索引管线工程化</h2>
+
+<h3>4.1 六阶段管线</h3>
+<div class="diagram">
+<pre><code>Phase 1   扫描文件树         walkRepositoryPaths（只看路径，0-15%）
+Phase 2   结构 + Markdown      processStructure + processMarkdown（15-20%）
+Phase 3   Tree-sitter 解析    14+ 语言 AST 提取，20MB 字节预算分块（20-82%）
+Phase 4   跨文件类型传播      Kahn 拓扑排序，跨 chunk 缓冲 CALLS（82%）
+Phase 5   Leiden 社区发现      基于 CALLS/EXTENDS/IMPLEMENTS 聚类（82-92%）
+Phase 6   执行流追踪          入口点打分 → BFS → Process 节点（94-99%）
+─────────────────────────────────────────────────────────
+并行子阶段：路由注册、MCP 工具检测、ORM 数据流、Entity→Table 映射</code></pre>
+</div>
+
+<h3>4.2 Tree-sitter 多语言解析（14+ 语言）</h3>
+<p>CLI 模式用 native bindings（快），Web 模式用 WASM（跨平台）。支持的语义维度因语言而异：<span class="cite">README.md L325-342</span></p>
+<table>
+<thead><tr><th>语言</th><th>Imports</th><th>Named Bindings</th><th>Heritage</th><th>Type Annotations</th><th>Constructor Inference</th></tr></thead>
+<tbody>
+<tr><td>TypeScript / JavaScript</td><td>✓</td><td>✓</td><td>✓</td><td>✓ / —</td><td>✓</td></tr>
+<tr><td>Python</td><td>✓</td><td>✓</td><td>✓</td><td>✓</td><td>✓</td></tr>
+<tr><td>Java / Kotlin / C#</td><td>✓</td><td>✓</td><td>✓</td><td>✓</td><td>✓</td></tr>
+<tr><td>Go</td><td>✓</td><td>—</td><td>✓</td><td>✓</td><td>✓</td></tr>
+<tr><td>Rust</td><td>✓</td><td>✓</td><td>✓</td><td>✓</td><td>✓</td></tr>
+<tr><td>C / C++ / Swift / Dart / Ruby / PHP</td><td>部分</td><td>部分</td><td>部分</td><td>部分</td><td>✓</td></tr>
+</tbody>
+</table>
+
+<h3>4.3 Worker 池并行：字节预算分块</h3>
+<p>大仓库不能一次性塞进内存。这类工具用三层并行策略：<span class="cite">worker-pool.ts + pipeline.ts L150-158</span></p>
+<ol>
+<li><strong>字节预算分块</strong>：<code>CHUNK_BYTE_BUDGET = 20MB</code>。20MB 源码 ≈ 200-400MB 峰值工作内存（AST 膨胀 + 提取记录 + 序列化开销同时驻留）。</li>
+<li><strong>Worker 池</strong>：<code>size = Math.min(8, Math.max(1, os.cpus().length - 1))</code>，默认最多 8 个线程。少于 15 个文件或 512KB 时不 spawn（开销 &gt; 收益）。</li>
+<li><strong>子批（sub-batch）</strong>：每个 worker 内部再把任务切成 <code>SUB_BATCH_SIZE = 1500</code> 一批，限制单次 <code>postMessage</code> 的结构化克隆内存。每子批 30 秒超时，遇到 minified 50MB JS 这类病态文件 fail fast。</li>
+</ol>
+
+<pre><code class="language-typescript">// Worker 池核心调度逻辑（精简版）
+const createWorkerPool = (workerUrl: URL, poolSize?: number) =&gt; {
+  const size = poolSize ?? Math.min(8, Math.max(1, os.cpus().length - 1));
+  const workers = Array.from({ length: size }, () =&gt; new Worker(workerUrl));
+  const SUB_BATCH_SIZE = 1500;
+  const SUB_BATCH_TIMEOUT_MS = 30_000;
+
+  const dispatch = async &lt;TInput, TResult&gt;(items: TInput[]) =&gt; {
+    if (items.length === 0) return [];
+    // 把 items 均分给 size 个 worker
+    const chunkSize = Math.ceil(items.length / size);
+    const chunks = [];
+    for (let i = 0; i &lt; items.length; i += chunkSize) {
+      chunks.push(items.slice(i, i + chunkSize));
+    }
+    // 每个 worker 内部按 1500 一批 postMessage，避免单次结构化克隆爆内存
+    return Promise.all(chunks.map((chunk, i) =&gt; runWorker(workers[i], chunk)));
+  };
+
+  return { dispatch, terminate: () =&gt; Promise.all(workers.map(w =&gt; w.terminate())), size };
+};</code></pre>
+<p><span class="cite">worker-pool.ts L44-172</span></p>
+
+<h3>4.4 Kahn 拓扑排序：跨文件类型传播</h3>
+<p>这是索引中最容易出错的一环。<strong>问题</strong>：在 <code>a.ts</code> 里 <code>import { getConfig } from './config'</code>，<code>getConfig()</code> 返回类型 <code>Config</code>；<code>b.ts</code> 里 <code>cfg = getConfig(); cfg.save()</code>——要解析这个 <code>.save()</code> 调用，必须先知道 <code>Config</code> 类有 <code>save()</code> 方法。这就是<strong>跨文件类型传播</strong>。</p>
+
+<p>解法：用 <strong>Kahn 算法</strong>按 import 依赖做拓扑排序，<strong>同一拓扑层内无相互依赖，可并行处理</strong>。处理顺序保证：上游文件的导出类型先就绪，下游文件再解析调用。<span class="cite">pipeline.ts L96-144 topologicalLevelSort</span></p>
+
+<pre><code class="language-typescript">/** Kahn 算法：按拓扑层级分组返回文件。
+ *  同一层内的文件互不依赖 —— 可安全并行处理。
+ *  环里的文件作为最后一组返回（不做跨环传播）。 */
+function topologicalLevelSort(importMap: Map&lt;string, Set&lt;string&gt;&gt;) {
+  const inDegree = new Map&lt;string, number&gt;();
+  const reverseDeps = new Map&lt;string, string[]&gt;();
+  // file imports dep → dep 是 file 的前置（dep → file）
+  for (const [file, deps] of importMap) {
+    if (!inDegree.has(file)) inDegree.set(file, 0);
+    for (const dep of deps) {
+      if (!inDegree.has(dep)) inDegree.set(dep, 0);
+      inDegree.set(file, (inDegree.get(file) ?? 0) + 1);
+      (reverseDeps.get(dep) ?? reverseDeps.set(dep, []).get(dep)!).push(file);
+    }
+  }
+  // BFS 从入度为 0 的节点开始，按层分组
+  const levels: string[][] = [];
+  let currentLevel = [...inDegree.entries()].filter(([, d]) =&gt; d === 0).map(([f]) =&gt; f);
+  while (currentLevel.length &gt; 0) {
+    levels.push(currentLevel);
+    const next: string[] = [];
+    for (const f of currentLevel) {
+      for (const dep of reverseDeps.get(f) ?? []) {
+        const newDeg = (inDegree.get(dep) ?? 1) - 1;
+        inDegree.set(dep, newDeg);
+        if (newDeg === 0) next.push(dep);
+      }
+    }
+    currentLevel = next;
+  }
+  // 入度仍 &gt; 0 的文件在环里 —— 作为最后一组
+  const cycleFiles = [...inDegree.entries()].filter(([, d]) =&gt; d &gt; 0).map(([f]) =&gt; f);
+  if (cycleFiles.length &gt; 0) levels.push(cycleFiles);
+  return { levels, cycleCount: cycleFiles.length };
+}</code></pre>
+<p><span class="cite">pipeline.ts L96-144</span></p>
+
+<h3>4.5 接口分派延迟解析（关键工程技巧）</h3>
+<div class="callout warn">
+  <span class="callout-title">陷阱：实现类还没收集全，就解析接口调用</span>
+  <p>接口 <code>IUserRepo</code> 有方法 <code>find()</code>，有两个实现类 <code>SqlUserRepo</code>、<code>MongoUserRepo</code>。当代码 <code>repo.find()</code> 调用 <code>IUserRepo</code> 时，要正确建立 CALLS 边，必须知道所有实现类的 <code>find()</code> 方法。如果在第一个 chunk 处理完就解析 CALLS，可能只看到 <code>SqlUserRepo</code>，漏掉 <code>MongoUserRepo</code>。</p>
+</div>
+<p><strong>解法</strong>：在 worker 路径下，<strong>所有 chunk 的 heritage（继承/实现关系）都先缓冲</strong>，等全部 chunk 贡献完，<strong>构建完整的 implementor map</strong>，再一次性解析所有 CALLS（接口分派用完整 map）。<span class="cite">pipeline.ts L878-990，L963-989</span></p>
+
+<pre><code class="language-typescript">// 关键片段：延迟解析 CALLS，等所有 heritage 到齐
+const deferredWorkerCalls: ExtractedCall[] = [];
+const deferredWorkerHeritage: ExtractedHeritage[] = [];
+
+for (let chunkIdx = 0; chunkIdx &lt; numChunks; chunkIdx++) {
+  // ... 解析当前 chunk ...
+  deferredWorkerCalls.push(...chunkWorkerData.calls);        // 缓冲
+  deferredWorkerHeritage.push(...chunkWorkerData.heritage);  // 缓冲
+  // 注意：CALLS 不在这里解析，只解析 heritage 和 routes
+  await processHeritageFromExtracted(graph, chunkWorkerData.heritage, ctx);
+}
+
+// 所有 chunk 处理完 —— 构建完整的 implementor map
+const fullWorkerImplementorMap = deferredWorkerHeritage.length &gt; 0
+  ? buildImplementorMap(deferredWorkerHeritage, ctx)
+  : new Map();
+
+// 现在才解析 CALLS，接口分派有完整 map
+await processCallsFromExtracted(graph, deferredWorkerCalls, ctx, undefined, fullWorkerImplementorMap);</code></pre>
+<p><span class="cite">pipeline.ts L878-990</span></p>
+
+<h3>4.6 核心：Tree-sitter 解析 + AST 关系提取</h3>
+<p>下面是一个最小可复现的 TypeScript 解析器骨架，演示如何从一个文件的 AST 提取节点和关系：</p>
+
+<pre><code class="language-typescript">import Parser from 'tree-sitter';
+import TS from 'tree-sitter-typescript';
+
+const parser = new Parser();
+parser.setLanguage(TS.typescript);
+
+interface ExtractedNode {
+  id: string; kind: string; name: string;
+  filePath: string; startLine: number; endLine: number; isExported: boolean;
+}
+interface ExtractedEdge {
+  type: string; sourceId: string; targetId: string;
+  confidence: number; reason: string;
+}
+
+/** 解析单个文件，提取节点和关系 */
+function parseFile(filePath: string, content: string): { nodes: ExtractedNode[]; edges: ExtractedEdge[] } {
+  const tree = parser.parse(content);
+  const nodes: ExtractedNode[] = [];
+  const edges: ExtractedEdge[] = [];
+  const cursor = tree.walk();
+
+  // 用 Tree-sitter 的 query 语法批量提取（比手写遍历快且容错）
+  const functionQuery = new Parser.Query(TS.typescript, `
+    (function_declaration name: (identifier) @name) @func
+    (method_definition name: (property_identifier) @name) @method
+    (class_declaration name: (type_identifier) @name) @class
+    (interface_declaration name: (type_identifier) @name) @iface
+    (import_statement) @import
+    (call_expression function: (_) @callee) @call
+  `);
+
+  const matches = functionQuery.matches(tree.rootNode);
+  for (const { captures } of matches) {
+    const byName = Object.fromEntries(captures.map(c =&gt; [c.name, c.node]));
+    if (byName.func) {
+      const name = byName.name.text;
+      nodes.push({
+        id: `Function:${filePath}:${name}`,
+        kind: 'Function', name, filePath,
+        startLine: byName.func.startPosition.row,
+        endLine: byName.func.endPosition.row,
+        isExported: isExportedNode(byName.func),
+      });
+    }
+    if (byName.class) {
+      const name = byName.name.text;
+      nodes.push({ id: `Class:${filePath}:${name}`, kind: 'Class', name, filePath,
+        startLine: byName.class.startPosition.row, endLine: byName.class.endPosition.row,
+        isExported: isExportedNode(byName.class) });
+    }
+    if (byName.call &amp;&amp; byName.callee) {
+      // 调用关系：需要后续跨文件解析 callee 到底指向谁
+      const calleeName = byName.callee.text;
+      edges.push({
+        type: 'CALLS',
+        sourceId: `${getCurrentScope(filePath, byName.call)}`,
+        targetId: calleeName, // 占位，跨文件传播时解析
+        confidence: 0.9,
+        reason: 'ast-call',
+      });
+    }
+    // ... import / extends / implements / accesses 同理 ...
+  }
+  return { nodes, edges };
+}
+
+function isExportedNode(node: Parser.SyntaxNode): boolean {
+  // 检查是否在 export 语句下
+  let parent = node.parent;
+  while (parent) {
+    if (parent.type === 'export_statement') return true;
+    parent = parent.parent;
+  }
+  return false;
+}</code></pre>
+
+<details>
+<summary>Wildcard Import（Go/Ruby/C++/Python）的特殊处理</summary>
+<div class="details-body">
+<p>有些语言是"整模块导入"：<code>import models</code>（Python）、<code>require 'user'</code>（Ruby）、<code>#include "user.h"</code>（C/C++）、<code>import "user"</code>（Go）。它们不像 TS 的 <code>import { X }</code> 有具名绑定，而是把整个文件的导出符号都拉进来。</p>
+<p>解法是 <strong>synthesize（合成）具名绑定</strong>：解析时记录每个文件导出了哪些符号（通过 <code>isExported</code>），然后在调用解析前，对每个 wildcard-import 文件，把所有被导入文件的导出符号合成为 <code>namedImportMap</code> 条目。<span class="cite">pipeline.ts L163-177, L212-324 synthesizeWildcardImportBindings</span></p>
+<p>Python 额外有 <strong>namespace 导入</strong>：<code>import models</code> 后 <code>models.User()</code>，需要建 <code>moduleAliasMap</code>（<code>models</code> → <code>models.py</code>），避免歧义符号展开。</p>
+</div>
+</details>
+
+<!-- ======================= 第 5 章 ======================= -->
+<h2 id="ch5">5. 社区发现与执行流</h2>
+
+<h3>5.1 Leiden 算法：基于 CALLS 边聚类</h3>
+<p>社区（Community）= 自动发现的功能域。这类工具用 <strong>Leiden 算法</strong>（比 Louvain 更稳健，保证连通性）在 graphology 图上聚类。<span class="cite">community-processor.ts L104-205</span></p>
+
+<h4>聚类输入与策略</h4>
+<ul>
+<li><strong>只取符号节点</strong>：<code>Function / Class / Method / Interface</code>（排除 File/Folder 等结构节点）。</li>
+<li><strong>只取聚类边</strong>：<code>CALLS / EXTENDS / IMPLEMENTS</code>（排除 IMPORTS/ACCESSES 等弱关系）。</li>
+<li><strong>大图过滤</strong>：符号数 &gt; 10000 时，<strong>过滤掉 confidence &lt; 0.5 的模糊边和度数为 1 的悬挂节点</strong>（它们要么变单例、要么被吸收进邻居社区，但严重拖慢迭代）。<span class="cite">community-processor.ts L216-268</span></li>
+<li><strong>大图参数</strong>：<code>resolution: 2.0</code>（更细粒度）、<code>maxIterations: 3</code>（前 2 轮捕获 ~95% 模块度，递减收益）。60 秒超时，超时回退到"全归一个社区"。</li>
+<li><strong>跳过单例</strong>：成员数 &lt; 2 的社区直接丢弃。</li>
+</ul>
+
+<h4>社区标签生成（启发式）</h4>
+<p>社区需要人类可读的名字。启发式优先级：<span class="cite">community-processor.ts L332-392</span></p>
+<ol>
+<li>取成员文件路径的<strong>最常见父目录名</strong>（跳过 <code>src/lib/core/utils/common/shared/helpers</code> 等通用名）；</li>
+<li>退而求其次：取成员函数名的<strong>公共前缀</strong>；</li>
+<li>最后兜底：<code>Cluster_&lt;编号&gt;</code>。</li>
+</ol>
+<p>社区还带 <code>cohesion</code>（内聚度，0-1）= 内部边数 / 总边数（大社区采样 50 个成员避免 O(N²)）。<span class="cite">community-processor.ts L420-445</span></p>
+
+<h3>5.2 执行流追踪：入口点 → BFS → Process</h3>
+<p>执行流（Process）= 从入口点到终点的调用链。它是 Agent 理解"这个功能怎么跑通"的核心抽象。<span class="cite">process-processor.ts L81-215</span></p>
+
+<h4>四步流程</h4>
+<ol>
+<li><strong>找入口点</strong>：调用多、被调少、导出、命名模式匹配（<code>handle*</code>、<code>on*</code>、<code>*Controller</code>）。排除测试文件。打分后取 Top 200。<span class="cite">process-processor.ts L270-336</span></li>
+<li><strong>BFS 追踪</strong>：从每个入口点沿 CALLS 边（<code>confidence &gt;= 0.5</code>）广度优先，记录所有路径。<code>maxTraceDepth=10</code>、<code>maxBranching=4</code>、<code>minSteps=3</code>（2 步只是"A 调 B"，不算真流程）。<span class="cite">process-processor.ts L346-394</span></li>
+<li><strong>去重</strong>：先子集去重（A→B→C→D 包含 A→B→C，删短的），再按<strong>入口-终点对</strong>去重（同一对保留最长路径）。</li>
+<li><strong>建 Process 节点</strong>：标签 <code>"入口名 → 终点名"</code>，记录 <code>stepCount</code>、<code>communities</code>（途经社区）、<code>processType</code>（<code>cross_community</code> 跨社区 / <code>intra_community</code> 社区内）。</li>
+</ol>
+
+<div class="callout">
+  <span class="callout-title">为什么 cross_community 标记很重要？</span>
+  <p>跨社区的执行流是<strong>架构上的关键链路</strong>（比如"登录"流程横跨 Auth、User、Session、Notification 四个社区）。Agent 一眼看到 <code>processType: 'cross_community'</code>，就知道这是高价值、高耦合的链路，改动要特别小心。</p>
+</div>
+
+<h3>5.3 核心：简化版社区发现（graphology + Leiden）</h3>
+<pre><code class="language-typescript">import Graph from 'graphology';
+// Leiden 算法：graphology-communities-leiden（npm 上有发布版，这类工具因历史原因 vendor 了一份）
+import leiden from 'graphology-communities-leiden';
+
+interface CommunityNode {
+  id: string; label: string; heuristicLabel: string;
+  cohesion: number; symbolCount: number;
+}
+
+async function detectCommunities(knowledgeGraph: KnowledgeGraph): Promise&lt;{
+  communities: CommunityNode[];
+  memberships: { nodeId: string; communityId: string }[];
+}&gt; {
+  // Step 1: 统计符号数，判断是否大图模式
+  let symbolCount = 0;
+  knowledgeGraph.forEachNode((node) =&gt; {
+    if (['Function', 'Class', 'Method', 'Interface'].includes(node.label)) symbolCount++;
+  });
+  const isLarge = symbolCount &gt; 10_000;
+
+  // Step 2: 构建 graphology 无向图（只取符号节点 + 聚类边）
+  const graph = new Graph({ type: 'undirected' });
+  const symbolTypes = new Set(['Function', 'Class', 'Method', 'Interface']);
+  const clusteringRels = new Set(['CALLS', 'EXTENDS', 'IMPLEMENTS']);
+
+  knowledgeGraph.forEachRelationship((rel) =&gt; {
+    if (!clusteringRels.has(rel.type) || rel.sourceId === rel.targetId) return;
+    // 大图：过滤低置信度边
+    if (isLarge &amp;&amp; rel.confidence &lt; 0.5) return;
+    if (!graph.hasNode(rel.sourceId)) graph.addNode(rel.sourceId);
+    if (!graph.hasNode(rel.targetId)) graph.addNode(rel.targetId);
+    if (!graph.hasEdge(rel.sourceId, rel.targetId)) graph.addEdge(rel.sourceId, rel.targetId);
+  });
+
+  // Step 3: 跑 Leiden
+  const details = leiden.detailed(graph, {
+    resolution: isLarge ? 2.0 : 1.0,
+    maxIterations: isLarge ? 3 : 0,  // 0 = 跑到收敛
+  });
+
+  // Step 4: 按社区分组，生成标签，跳过单例
+  const members = new Map&lt;number, string[]&gt;();
+  for (const [nodeId, commNum] of Object.entries(details.communities)) {
+    (members.get(commNum) ?? members.set(commNum, []).get(commNum)!).push(nodeId);
+  }
+
+  const communities: CommunityNode[] = [];
+  for (const [commNum, ids] of members) {
+    if (ids.length &lt; 2) continue; // 跳过单例
+    communities.push({
+      id: `comm_${commNum}`,
+      label: generateHeuristicLabel(ids, knowledgeGraph),
+      heuristicLabel: generateHeuristicLabel(ids, knowledgeGraph),
+      cohesion: calculateCohesion(ids, graph),
+      symbolCount: ids.length,
+    });
+  }
+  communities.sort((a, b) =&gt; b.symbolCount - a.symbolCount);
+
+  return { communities, memberships: /* ... */ };
+}</code></pre>
+<p><span class="cite">community-processor.ts L104-268 精炼</span></p>
+
+<!-- ======================= 第 6 章 ======================= -->
+<h2 id="ch6">6. MCP 工具设计</h2>
+
+<h3>6.1 14 个工具的三大分类</h3>
+<table>
+<thead><tr><th>分类</th><th>工具</th><th>本质</th></tr></thead>
+<tbody>
+<tr><td rowspan="4"><strong>理解类</strong><br>（读图）</td><td><code>context</code></td><td>符号的 360 度视图（入边/出边/参与的执行流）</td></tr>
+<tr><td><code>route_map</code></td><td>API 路由 → 处理器 → 消费者映射</td></tr>
+<tr><td><code>tool_map</code></td><td>MCP/RPC 工具定义 → 处理器映射</td></tr>
+<tr><td><code>topic_map</code></td><td>MQ topic 的生产者/消费者（跨库）</td></tr>
+<tr><td rowspan="4"><strong>变更类</strong><br>（写图/写文件）</td><td><code>impact</code></td><td>变更爆炸半径（upstream/downstream + 风险等级）</td></tr>
+<tr><td><code>detect_changes</code></td><td>git diff → 受影响的符号和执行流</td></tr>
+<tr><td><code>rename</code></td><td>多文件协调重命名（graph + 文本搜索，带置信度标签）</td></tr>
+<tr><td><code>api_impact</code></td><td>API 路由变更预检（route_map + shape_check + impact 合一）</td></tr>
+<tr><td rowspan="6"><strong>查询类</strong><br>（图查询/导航）</td><td><code>cypher</code></td><td>原始 Cypher 查询（万能逃生口）</td></tr>
+<tr><td><code>list_repos</code></td><td>列出所有索引仓库</td></tr>
+<tr><td><code>resolve_repo</code></td><td>FQN → 仓库（多库时定位）</td></tr>
+<tr><td><code>shape_check</code></td><td>响应结构 vs 消费者字段访问的漂移检测</td></tr>
+<tr><td><code>table_context</code></td><td>数据库表 FK 关系</td></tr>
+<tr><td><code>cross_repo_search</code></td><td>跨库文本正则搜索（广度，补图的深度）</td></tr>
+</tbody>
+</table>
+
+<h3>6.2 工具描述即决策树（最关键的设计）</h3>
+<p>每个工具的 <code>description</code> 不是简单的一句话，而是<strong>一个完整的决策树</strong>，包含四个固定段落：<span class="cite">tools.ts 全文</span></p>
+
+<pre><code class="language-text">TRIGGER when: ...      ← 什么场景触发这个工具
+WHEN TO USE: ...        ← 何时用（与相邻工具的边界）
+AFTER THIS: ...         ← 用完之后下一步该调什么
+NEVER: ...              ← 什么时候绝对不要用（防误用）</code></pre>
+
+<p>举例，<code>impact</code> 工具的描述开头：<span class="cite">tools.ts L239-265</span></p>
+<pre><code class="language-text">TRIGGER when: user wants to change/modify/rename code, asks "is it safe",
+  "what breaks", "who uses this".
+MUST run BEFORE editing any function, class, or method.
+REPO REQUIRED in multi-repo setup. ...
+WHEN TO USE: Before making code changes — especially refactoring, renaming,
+  or modifying shared code. Shows what would break.
+AFTER THIS: Review d=1 items (WILL BREAK). Use context() on high-risk symbols.
+TIP: Default traversal uses CALLS/IMPORTS/EXTENDS/IMPLEMENTS. For class members,
+  include HAS_METHOD and HAS_PROPERTY in relationTypes.</code></pre>
+
+<div class="callout success">
+  <span class="callout-title">为什么工具描述要这么长？</span>
+  <p>因为 <strong>MCP 工具的描述是 LLM 唯一能看到的"使用说明书"</strong>。LLM 在决定调哪个工具时，只读 description。描述里没有的边界条件，LLM 一定踩。把决策树写进描述，等于把"工具选择 prompt"内联进协议，省去了额外的 system prompt。</p>
+</div>
+
+<h3>6.3 Next 提示：对抗 LLM 的"单次调用即停"</h3>
+<p>LLM 有个通病：调一次工具拿到结果，就以为任务完成了。这类工具在<strong>每个工具返回的末尾</strong>追加一段 <code>Next:</code> 提示，引导它走下一步。<span class="cite">server.ts L102-160 getNextStepHint</span></p>
+
+<pre><code class="language-typescript">function getNextStepHint(toolName: string, args: any): string {
+  const repo = args?.repo;
+  const repoParam = repo ? `, repo: "${repo}"` : '';
+  switch (toolName) {
+    case 'context':
+      return `\n\n---\n**Next:** If planning changes, use impact({target: "${args?.name}", direction: "upstream"${repoParam}}) to check blast radius. To see execution flows, READ codegraph://repo/{name}/processes.`;
+    case 'impact':
+      return `\n\n---\n**Next:** Review d=1 items first (WILL BREAK). Use context({name: "<high_risk_symbol>"${repoParam}}) on high-risk items.`;
+    case 'detect_changes':
+      return `\n\n---\n**Next:** Review affected processes. Use context() on high-risk changed symbols. READ codegraph://repo/{name}/process/{name} for full traces.`;
+    case 'rename':
+      return `\n\n---\n**Next:** Run detect_changes() to verify no unexpected side effects.`;
+    // ... 每个工具一个 hint ...
+  }
+}</code></pre>
+
+<p>这套机制创造了<strong>自引导工作流</strong>：LLM 不需要外部 hook 驱动，工具返回本身就在引导它走完整个流程（context → impact → detect_changes → 提交检查）。</p>
+
+<h3>6.4 动态 repo 注入（多库自适应）</h3>
+<p>当索引了多个仓库时，工具的 <code>repo</code> 参数描述会<strong>动态注入仓库清单</strong>，省去 LLM 去 <code>list_repos</code> 查一遍：<span class="cite">server.ts L166-195 buildToolsWithRepoList</span></p>
+
+<pre><code class="language-typescript">function buildToolsWithRepoList(repos, baseTools) {
+  if (repos.length &lt;= 1) return baseTools; // 单库：repo 可选
+  const repoList = repos.map(r =&gt; `${r.name} (${r.description})`).join(', ');
+  const dynamicDesc = `REQUIRED when multiple repos are indexed. Available repos: ${repoList}`;
+  return baseTools.map(tool =&gt; {
+    if (tool.name === 'list_repos') return tool;
+    return { ...tool, inputSchema: { ...tool.inputSchema,
+      properties: { ...tool.inputSchema.properties,
+        repo: { ...tool.inputSchema.properties.repo, description: dynamicDesc } } } };
+  });
+}</code></pre>
+
+<h3>6.5 核心：MCP Server 骨架 + impact 工具实现</h3>
+<p>下面是用官方 <code>@modelcontextprotocol/sdk</code> 写的最小 MCP Server，外加 <code>impact</code> 工具的多跳 BFS + 风险等级核心实现：</p>
+
+<pre><code class="language-typescript">import { Server } from '@modelcontextprotocol/sdk/server/index.js';
+import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
+import {
+  CallToolRequestSchema, ListToolsRequestSchema,
+} from '@modelcontextprotocol/sdk/types.js';
+
+// ── 工具定义（决策树式描述） ──
+const TOOLS = [{
+  name: 'impact',
+  description: `TRIGGER when: user wants to change code, asks "is it safe", "what breaks".
+MUST run BEFORE editing any function, class, or method.
+Analyze the blast radius of changing a code symbol.
+Returns affected symbols grouped by depth, plus risk assessment.
+Depth groups: d=1 WILL BREAK, d=2 LIKELY AFFECTED, d=3 MAY NEED TESTING.`,
+  inputSchema: {
+    type: 'object',
+    properties: {
+      target: { type: 'string', description: 'Symbol name to analyze' },
+      direction: { type: 'string', enum: ['upstream', 'downstream'] },
+      maxDepth: { type: 'number', default: 3 },
+      minConfidence: { type: 'number', default: 0.7 },
+    },
+    required: ['target', 'direction'],
+  },
+}];
+
+// ── 创建 Server，注入 instructions ──
+const server = new Server(
+  { name: 'code-graph', version: '1.0.0' },
+  {
+    capabilities: { tools: {} },
+    instructions: `# Code Graph Intelligence
+ALWAYS use these tools before reading source files.
+## MUST Do
+- Before modifying any function: Run impact({target, direction:"upstream"}). Report risk.
+## NEVER Do
+- NEVER edit code without first running impact.
+- NEVER grep for API handlers when you have a route path.`,
+  },
+);
+
+// ── ListTools：动态注入 repo 清单（多库时） ──
+server.setRequestHandler(ListToolsRequestSchema, async () =&gt; ({
+  tools: TOOLS.map(t =&gt; ({ name: t.name, description: t.description, inputSchema: t.inputSchema })),
+}));
+
+// ── CallTool：执行 + 追加 Next 提示 ──
+server.setRequestHandler(CallToolRequestSchema, async (request) =&gt; {
+  const { name, arguments: args } = request.params;
+  try {
+    const result = await executeTool(name, args);
+    const hint = `\n\n---\n**Next:** Review d=1 items first (WILL BREAK). Use context() on high-risk symbols.`;
+    return { content: [{ type: 'text', text: JSON.stringify(result, null, 2) + hint }] };
+  } catch (e) {
+    return { content: [{ type: 'text', text: `Error: ${e.message}` }], isError: true };
+  }
+});
+
+// ── impact 核心实现：多跳 BFS + 风险等级 ──
+interface ImpactResult {
+  risk: 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
+  byDepth: Record&lt;number, { id: string; name: string; edge: string; confidence: number }[]&gt;;
+  affectedProcesses: string[];
+}
+
+function impact(graph: KnowledgeGraph, target: string, opts: {
+  direction: 'upstream' | 'downstream';
+  maxDepth?: number; minConfidence?: number;
+  relationTypes?: string[];
+}): ImpactResult {
+  const maxDepth = opts.maxDepth ?? 3;
+  const minConfidence = opts.minConfidence ?? 0.7;
+  const relTypes = new Set(opts.relationTypes ?? ['CALLS', 'IMPORTS', 'EXTENDS', 'IMPLEMENTS']);
+
+  // 找起始节点（可能多个同名）
+  const startIds = findNodesByName(graph, target);
+  const byDepth: Record&lt;number, any[]&gt; = { 1: [], 2: [], 3: [] };
+  const visited = new Set(startIds);
+
+  // BFS：每跳收集一层的邻居
+  let frontier = startIds;
+  for (let depth = 1; depth &lt;= maxDepth; depth++) {
+    const next: string[] = [];
+    for (const nodeId of frontier) {
+      // upstream = 找入边；downstream = 找出边
+      const edges = opts.direction === 'upstream'
+        ? graph.getIncomingEdges(nodeId)
+        : graph.getOutgoingEdges(nodeId);
+      for (const edge of edges) {
+        if (!relTypes.has(edge.type)) continue;
+        if (edge.confidence &lt; minConfidence) continue;
+        const neighborId = opts.direction === 'upstream' ? edge.sourceId : edge.targetId;
+        if (visited.has(neighborId)) continue;
+        visited.add(neighborId);
+        byDepth[depth].push({
+          id: neighborId,
+          name: graph.getNode(neighborId).name,
+          edge: edge.type,
+          confidence: edge.confidence,
+        });
+        next.push(neighborId);
+      }
+    }
+    frontier = next;
+  }
+
+  // 风险等级：基于直接调用者数量 + 受影响执行流数
+  const d1Count = byDepth[1].length;
+  const affectedProcesses = findProcessesTouching(graph, visited);
+  let risk: ImpactResult['risk'];
+  if (d1Count &gt;= 10 || affectedProcesses.length &gt;= 5) risk = 'CRITICAL';
+  else if (d1Count &gt;= 5) risk = 'HIGH';
+  else if (d1Count &gt;= 2) risk = 'MEDIUM';
+  else risk = 'LOW';
+
+  return { risk, byDepth, affectedProcesses };
+}
+
+// 启动 stdio transport（Agent 通过 stdin/stdout 通信）
+const transport = new StdioServerTransport();
+await server.connect(transport);</code></pre>
+<p><span class="cite">server.ts L201-333 + tools.ts impact 定义 + README L355-362 impact 示例</span></p>
+
+<!-- ======================= 第 7 章 ======================= -->
+<h2 id="ch7">7. 指令工程</h2>
+
+<p>MCP 工具再好，LLM 不用也白搭。<strong>指令工程（Instruction Engineering）</strong>是让 LLM 真正按预期使用工具的学问。</p>
+
+<h3>7.1 80 行阈值</h3>
+<p>instructions（MCP 连接时注入的 system 级指令）有<strong>实测的长度依从度衰减</strong>。这类工具把它压在 <strong>~80 行</strong>（硬上限 120 行）。<span class="cite">server.ts L31-40 注释 + L41-91 实际 instructions</span></p>
+<div class="callout warn">
+  <span class="callout-title">超过 120 行，依从度显著下降</span>
+  <p>这不是直觉，是实测数据。LLM 的注意力在长指令上会稀释，后半段的规定容易被忽略。所以 instructions 必须极简：只放最关键的"MUST Do / NEVER Do / 工具选择决策树"，细节留给工具描述。</p>
+</div>
+
+<h3>7.2 RFC 2119 措辞</h3>
+<p>用 <strong>MUST / NEVER / ALWAYS / SHOULD</strong> 这些 RFC 2119 关键词，而不是"建议/最好/请"。LLM 对这些大写动词的依从度显著高于自然语言建议。</p>
+<pre><code class="language-text">## MUST Do (Before Actions)
+- Before modifying any function/class/method: Run impact({target, direction:"upstream"}).
+- Before committing: Run detect_changes({scope:"staged"}).
+
+## NEVER Do
+- NEVER edit code without first running impact.
+- NEVER grep/search for API handlers when you have a route path — use route_map.
+- NEVER rename symbols with find-and-replace — use rename.
+- NEVER commit without running detect_changes.
+- NEVER ignore HIGH or CRITICAL risk warnings from impact analysis.</code></pre>
+<p><span class="cite">server.ts L45-60</span></p>
+
+<h3>7.3 skill 忽略率 56%（关键工作流必须内联）</h3>
+<p>实测：Claude Code 的 skill（独立 .md 文件）<strong>有 56% 的概率被忽略</strong>。<span class="cite">server.ts L36 注释 "skills skipped 56%"</span></p>
+<div class="callout danger">
+  <span class="callout-title">教训：不要把关键工作流放进 skill</span>
+  <p>所以这类工具把<strong>所有关键工作流内联</strong>进 MCP instructions 和工具描述，而不是依赖 skill 文件。Skill 只放"锦上添花"的内容（探索、调试、影响分析、重构的详细指南）。这是指令工程的硬教训。</p>
+</div>
+
+<h3>7.4 GUARDRAILS Signs 机制：失败模式沉淀</h3>
+<p>项目维护一份 <code>GUARDRAILS.md</code>，用 "Signs"（征兆）机制<strong>沉淀失败模式</strong>。每条 Sign 描述一种"如果你看到 X，说明 Y 要出错"的预警。<span class="cite">README.md L39 GUARDRAILS 引用</span></p>
+<p>这本质上是把<strong>生产事故和踩坑</strong>结构化成可执行规则，喂给人类贡献者和 AI Agent 双方遵守。 Signs 会反向影响 instructions 和工具描述的迭代。</p>
+
+<h3>7.5 核心：instructions 模板示例</h3>
+<pre><code class="language-text"># CodeGraph — Code Intelligence
+
+This MCP server provides a code knowledge graph. ALWAYS use these tools
+before reading source files or making changes.
+
+## MUST Do (Before Actions)
+
+- **Before modifying any function/class/method**: Run `impact({target: "X", direction: "upstream"})`. Report blast radius and risk to user.
+- **Before committing**: Run `detect_changes({scope: "staged"})`. Verify only expected symbols/flows affected.
+- **When given an API route path**: Run `route_map({route: "/api/..."})` FIRST to find the handler.
+- **When exploring unfamiliar code**: Use `context({name: "X"})` for 360-degree view before reading source.
+
+## NEVER Do
+
+- NEVER edit code without first running `impact` on the target symbol.
+- NEVER grep/search for API handlers when you have a route path — use `route_map`.
+- NEVER rename symbols with find-and-replace — use `rename`.
+- NEVER commit without running `detect_changes`.
+- NEVER ignore HIGH or CRITICAL risk warnings from impact analysis.
+
+## Tool Selection (Decision Tree)
+
+| User says | Tool to use FIRST |
+|---|---|
+| "How does X work?" | context({name: "X"}) |
+| "Change X" / "Is it safe?" | impact({target: "X", direction: "upstream"}) |
+| "/api/something" | route_map({route: "/api/..."}) |
+| "Rename X" | rename({symbol_name: "X", new_name: "Y"}) |
+| Before commit | detect_changes({scope: "staged"}) |
+
+## Impact Risk Levels
+
+| Depth | Meaning | Action |
+|-------|---------|--------|
+| d=1 | WILL BREAK — direct callers | MUST update |
+| d=2 | LIKELY AFFECTED — indirect | Should test |
+| d=3 | MAY NEED TESTING — transitive | Test if critical |</code></pre>
+<p><span class="cite">server.ts L41-91</span></p>
+
+<!-- ======================= 第 8 章 ======================= -->
+<h2 id="ch8">8. Agent 集成三层</h2>
+
+<h3>8.1 SessionStart Hook：自动注入工具清单</h3>
+<p>当 Agent 会话启动时，<strong>SessionStart hook 检测当前目录是否有索引</strong>（向上找 5 层 <code>.codegraph</code>），如果有，就把工具清单和资源 URI 注入到 Agent 上下文。<span class="cite">session-start.sh 全文</span></p>
+
+<pre><code class="language-bash">#!/bin/bash
+# SessionStart hook：会话启动时触发，stdout 直接注入 Agent 上下文
+# 检测当前目录（向上找 5 层）是否有索引
+dir="$PWD"
+found=false
+for i in 1 2 3 4 5; do
+  if [ -d "$dir/.codegraph" ]; then
+    found=true
+    break
+  fi
+  parent="$(dirname "$dir")"
+  [ "$parent" = "$dir" ] && break
+  dir="$parent"
+done
+
+if [ "$found" = false ]; then
+  exit 0  # 没索引，不注入
+fi
+
+# 有索引 → 注入工具清单（这段 stdout 进 Agent 上下文）
+cat &lt;&lt; 'EOF'
+## CodeGraph Code Intelligence
+
+This codebase is indexed by CodeGraph, providing a knowledge graph with
+execution flows, relationships, and semantic search.
+
+**Available MCP Tools:**
+- `context` — 360-degree symbol view
+- `impact` — Blast radius analysis
+- `detect_changes` — Git-diff impact analysis
+- `rename` — Multi-file coordinated rename
+- `cypher` — Raw graph queries
+
+**Quick Start:** READ `codegraph://repo/{name}/context` for overview,
+then use `context` to explore symbols.
+EOF
+exit 0</code></pre>
+<p><span class="cite">session-start.sh</span></p>
+
+<h3>8.2 PreToolUse Hook：拦截 grep → 增强引擎（&lt;500ms）</h3>
+<p>这是最精巧的一层。当 Agent 准备调用 <code>Grep</code>、<code>Glob</code> 或 <code>Bash(rg/grep)</code> 时，<strong>hook 在工具执行前拦截</strong>，提取搜索词，调用增强引擎，把图上下文作为 <code>additionalContext</code> 注入。<span class="cite">pre-tool-use.sh 全文</span></p>
+
+<h4>关键约束</h4>
+<ul>
+<li><strong>必须快</strong>：目标 &lt;500ms，否则拖慢 Agent 的每一次搜索。所以<strong>只用 BM25</strong>（不用语义检索/聚类），避免 &gt;1s 的延迟。</li>
+<li><strong>聚类不外泄</strong>：增强引擎只返回匹配符号和直接关系，<strong>不返回 Community/Process 的内部结构</strong>（那些是深度查询时才暴露的）。</li>
+<li><strong>静默失败</strong>：任何错误都 <code>exit 0</code>，绝不阻断原始工具调用。</li>
+<li><strong>模式提取</strong>：从 <code>Grep</code> 取 <code>pattern</code>；从 <code>Glob</code> 去掉通配符取有意义的名字；从 <code>Bash</code> 只在命令含 <code>rg/grep</code> 时提取；<strong>短于 3 字符的词跳过</strong>。</li>
+</ul>
+
+<pre><code class="language-bash">#!/bin/bash
+# PreToolUse hook：拦截搜索工具，注入图上下文
+# 输入：stdin 收到 { tool_name, tool_input, cwd, ... }
+# 输出：JSON { hookSpecificOutput: { additionalContext: ... } }
+
+INPUT=$(cat)
+TOOL_NAME=$(echo "$INPUT" | jq -r '.tool_name // empty')
+CWD=$(echo "$INPUT" | jq -r '.cwd // empty')
+
+# 按工具类型提取搜索词
+PATTERN=""
+case "$TOOL_NAME" in
+  Grep)
+    PATTERN=$(echo "$INPUT" | jq -r '.tool_input.pattern // empty')
+    ;;
+  Glob)
+    # Glob 是路径模式，去掉通配符取有意义的名字
+    RAW=$(echo "$INPUT" | jq -r '.tool_input.pattern // empty')
+    PATTERN=$(echo "$RAW" | sed -n 's/.*[*\/]\([a-zA-Z][a-zA-Z0-9_-]*\).*/\1/p')
+    ;;
+  Bash)
+    CMD=$(echo "$INPUT" | jq -r '.tool_input.command // empty')
+    if echo "$CMD" | grep -qE '\brg\b|\bgrep\b'; then
+      # 从 rg/grep 命令提取 pattern
+      PATTERN=$(echo "$CMD" | sed -n "s/.*\brg\s\+\(--[^ ]*\s\+\)*['\"]\\?\([^'\";\| >]*\\).*/\2/p")
+    fi
+    ;;
+  *)
+    exit 0  # 非搜索工具，跳过
+    ;;
+esac
+
+# 太短或空 → 跳过
+if [ -z "$PATTERN" ] || [ ${#PATTERN} -lt 3 ]; then
+  exit 0
+fi
+
+# 检测是否在索引仓库内（向上找 5 层）
+dir="${CWD:-$PWD}"
+found=false
+for i in 1 2 3 4 5; do
+  if [ -d "$dir/.codegraph" ]; then found=true; break; fi
+  parent="$(dirname "$dir")"
+  [ "$parent" = "$dir" ] && break
+  dir="$parent"
+done
+[ "$found" = false ] &amp;&amp; exit 0
+
+# 调用增强引擎 —— 必须 &lt;500ms（只用 BM25，不做语义/聚类）
+RESULT=$(cd "$CWD" &amp;&amp; npx -y code-graph augment "$PATTERN" 2&gt;&amp;1 1&gt;/dev/null)
+
+if [ -n "$RESULT" ]; then
+  ESCAPED=$(echo "$RESULT" | jq -Rs .)
+  jq -n --argjson ctx "$ESCAPED" '{
+    hookSpecificOutput: {
+      hookEventName: "PreToolUse",
+      additionalContext: $ctx
+    }
+  }'
+else
+  exit 0
+fi</code></pre>
+<p><span class="cite">pre-tool-use.sh</span></p>
+
+<h3>8.3 MCP Instructions：连接时注入 system 级指令</h3>
+<p>第三层是<strong>MCP 协议自带的 instructions 字段</strong>。当 Agent 连接 MCP server 时，<code>instructions</code> 作为 system 级指令注入，全程生效。这一层与 SessionStart hook 互补：hook 在会话启动时一次性注入"这个仓库有索引"，instructions 在每次工具调用时持续约束"怎么用工具"。<span class="cite">server.ts L41-91, L215</span></p>
+
+<div class="diagram">
+<pre><code>会话启动
+   │
+   ├─→ SessionStart hook 注入："本仓库已索引，工具清单如下"
+   │
+   └─→ MCP 连接
+         │
+         ├─→ instructions 注入 system 级："MUST/NEVER/决策树"
+         │
+         └─→ 每次工具调用
+               │
+               ├─→ PreToolUse hook（若是搜索）→ 增强上下文注入
+               │
+               └─→ 工具执行 → 返回末尾带 Next 提示 → 引导下一步</code></pre>
+</div>
+
+<!-- ======================= 第 9 章 ======================= -->
+<h2 id="ch9">9. 企业级扩展</h2>
+
+<h3>9.1 多库 MCP 架构（registry + 懒加载连接池）</h3>
+<p>企业里一个 Agent 要同时面对几十上百个仓库（前端、后端、微服务、SDK）。这类工具用<strong>全局 registry + 懒加载连接池</strong>解决：<span class="cite">README.md L200-244</span></p>
+<ul>
+<li><strong>全局 registry</strong>：<code>~/.codegraph/registry.json</code> 记录所有索引过的仓库路径与元数据。每次 <code>analyze</code> 注册一条，<code>clean</code> 注销一条。</li>
+<li><strong>一个 MCP server 服务所有仓库</strong>：不需要每个项目单独配 MCP。配置一次，到处可用。</li>
+<li><strong>懒加载连接池</strong>：LadybugDB 连接<strong>首次查询时才打开</strong>，5 分钟不活动后驱逐，最多 5 个并发。避免一次性打开几十个连接爆内存。</li>
+<li><strong>repo 参数自适应</strong>：单库时 <code>repo</code> 可选；多库时 REQUIRED，且工具描述自动注入仓库清单（见 6.4）。</li>
+</ul>
+
+<h3>9.2 增量更新：commit 级 vs 文件级的缺口与方案</h3>
+<div class="callout warn">
+  <span class="callout-title">现状：增量索引是已知缺口</span>
+  <p>这类工具的 Roadmap 明确标注 <strong>"Incremental Indexing — Only re-index changed files"</strong> 还在 Actively Building。<span class="cite">README.md L473</span> 目前是全量重建。这是大规模仓库的主要痛点。</p>
+</div>
+
+<p>增量更新的难点不在"哪些文件变了"（git diff 就知道），而在<strong>关系传播</strong>：</p>
+<ul>
+<li>文件 A 改了一个函数签名 → 所有调用 A 的文件（跨文件传播）的 CALLS 边都要重算；</li>
+<li>类 B 加了一个方法 → 所有继承 B 的类的 MRO（方法解析顺序）要重算；</li>
+<li>接口 I 加了一个方法 → 所有实现 I 的类的 implementor map 要更新，进而影响 CALLS 解析。</li>
+</ul>
+<p><strong>方案</strong>：把图谱的变更也建模成图问题——先 diff 出受影响的符号子图，再用 Kahn 拓扑排序在这个子图上重跑跨文件传播。但这需要图数据库支持高效的"删除某节点关联的所有边 + 局部重算"，工程复杂度高。</p>
+
+<h3>9.3 跨库 sidecar 索引：消费者 / MQ topic / SOA</h3>
+<p>微服务架构里，一个仓库的代码会<strong>调用另一个仓库的 API</strong>（HTTP fetch）、<strong>消费另一个仓库的 MQ 消息</strong>（RocketMQ topic）、<strong>调用另一个仓库的 SOA 服务</strong>。这些跨库关系是<strong>分布式系统的命脉</strong>，也是图索引最难捕捉的部分。</p>
+
+<p>这类工具的方案是<strong>sidecar 索引</strong>：每个仓库索引时，把它的 fetch 调用、MQ 生产/消费、SOA 提供者写入一个<strong>全局跨库索引</strong>。<span class="cite">pipeline.ts L1700-1708 updateCrossRepoIndex</span></p>
+
+<div class="callout danger">
+  <span class="callout-title">N+1 反模式警示</span>
+  <p>跨库关系的最大陷阱是 <strong>N+1 查询</strong>：要回答"A 仓库的方法调用了哪些其他仓库"，如果对每个方法单独去查全局索引，就是 N+1。正确做法是<strong>批量预加载</strong>：一次把 A 仓库所有跨库关系读进来，在内存里 join。这类工具的 <code>topic_map</code> 工具就是一次性返回所有 topic 的生产者/消费者，避免 Agent 反复查询。</p>
+</div>
+
+<details>
+<summary>跨库关系的三种形态与建模</summary>
+<div class="details-body">
+<ul>
+<li><strong>HTTP fetch（FETCHES 边）</strong>：前端 <code>fetch('/api/users')</code> → 后端路由处理器。索引时扫描所有 <code>fetch()</code> 调用，匹配同仓库路由，未匹配的写入跨库索引（带配置变量解析，如 <code>API_BASE_URL</code>）。<span class="cite">pipeline.ts L1671-1708</span></li>
+<li><strong>MQ topic（publishes/subscribes）</strong>：RocketMQ 的生产者/消费者。索引时识别 <code>@RocketMQMessageListener</code> 等注解，建 <code>Interface:mq:&lt;topic&gt;</code> 节点，所有生产/消费方法连到它。<code>topic_map</code> 工具跨库查询。</li>
+<li><strong>SOA 调用（crossRepoProvider）</strong>：Interface 节点带 <code>soaPrefix</code> 和 <code>crossRepoProvider</code> 属性。<code>context</code> 工具返回时，<code>outgoing.calls</code> 里带 <code>calledMethod + providerRepo</code> 字段，提示这是跨库调用。</li>
+</ul>
+</div>
+</details>
+
+<h3>9.4 存储双轨：嵌入式日常 / 服务端治理</h3>
+<table>
+<thead><tr><th>模式</th><th>数据库</th><th>适用场景</th><th>部署</th></tr></thead>
+<tbody>
+<tr><td><strong>嵌入式（CLI）</strong></td><td>LadybugDB native，落在 <code>.codegraph/</code></td><td>个人开发、本地隐私、CI</td><td>零部署，随仓库走</td></tr>
+<tr><td><strong>服务端（治理）</strong></td><td>LadybugDB server / 中央化</td><td>团队共享、权限治理、跨库查询中心</td><td>需要运维，但支持多用户并发</td></tr>
+<tr><td><strong>Web UI（WASM）</strong></td><td>LadybugDB WASM，浏览器内存</td><td>演示、一次性分析、小仓库</td><td>零安装，但受浏览器内存限制（~5k 文件）</td></tr>
+<tr><td><strong>Bridge 模式</strong></td><td>CLI 索引 + Web UI 展示</td><td>本地索引 + 浏览器可视化</td><td><code>code-graph serve</code> 连接两者</td></tr>
+</tbody>
+</table>
+<p><span class="cite">README.md L19-31, L248-265</span></p>
+
+<h3>9.5 Branch Index Overlay（分支覆盖索引）</h3>
+<p>团队协作时，每个开发者都在不同分支上。如果每次切分支都全量重建索引，成本不可接受。<strong>Branch Index Overlay</strong> 的思路是：主分支建一份完整索引（base layer），每个特性分支只索引<strong>与主分支的 diff</strong>，作为 overlay 覆盖层叠加。查询时合并两层结果。</p>
+<p>这本质上是把 git 的分支模型镜像到图索引。挑战在于关系的合并语义（overlay 删了一个节点，base 层指向它的边怎么办）。这是这类工具尚未实现但企业场景必需的能力。</p>
+
+<h3>9.6 权限分层：只读为主，rename 可写 + dry_run</h3>
+<p>安全第一。<strong>14 个工具里 13 个是只读的</strong>（context、impact、cypher 等都不改文件）。唯一会改文件的是 <code>rename</code>，且<strong>默认 <code>dry_run: true</code></strong>（预览不写入）。<span class="cite">tools.ts L201-235</span></p>
+<ul>
+<li>每次 rename 的编辑都带<strong>置信度标签</strong>：<code>"graph"</code>（图关系找到，高置信，可放心接受）vs <code>"text_search"</code>（正则文本搜索，低置信，需人工审查）。</li>
+<li>rename 后必须再跑 <code>detect_changes</code> 验证无意外副作用（Next 提示强制引导）。</li>
+<li>没有"批量自动应用"的工具——所有写操作都设计成需要人类确认。</li>
+</ul>
+
+<!-- ======================= 第 10 章 ======================= -->
+<h2 id="ch10">10. 从零实现路线</h2>
+
+<h3>10.1 最小可用原型（MVP：&lt;500 行）</h3>
+<p>不要一上来就做 14 语言 + 14 工具。先做<strong>单语言 + 基础节点 + 3 工具</strong>的最小闭环，跑通了再扩展。</p>
+
+<table>
+<thead><tr><th>组件</th><th>MVP 选择</th><th>理由</th></tr></thead>
+<tbody>
+<tr><td>语言</td><td>TypeScript 单语言</td><td>Tree-sitter 支持成熟，类型信息丰富</td></tr>
+<tr><td>节点</td><td>File / Function / Class（3 种）</td><td>覆盖 80% 场景</td></tr>
+<tr><td>关系</td><td>CALLS / IMPORTS（2 种）</td><td>调用图是最核心的</td></tr>
+<tr><td>图存储</td><td>内存 Map（不落库）</td><td>验证概念，零依赖</td></tr>
+<tr><td>工具</td><td>context / impact / cypher（3 个）</td><td>理解 + 变更 + 查询各一个</td></tr>
+<tr><td>MCP</td><td>@modelcontextprotocol/sdk</td><td>官方 SDK，stdio transport</td></tr>
+</tbody>
+</table>
+
+<pre><code class="language-typescript">// MVP：单文件知识图谱 + 3 工具（&lt;500 行）
+import Parser from 'tree-sitter';
+import TS from 'tree-sitter-typescript';
+import { Server } from '@modelcontextprotocol/sdk/server/index.js';
+import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
+
+// 1. 极简图存储（内存）
+class SimpleGraph {
+  nodes = new Map&lt;string, { id: string; kind: string; name: string; filePath: string }&gt;();
+  edges: { type: string; source: string; target: string; confidence: number }[] = [];
+  addNode(n: any) { this.nodes.set(n.id, n); }
+  addEdge(e: any) { this.edges.push(e); }
+  findByName(name: string) { return [...this.nodes.values()].filter(n =&gt; n.name === name); }
+  callers(id: string) { return this.edges.filter(e =&gt; e.type === 'CALLS' &amp;&amp; e.target === id).map(e =&gt; e.source); }
+}
+
+// 2. 解析单个 TS 文件 → 提取 Function/Class + CALLS/IMPORTS
+function parseFile(graph: SimpleGraph, filePath: string, content: string) {
+  const parser = new Parser(); parser.setLanguage(TS.typescript);
+  const tree = parser.parse(content);
+  // 用 query 提取（详见第 4 章 4.6）
+  // ... 提取 function_declaration, class_declaration, call_expression ...
+  // graph.addNode(...); graph.addEdge(...);
+}
+
+// 3. 三工具实现
+const tools = {
+  context: (args: { name: string }) =&gt; {
+    const nodes = graph.findByName(args.name);
+    return nodes.map(n =&gt; ({ ...n, callers: graph.callers(n.id) }));
+  },
+  impact: (args: { target: string }) =&gt; {
+    // 多跳 BFS（详见第 6 章 6.5）
+  },
+  cypher: (args: { query: string }) =&gt; { /* 简化：只支持 MATCH (a)-[:CALLS]-&gt;(b) RETURN */ },
+};
+
+// 4. MCP Server
+const server = new Server({ name: 'mini-graph', version: '0.1.0' }, { capabilities: { tools: {} } });
+// ... 注册 handlers ...
+await server.connect(new StdioServerTransport());</code></pre>
+
+<h3>10.2 扩展路径（循序渐进）</h3>
+<div class="diagram">
+<pre><code>MVP（单语言 + 3 节点 + 3 工具，&lt;500 行）
+   │
+   ├─→ 加语言（Python / Java / Go ...）
+   │      每语言一个 LanguageProvider（importSemantics: named/wildcard/namespace）
+   │
+   ├─→ 加节点类型（Method / Interface / 多语言节点）
+   │
+   ├─→ 加关系（EXTENDS / IMPLEMENTS / ACCESSES / OVERRIDES）
+   │      触发 MRO（方法解析顺序）计算
+   │
+   ├─→ 加社区发现（Leiden）→ Community 节点
+   │      graphology-communities-leiden
+   │
+   ├─→ 加执行流追踪 → Process 节点
+   │      入口点打分 + BFS + 去重
+   │
+   ├─→ 加跨文件传播（Kahn 拓扑 + 接口分派延迟）
+   │      ← 这是质量分水岭，不做就是玩具
+   │
+   ├─→ 加 Worker 池并行（大仓库必需）
+   │
+   ├─→ 加 Embedding（HNSW 向量索引）
+   │      BM25 + 语义 + RRF 混合搜索
+   │
+   ├─→ 加业务概念（Route / Tool / MQ topic / Entity-Table）
+   │
+   └─→ 加跨库（sidecar 索引 + cross_repo_search）</code></pre>
+</div>
+
+<h3>10.3 技术选型清单</h3>
+<table>
+<thead><tr><th>层</th><th>推荐</th><th>备选</th></tr></thead>
+<tbody>
+<tr><td>解析器</td><td><strong>Tree-sitter</strong>（native for CLI, WASM for Web）</td><td>Babel（仅 JS）、libclang（仅 C/C++）</td></tr>
+<tr><td>图存储</td><td><strong>LadybugDB</strong>（嵌入式，属性图+向量）</td><td>Neo4j（服务端）、Memgraph、Apache AGE（Postgres 扩展）</td></tr>
+<tr><td>图算法</td><td><strong>graphology + graphology-communities-leiden</strong></td><td>igraph、networkx（Python）</td></tr>
+<tr><td>Embedding</td><td><strong>transformers.js</strong> + snowflake-arctic-embed-xs（384维）</td><td>OpenAI text-embedding-3-small、Cohere</td></tr>
+<tr><td>向量索引</td><td><strong>HNSW</strong>（LadybugDB 内建）</td><td>Faiss、hnswlib、pgvector</td></tr>
+<tr><td>MCP</td><td><strong>@modelcontextprotocol/sdk</strong></td><td>（目前唯一标准选项）</td></tr>
+<tr><td>Agent Hooks</td><td>Claude Code 的 SessionStart / PreToolUse / PostToolUse</td><td>—</td></tr>
+<tr><td>并发</td><td>Node.js <strong>worker_threads</strong></td><td>Piscina（worker 池库）</td></tr>
+<tr><td>BM25</td><td><strong>winston-bm25</strong> 或自实现</td><td>Lucene、Tantivy</td></tr>
+</tbody>
+</table>
+
+<h3>10.4 踩坑清单（前人填过的坑）</h3>
+<table>
+<thead><tr><th>坑</th><th>症状</th><th>解法</th><th>出处</th></tr></thead>
+<tbody>
+<tr><td>接口分派未延迟</td><td>接口的 CALLS 漏掉部分实现类</td><td>所有 chunk 的 heritage 缓冲，建完整 implementor map 后再解析 CALLS</td><td>pipeline.ts L963-989</td></tr>
+<tr><td>Wildcard import 未合成</td><td>Go/Ruby/C++/Python 的跨文件调用解析不出</td><td>synthesizeWildcardImportBindings：把导入文件的导出符号合成为具名绑定</td><td>pipeline.ts L212-324</td></tr>
+<tr><td>N+1 跨库查询</td><td>跨库关系查询慢到超时</td><td>批量预加载，topic_map 一次返回所有</td><td>tools.ts topic_map 设计</td></tr>
+<tr><td>增量索引缺口</td><td>大仓库全量重建太慢</td><td>Roadmap 项；方案：子图 diff + 局部重算</td><td>README.md L473</td></tr>
+<tr><td>instructions 太长</td><td>LLM 依从度衰减，后半段规定被忽略</td><td>压到 ~80 行（&lt;120 硬上限），用 RFC 2119 措辞</td><td>server.ts L36-40</td></tr>
+<tr><td>skill 被忽略</td><td>56% 概率 skill 不被读取</td><td>关键工作流内联进 instructions + 工具描述</td><td>server.ts L36</td></tr>
+<tr><td>Worker OOM</td><td>minified 大文件撑爆 worker 内存</td><td>子批 1500 + 30s 超时 fail fast</td><td>worker-pool.ts L37-39</td></tr>
+<tr><td>跨环类型传播</td><td>循环依赖导致死锁</td><td>Kahn 把环内文件作为最后一组，不做跨环传播</td><td>pipeline.ts L138-141</td></tr>
+<tr><td>向量写时复制</td><td>符号属性更新触发向量行复制</td><td>Embedding 独立建表</td><td>schema.ts L432-433 注释</td></tr>
+<tr><td>PreToolUse 拖慢搜索</td><td>每次 grep 都等图查询</td><td>只用 BM25，目标 &lt;500ms，聚类不外泄</td><td>pre-tool-use.sh</td></tr>
+</tbody>
+</table>
+
+<h3>10.5 推荐参考开源项目</h3>
+<table>
+<thead><tr><th>项目</th><th>定位</th><th>参考价值</th></tr></thead>
+<tbody>
+<tr><td><strong>codebase-memory-mcp</strong></td><td>MCP 形态的代码记忆</td><td>轻量 MCP 工具设计参考</td></tr>
+<tr><td><strong>deepwiki-open</strong></td><td>DeepWiki 开源版，LLM 生成仓库文档</td><td>理解"用 LLM 读图生成文档"的范式</td></tr>
+<tr><td><strong>sourcebot</strong></td><td>代码搜索引擎</td><td>BM25 + 混合搜索的工程实现</td></tr>
+<tr><td><strong>graphology</strong></td><td>JS 图算法库</td><td>社区发现、图遍历的基础设施</td></tr>
+<tr><td><strong>tree-sitter</strong></td><td>增量解析器</td><td>多语言 AST 提取的事实标准</td></tr>
+<tr><td><strong>modelcontextprotocol</strong></td><td>MCP 官方 SDK 与规范</td><td>工具/资源/prompt 三件套协议</td></tr>
+</tbody>
+</table>
+
+<div class="callout success">
+  <span class="callout-title">一句话总结</span>
+  <p>代码知识图谱的本质是<strong>把代码的确定性结构在索引时预计算好，通过决策树式的 MCP 工具一次返回完整上下文</strong>，让 AI Agent 从"概率性地摸索"升级为"确定性地查询"。图谱 + RAG 分层共存，确定性走图、语义走向量；工具描述即决策树、Next 提示自引导、instructions 极简内联——这三条是指令工程的核心。从 MVP 到企业级，按"语言 → 关系 → 社区 → 执行流 → 跨库"的路径扩展，每一步都有明确的踩坑清单可避。</p>
+</div>
+
+<hr>
+<h3>核心源码出处索引</h3>
+<table>
+<thead><tr><th>主题</th><th>文件</th><th>行号</th></tr></thead>
+<tbody>
+<tr><td>图 schema（节点表 + CodeRelation 表 + Embedding 表）</td><td><code>schema.ts</code></td><td>L22-503</td></tr>
+<tr><td>6 阶段管线编排</td><td><code>pipeline.ts</code></td><td>L1345-1926</td></tr>
+<tr><td>Kahn 拓扑排序</td><td><code>pipeline.ts</code></td><td>L96-144</td></tr>
+<tr><td>跨文件类型传播</td><td><code>pipeline.ts</code></td><td>L326-492</td></tr>
+<tr><td>接口分派延迟解析</td><td><code>pipeline.ts</code></td><td>L878-990</td></tr>
+<tr><td>Wildcard import 合成</td><td><code>pipeline.ts</code></td><td>L212-324</td></tr>
+<tr><td>Worker 池（字节预算/子批/超时）</td><td><code>worker-pool.ts</code></td><td>L31-172</td></tr>
+<tr><td>Leiden 社区发现</td><td><code>community-processor.ts</code></td><td>L104-268</td></tr>
+<tr><td>执行流追踪（入口点/BFS/去重）</td><td><code>process-processor.ts</code></td><td>L81-450</td></tr>
+<tr><td>14 MCP 工具定义</td><td><code>tools.ts</code></td><td>L27-527</td></tr>
+<tr><td>MCP Server + instructions + Next 提示</td><td><code>server.ts</code></td><td>L41-333</td></tr>
+<tr><td>动态 repo 注入</td><td><code>server.ts</code></td><td>L166-195</td></tr>
+<tr><td>SessionStart hook</td><td><code>session-start.sh</code></td><td>全文</td></tr>
+<tr><td>PreToolUse hook（增强引擎）</td><td><code>pre-tool-use.sh</code></td><td>全文</td></tr>
+<tr><td>设计哲学（vs RAG）</td><td><code>README.md</code></td><td>L269-308</td></tr>
+<tr><td>多库 MCP 架构</td><td><code>README.md</code></td><td>L200-244</td></tr>
+</tbody>
+</table>
+
+<footer>
+  <p>核心代码基于通用开源库（<code>@modelcontextprotocol/sdk</code> / <code>tree-sitter</code> / <code>graphology</code>），可复制运行。</p>
+  <p>生成日期：2026-07-01 · 知识图谱架构深度解析</p>
+</footer>
+
+</main>
+</div>
+
+<script>
+  // 初始化 highlight.js
+  document.addEventListener('DOMContentLoaded', () => {
+    hljs.configure({ ignoreUnescapedHTML: true });
+    document.querySelectorAll('pre code').forEach((block) => {
+      hljs.highlightElement(block);
+    });
+  });
+</script>
+</body>
+</html>

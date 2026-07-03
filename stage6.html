@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>阶段6 · 沉淀与复用 · AI 战略转型方法论</title>
+<link rel="stylesheet" href="assets/css/style.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/styles/atom-one-dark.min.css">
+</head>
+<body>
+<header class="topbar"><div class="wrap topbar-inner">
+  <a class="brand" href="index.html"><span class="brand-mark">⚡</span><span>AI 战略转型方法论</span></a>
+  <nav class="topnav"><a href="index.html">首页</a><a href="stage0.html">总纲</a><a href="appendix.html">附录</a></nav>
+</div></header>
+<div class="chapter">
+  <aside class="side">
+    <h4>转型阶段</h4>
+    <a href="stage0.html">阶段0 总纲：思想+原理</a>
+    <a href="stage1.html">阶段1 战略启动</a>
+    <a href="stage2.html">阶段2 全员赋能</a>
+    <a href="stage3.html">阶段3 基础设施</a>
+    <a href="stage4.html">阶段4 闭环试点</a>
+    <a href="stage5.html">阶段5 推广度量</a>
+    <a href="stage6.html" class="cur">阶段6 沉淀复用</a>
+    <h4>其他</h4><a href="index.html">首页</a><a href="appendix.html">附录</a>
+  </aside>
+  <main class="content">
+    <h1>阶段 6 · 沉淀与复用</h1>
+    <p class="subtitle">把个体经验变成组织资产——Skill 范式整合、知识沉淀、真实避坑、持续改进。</p>
+
+    <div class="key-conclusion"><p><strong>个体经验不沉淀，人走了经验也走了。</strong>本阶段把推广中积累的能力固化成可复用的 Skill 范式、把规范/避坑沉淀成 AI 自动加载的知识、把"犯错"变成"自我改进"。这是转型从"一次性项目"变成"持续进化能力"的关键。</p></div>
+
+    <div style="margin:18px 0;padding:14px 18px;background:#f0f7ff;border:1px solid #bcd9ff;border-radius:10px">
+      <div style="font-weight:700;color:#1057cb;font-size:14px;margin-bottom:8px">🧰 工具与 Demo 速查 <span style="font-weight:400;color:#64748b;font-size:12px">（不想读全文？直接用这些）</span></div>
+      <ul style="margin:0;padding-left:22px;font-size:14px;line-height:1.9;color:#334155">
+        <li><strong>Skill 共享平台</strong>：<a href="https://github.com/iflytek/skillhub" target="_blank">iflytek/skillhub</a>（自托管私有 Skill 注册中心，团队共享 / 版本 / 审核）</li>
+        <li><strong>可运行 Demo</strong>：<a href="demos/ai-test-frame/">demos/ai-test-frame</a>（"录制 + AI 生成"测试范式落地，<code>python main.py</code> 即跑）</li>
+      </ul>
+    </div>
+
+    <h2>1. 为什么：个体 → 组织</h2>
+    <p>前 5 个阶段，能力主要长在个体身上（某个开发者很会用 AI）。如果这些能力不沉淀成组织资产，人员流动会让能力流失。阶段6 的核心是<strong>把"个人会用"变成"团队资产"</strong>：Skill 复用、知识沉淀、避坑库、自我改进循环。</p>
+
+    <h2>2. Skill 设计范式整合（飞书各组精华）</h2>
+    <p>13 个组在推广中沉淀了大量高质量 Skill，思路值得整合复用。好的 Skill 有共同范式：</p>
+<pre><code class="language-yaml"># Skill 三件套：skill.md（必需）+ Reference（按需）+ Script（零上下文）
+---
+name: sql-query          # 必须与文件夹同名
+description: "查询业务库只读数据，自动走 SSH 隧道 + 租户库发现"  # 单行、具体、决定是否自动调用
+---
+# 指令（规则 + 输入输出示例）
+只允许 SELECT，禁止写操作；corp_code 必带做租户隔离...</code></pre>
+    <table>
+      <tr><th>Skill 范式</th><th>代表组</th><th>核心思路</th></tr>
+      <tr><td>工具型（SQL/CRUD/数据模型）</td><td>基础应用组</td><td>封装高频开发动作为 Skill，OpenSpec 开发，断点续传</td></tr>
+      <tr><td>规范型（设计 Token/平台规范）</td><td>前端组</td><td>让 AI 输出符合团队设计规范（<code>var(--primary)</code> 而非硬编码）</td></tr>
+      <tr><td>平台型（低代码搭建）</td><td>低代码组</td><td>严格触发条件 + <strong>接口白名单（绝不猜测写操作）</strong> + 三层文档兜底</td></tr>
+      <tr><td>流程型（/commit 规范提交）</td><td>AI 架构组</td><td>AI 分析变更生成 Conventional Commits，自动提交</td></tr>
+      <tr><td>记忆型（claude-mem）</td><td>定制组</td><td>持久化记忆，跨会话复用，按项目隔离</td></tr>
+    </table>
+    <div class="tip"><strong>写好 Skill 的关键</strong>：description 要具体（✅"查询业务库只读数据，自动走 SSH 隧道" ❌"查询数据库"）；写清"何时触发"和"何时禁止"；任务关键的 Skill 用 <code>disable-model-invocation</code> + 显式调用，比自动检测可靠。</div>
+
+    <h2>3. 知识沉淀：规范 + 避坑 + 自我改进</h2>
+    <h3>3.1 规范资产化（三条红线示例）</h3>
+<pre><code class="language-java">// 时光易培组 · 三条红线（写进 .claude/rules/，AI 自动加载）
+// 1. 租户隔离：所有 SQL 每表必带 corp_code
+// 2. MQ/定时任务 finally 必须清理上下文，否则数据串企业
+finally { ExecutionContext.setContextMap(null); }
+// 3. 事务必须指定管理器
+@Transactional(transactionManager = "mdlTransactionManager")</code></pre>
+    <h3>3.2 真实避坑（来自生产 bug 复盘）</h3>
+<pre><code class="language-java">// ❌ 静默吞异常（占本周确认 Bug 的 15%）：catch 吞掉 + handleSuccess 在 try-catch 外
+try { doBusiness(); } catch (Exception e) { log.info("出错了", e); }
+XxlJobHelper.handleSuccess();   // 无论如何都"成功" → 故障静默 9 个月才被发现
+
+// ✅ catch 必须重抛或转 Error，失败必须 handleFail
+try { doBusiness(); XxlJobHelper.handleSuccess(); }
+catch (Exception e) { log.error("任务失败", e); XxlJobHelper.handleFail(e.getMessage()); }</code></pre>
+    <div class="danger"><strong>惨痛案例</strong>：某 SFTP 推送任务因静默吞异常，<strong>停更 9 个月才被客户发现</strong>。教训：关键集成任务必须有外部健康检查（数据时效性监控），不能只信任务自报成功。</div>
+    <h3>3.3 自我改进循环</h3>
+    <p>让 Claude 犯错后<strong>自己更新 CLAUDE.md</strong>避免同类错误："刚才那个错误是因为 X，更新 CLAUDE.md 添加规则防止类似情况。"——让工具的失败自动转化为团队规范的进化。</p>
+
+    <h2>4. 13 组案例的六大共性方法论</h2>
+    <p>13 个组的实战提炼出 6 大共性方法论，是团队通用的精华：</p>
+    <ol>
+      <li><strong>规范/知识资产化</strong>（地基）：先沉淀 AI 能读的说明书，再谈提效。</li>
+      <li><strong>Skill 沉淀工作流</strong>：高频能力做成 Skill 共享，写清触发/禁止。</li>
+      <li><strong>OpenSpec+Superpowers 规范驱动</strong>：探索不是浪费，是最高效的慢。</li>
+      <li><strong>录制 + AI 生成</strong>：人做一遍，AI 看会，批量复制（测试/前端/运维）。测试场景的完整展开见 <a href="assets/ref/AI自动化测试-方法论与实践.html" target="_blank">《AI 自动化测试：方法论与实践》</a>。</li>
+      <li><strong>多 Agent 并行</strong>：单点提效放大为大规模重构。</li>
+      <li><strong>业务知识库/RAG 调研</strong>：四方案对比验证（GraphRAG/LightRAG/Hyper-Extract/RagFlow）。</li>
+    </ol>
+
+    <h2>5. 角色视角 + 常见坑 + 清单</h2>
+    <div class="roles">
+      <div class="role role-leader"><span class="role-tag">Leader</span><p>把个体经验沉淀为组织资产定成机制（Skill 仓库/避坑库/周报），纳入考核。</p></div>
+      <div class="role role-dev"><span class="role-tag">开发者</span><p>主动把自己的高频操作做成 Skill 共享；踩坑后写进避坑库；用自我改进循环。</p></div>
+      <div class="role role-pm"><span class="role-tag">PM</span><p>把业务知识沉淀进 RAG；把需求模板化减少沟通损耗。</p></div>
+    </div>
+    <div class="warn"><strong>坑</strong>：①Skill 写了没人用（description 不清晰，要写清触发条件）；②规范写了不维护（定期审查修剪）；③避坑库不更新（每次复盘都补）。</div>
+    <div class="checklist">
+      <div class="checklist-title">📋 阶段6 落地清单（持续进化）</div>
+      <ul>
+        <li>团队 Skill 仓库成型，按工具/规范/平台/流程/记忆分类，description 清晰</li>
+        <li>规范资产化（rules/ 三红线等），新代码强制、旧代码宽容</li>
+        <li>避坑库（静默吞异常/硬编码定制/配置回归等）持续更新</li>
+        <li>自我改进循环：AI 犯错 → 更新 CLAUDE.md/rules</li>
+        <li>6 大共性方法论成为团队共识，新成员照着快速上手</li>
+      </ul>
+    </div>
+    <p class="muted" style="font-size:13px;margin-top:18px">转型不是一次性项目，而是<strong>持续进化的能力</strong>。回到总纲：<strong>人 + AI，人是根本</strong>——工具和方法论都会迭代，但"转变思想、懂原理、拥抱 AI"始终是地基。</p>
+    <div class="pager"><a href="stage5.html">← 阶段5 推广度量</a><a href="appendix.html">附录（术语/源码索引）→</a></div>
+  </main>
+</div>
+<footer class="foot"><div class="wrap"><p>企业级 AI 战略转型方法论教程 · 作者 Johnson</p></div></footer>
+<script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/highlight.min.js"></script>
+<script>hljs.highlightAll();</script>
+</body>
+</html>

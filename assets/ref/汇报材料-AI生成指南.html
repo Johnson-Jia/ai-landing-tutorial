@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>汇报材料 AI 生成指南 · AI 战略转型方法论</title>
+<link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+<header class="topbar"><div class="wrap topbar-inner">
+  <a class="brand" href="../index.html"><span class="brand-mark">⚡</span><span>AI 战略转型方法论</span></a>
+  <nav class="topnav"><a href="../index.html">首页</a><a href="../stage0.html">总纲</a><a href="../appendix.html">附录</a></nav>
+</div></header>
+<main class="wrap" style="max-width:940px;padding:32px 24px 64px">
+  <h1>汇报材料 AI 生成指南</h1>
+  <p class="subtitle">转型最大的痛点不是技术，是「向上汇报、向下推进」。本模块给一套 Prompt 模板包，让 AI 帮你生成汇报材料。</p>
+
+  <div class="key-conclusion"><p>汇报材料 = <strong>数据 + Prompt + AI</strong>。你准备数据 → 复制本模块的 Prompt 模板 → 喂给任意 AI → 生成汇报（PPT/计划书/周报/总结/度量报告）。<strong>不是空白模板，是「AI 可执行的 Prompt 包」</strong>——这才是可复制的关键。</p></div>
+
+  <h2>一、为什么：汇报是真痛点</h2>
+  <p>AI 转型最大的阻力，往往不是技术，而是：</p>
+  <ul>
+    <li><strong>向上</strong>：怎么向老板证明「值得投」、怎么汇报进展、怎么要资源？</li>
+    <li><strong>向下</strong>：怎么给各级人员讲清楚「该做什么」？</li>
+    <li><strong>横向</strong>：怎么让各部门协同、怎么交接？</li>
+  </ul>
+  <p>这些汇报/沟通材料，占管理者大量精力。本模块把这些材料的生成<strong>交给 AI</strong>——你只需准备数据，AI 按模板生成。</p>
+
+  <h2>二、工作流：数据 → Prompt → AI → 输出 → 渲染</h2>
+  <table>
+    <tr><th>步骤</th><th>动作</th><th>产出</th></tr>
+    <tr><td>① 准备数据</td><td>整理你的真实数据（AI 占比、产出、Bug、进展...）</td><td>数据清单</td></tr>
+    <tr><td>② 复制 Prompt</td><td>打开对应 <code>.prompt.md</code>，复制 Prompt，填入数据</td><td>填好数据的 Prompt</td></tr>
+    <tr><td>③ 发给 AI</td><td>任意 AI（Claude / ChatGPT / GLM）执行</td><td>汇报内容（Markdown）</td></tr>
+    <tr><td>④ 渲染</td><td>PPT 类 → ppt-master 生成原生可编辑 PPTX；文档类 → 直接用 / 转 PDF</td><td>最终汇报材料</td></tr>
+  </table>
+
+  <h2>三、5 类汇报 Prompt</h2>
+  <p>完整 Prompt 包在 <code>demos/report-templates/</code>（可单独交付）：</p>
+  <table>
+    <tr><th>模板</th><th>用途</th><th>输出</th></tr>
+    <tr><td><a href="../../demos/report-templates/01-战略汇报PPT.prompt.md">01 战略汇报 PPT</a></td><td>向老板汇报进展 / 要资源</td><td><strong>可编辑 PPTX</strong></td></tr>
+    <tr><td><a href="../../demos/report-templates/02-转型计划书.prompt.md">02 转型计划书</a></td><td>立项审批</td><td>文档</td></tr>
+    <tr><td><a href="../../demos/report-templates/03-周报.prompt.md">03 周报</a></td><td>关键节点跟踪</td><td>文档</td></tr>
+    <tr><td><a href="../../demos/report-templates/04-阶段总结报告.prompt.md">04 阶段总结报告</a></td><td>结项 / 晋升述职</td><td>文档</td></tr>
+    <tr><td><a href="../../demos/report-templates/05-效果度量报告.prompt.md">05 效果度量报告</a></td><td>数据证明提效（接 ai-metrics）</td><td>文档</td></tr>
+  </table>
+  <div class="tip"><strong>每个 Prompt 模板的结构</strong>：用途（何时用）→ 你要准备的数据（输入清单）→ Prompt（复制给 AI 的完整指令）→ 输出示例（脱敏样例）→ 渲染说明。<strong>读者拿 Prompt + 自己数据，照做即生成</strong>。</div>
+
+  <h2>四、PPT 渲染：ppt-master（开源）</h2>
+  <p>战略汇报 PPT 用 <a href="https://github.com/hugohe3/ppt-master" target="_blank">ppt-master</a>（GitHub 开源，MIT，1.6万 stars）——把 AI 生成的汇报内容（Markdown）生成**原生可编辑的 PPTX**，不用手画。</p>
+<pre><code class="language-bash"># 安装 ppt-master
+git clone https://github.com/hugohe3/ppt-master.git
+cd ppt-master
+pip install -r requirements.txt
+
+# 用法（在 Claude Code 里）：引用 ppt-master，让它把汇报内容生成 PPT
+# 1. 用本模块 Prompt 生成汇报内容（Markdown）
+# 2. Claude Code 里 @hugohe3/ppt-master，说「用这份战略汇报内容生成 PPT」
+# 3. AI 按 SKILL.md 工作流，生成原生可编辑 .pptx</code></pre>
+  <div class="tip"><strong>为什么是 ppt-master（根本原因）</strong>：Marp / Slidev 导出 PPTX 是<strong>图片式</strong>（每页渲染成图，PowerPoint 里无法改任何元素）；ppt-master 基于 <code>python-pptx</code> 生成原生 <strong>DrawingML</strong>（形状/文本框/图表/动画都是<strong>独立可编辑元素</strong>，PowerPoint 里能改每个细节，不是图片）。<strong>更多示例</strong>见 ppt-master 的 <a href="https://github.com/hugohe3/ppt-master" target="_blank"><code>examples/</code></a> 目录（20+ 精美可编辑 deck）。</div>
+
+  <h2>五、示例：战略汇报 PPT（关键数据）</h2>
+  <p>战略汇报 PPT 的示例输出（基于教程公开脱敏数据），用 ppt-master 生成原生可编辑 PPTX 后包含：</p>
+  <ul>
+    <li><strong>封面</strong>：AI 战略转型汇报</li>
+    <li><strong>转型目标</strong>：人均产出 +50%、AI 占比 ≥70%、周期 -30%（表格）</li>
+    <li><strong>阶段性成果</strong>：人均产出 <strong>+104%</strong>、AI 占比 <strong>76.6%</strong>、Bug <strong>-16.4pp</strong>（关键数字高亮）</li>
+    <li><strong>资源请求</strong>：工具预算 / 培训 / 人力 / 考核</li>
+  </ul>
+  <p>完整 deck 示例见 ppt-master 的 <a href="https://github.com/hugohe3/ppt-master" target="_blank"><code>examples/</code> 目录</a>（20+ 精美可编辑 deck，PowerPoint 里每个元素可改）。</p>
+
+  <h2>六、与其他模块的衔接</h2>
+  <ul>
+    <li><strong>战略目标数据</strong>来自 <a href="../stage1.html">阶段 1 战略启动</a></li>
+    <li><strong>度量数据</strong>（AI 占比/产出/Bug）来自 <a href="../stage5.html">阶段 5 推广度量</a> + <a href="AI自动化测试-方法论与实践.html">ai-metrics demo</a></li>
+    <li><strong>转型方法论</strong>（6 阶段）贯穿 <a href="../stage0.html">总纲</a> ~ <a href="../stage6.html">阶段 6</a></li>
+  </ul>
+  <div class="key-conclusion" style="margin-top:20px"><p><strong>关键</strong>：本模块交付的是「<strong>Prompt 包</strong>」（内容资产，可单独卖），不是工具。读者用任意 AI + Prompt → 生成，工具（ppt-master）只是可选渲染层。<strong>这是教程最大卖点之一</strong>——别人卖方法论，你卖「拿着就能生成汇报的 Prompt 包」。</p></div>
+
+  <div class="pager">
+    <a href="../stage6.html">← 阶段6 沉淀复用</a>
+    <a href="../appendix.html">附录 →</a>
+  </div>
+</main>
+<footer class="foot"><div class="wrap"><p>企业级 AI 战略转型方法论教程 · 作者 Johnson</p></div></footer>
+</body>
+</html>

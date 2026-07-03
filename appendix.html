@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>附录 · AI 战略转型方法论</title>
+<link rel="stylesheet" href="assets/css/style.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/styles/atom-one-dark.min.css">
+</head>
+<body>
+<header class="topbar"><div class="wrap topbar-inner">
+  <a class="brand" href="index.html"><span class="brand-mark">⚡</span><span>AI 战略转型方法论</span></a>
+  <nav class="topnav"><a href="index.html">首页</a><a href="stage0.html">总纲</a><a href="appendix.html">附录</a></nav>
+</div></header>
+<div class="chapter">
+  <aside class="side">
+    <h4>附录</h4>
+    <a href="#terms">A. 术语表</a>
+    <a href="#source">B. 配套源码索引</a>
+    <a href="#stack">C. 技术栈全景</a>
+    <a href="#reading">D. 延伸阅读</a>
+    <a href="#about">E. 关于</a>
+    <h4>转型阶段</h4>
+    <a href="stage0.html">阶段0 总纲</a>
+    <a href="stage1.html">阶段1 战略启动</a>
+    <a href="stage2.html">阶段2 全员赋能</a>
+    <a href="stage3.html">阶段3 基础设施</a>
+    <a href="stage4.html">阶段4 闭环试点</a>
+    <a href="stage5.html">阶段5 推广度量</a>
+    <a href="stage6.html">阶段6 沉淀复用</a>
+  </aside>
+  <main class="content">
+    <h1>附录</h1>
+
+    <h2 id="terms">A. 术语表</h2>
+    <ul>
+      <li><strong>上下文窗口</strong>：大模型一次能"看到"的 token 上限（Claude ~1M），填满后性能下降——本教程一切用法的约束原点。</li>
+      <li><strong>Agent</strong>：大模型 + 工具的组装体，能感知和改变外界。</li>
+      <li><strong>REACT</strong>：Thought→Action→Observation 循环的 Agent 运行模式。</li>
+      <li><strong>RAG</strong>：检索增强生成，先检索知识库再喂模型，减少幻觉。</li>
+      <li><strong>代码知识图谱</strong>：把代码索引成节点+边的图，供 AI 确定性查询（替代盲读）。</li>
+      <li><strong>SDD</strong>：规范驱动开发，spec/plan/tasks 三产物，纠错左移到 Markdown。</li>
+      <li><strong>Skill</strong>：可复用工作流/领域知识，两级加载（description 常驻 + 正文按需）。</li>
+      <li><strong>MCP</strong>：Model Context Protocol，AI 连接外部数据/能力的开放协议。</li>
+      <li><strong>OpenSpec / Superpowers</strong>：规范驱动框架 / 自动化执行框架，两者互补。</li>
+      <li><strong>Co-authored-by</strong>：Git commit trailer，AI 工具默认埋点，用于度量 AI 代码占比。</li>
+      <li><strong>HNSW / CrossEncoder</strong>：向量库图索引算法 / RAG 重排序模型。</li>
+    </ul>
+
+    <h2 id="source">B. 配套源码索引</h2>
+    <p>本教程强绑定以下真实项目（均在企业内部 paas 平台，章节对应）：</p>
+    <ul>
+      <li><strong>业务 RAG 服务</strong>（阶段3）：向量库抽象 + Milvus + 两阶段检索重排。</li>
+      <li><strong>代码图谱工具</strong>（阶段3·代码图谱）：推荐开源 <a href="https://github.com/DeusData/codebase-memory-mcp">codebase-memory-mcp</a>（Tree-sitter + 知识图谱 + MCP 工具集）。</li>
+      <li><strong>团队 Skill 仓库</strong>（阶段3/6）：编排型工作流 + 领域 Skill + 强制激活 hook。开源平台推荐 <a href="https://github.com/iflytek/skillhub">iflytek/skillhub</a>（自托管私有 Skill 注册中心，Apache 2.0）。</li>
+      <li><strong>MCP 网关服务</strong>（阶段3）：Spring AI Alibaba + Nacos 动态工具发现。</li>
+      <li><strong>AI 代码占比工具</strong>（阶段5）：Go，Co-authored-by + 风格学反伪造。</li>
+      <li><strong>PPT 生成服务</strong>（AI 应用扩展）：Dify 编排 + FastAPI 渲染。</li>
+      <li><strong>AI 自动化测试框架</strong>（测试）：Playwright + 数据驱动 + 录制转 AI 生成。详见 <a href="assets/ref/AI自动化测试-方法论与实践.html">《AI 自动化测试：方法论与实践》</a>。</li>
+    </ul>
+
+    <h2 id="stack">C. 技术栈全景</h2>
+    <p><strong>大模型 / Agent</strong>：Claude Code（Opus/Sonnet/Haiku）、Codex、Spring AI / Spring AI Alibaba。</p>
+    <p><strong>RAG / 向量</strong>：Milvus、Chroma、BGE-M3、DashScope Embedding、CrossEncoder。</p>
+    <p><strong>代码图谱</strong>：Tree-sitter、LadybugDB、MCP TypeScript SDK。</p>
+    <p><strong>编排</strong>：OpenSpec、Superpowers。</p>
+    <p><strong>基础设施</strong>：Nacos、Dubbo、K8s、Docker、PostgreSQL、Redis。</p>
+    <p><strong>测试 / 度量</strong>：Playwright、pytest、go-git、Cobra/Viper。</p>
+
+    <h2 id="reading">D. 延伸阅读</h2>
+    <ul>
+      <li><a href="assets/ref/角色操作手册.html">角色操作手册（本地，自包含）</a>——4 份角色手册（开发/测试/组长/产品）</li>
+      <li><a href="assets/ref/汇报材料-AI生成指南.html">汇报材料 AI 生成指南（本地，自包含）</a>——5 类汇报 prompt 模板包 + Marp PPT 渲染</li>
+      <li><a href="assets/ref/AI自动化测试-方法论与实践.html">AI 自动化测试：方法论与实践（本地，自包含）</a>——录制转生成四段式 + 规范即 Prompt</li>
+      <li><a href="assets/ref/Claude-Code-完全手册.html">Claude Code 完全手册（本地，自包含）</a>——15 章配置大全</li>
+      <li>Claude Code 官方文档：<code>code.claude.com/docs</code>（Skills / Agents / Hooks / MCP）</li>
+      <li>MCP 协议规范：<code>modelcontextprotocol.io</code></li>
+      <li>Spring AI Alibaba：<code>java2ai.com</code></li>
+      <li>OpenSpec：<code>openspec.dev</code>；Superpowers：<code>github.com/obra/superpowers</code></li>
+      <li>微软 AI-For-Beginners（中文版）：<a href="https://github.com/microsoft/AI-For-Beginners/tree/master/translations/zh-CN" target="_blank">github.com/microsoft/AI-For-Beginners/translations/zh-CN</a>（12周24课，AI 基础原理 + 代码实践，MIT 开源）</li>
+      <li>Milvus 混合检索、Tree-sitter、Playwright Best Practices</li>
+    </ul>
+
+    <h2 id="about">E. 关于</h2>
+    <p>本教程由 <strong>Johnson</strong>（技术总监 / 首席架构师）整理，基于 80+ 人研发团队、千万级用户平台的真实 AI 战略转型全过程。核心理念：<strong>AI 能提效、能大幅扩展人的能力边界，但 AI 不是万能的——最终依赖使用人的能力边界。先转变思想、拥抱 AI，再懂原理、精准交互。</strong> 人 + AI，人是根本。</p>
+    <p>配套资料：技术能力档案 · 充电档位定稿 · B站视频选题库。本教程自包含，整个目录可独立拷贝交付。</p>
+
+    <div class="pager">
+      <a href="stage6.html">← 阶段6 沉淀复用</a>
+      <a href="index.html">返回首页 →</a>
+    </div>
+  </main>
+</div>
+<footer class="foot"><div class="wrap"><p>企业级 AI 战略转型方法论教程 · 作者 Johnson</p></div></footer>
+<script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/highlight.min.js"></script>
+<script>hljs.highlightAll();</script>
+</body>
+</html>

@@ -1,0 +1,21 @@
+# 视频文件（太大，不入 git，单独提供/网盘）
+*.mp4
+*.wav
+*.mp3
+*.aac
+
+# demo 运行产物
+demos/*/workspace/
+demos/*/node_modules/
+demos/*/dist/
+demos/*/package-lock.json
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+
+# 系统
+.DS_Store
+Thumbs.db
+.idea/

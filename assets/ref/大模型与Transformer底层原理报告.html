@@ -1,0 +1,1260 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>大模型 · Transformer · 神经网络底层原理（分层图解版）</title>
+<style>
+  :root{
+    --primary:#6C5CE7; --primary-dark:#5A4BD1; --primary-light:#F0EDFF;
+    --success:#00B894; --success-light:#E6FFF7;
+    --info:#0984E3; --info-light:#EBF5FF;
+    --warning:#E8A317; --warning-light:#FFF7E0;
+    --danger:#E17055; --danger-light:#FFF0EC;
+    --teal:#00B8A9; --teal-light:#E6FFFB;
+    --gray-50:#F9FAFB; --gray-100:#F3F4F6; --gray-200:#E5E7EB; --gray-300:#D1D5DB;
+    --gray-500:#6B7280; --gray-600:#4B5563; --gray-700:#374151; --gray-800:#1F2937; --gray-900:#111827;
+    --radius:10px; --shadow:0 1px 3px rgba(0,0,0,.1),0 1px 2px rgba(0,0,0,.06); --shadow-lg:0 10px 15px -3px rgba(0,0,0,.1),0 4px 6px -4px rgba(0,0,0,.1);
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth;scroll-padding-top:80px}
+  body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;color:var(--gray-800);line-height:1.85;background:var(--gray-50)}
+  #progress-bar{position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,var(--primary),#a29bfe);z-index:9999;transition:width .15s}
+  #sidebar{position:fixed;top:0;left:0;width:286px;height:100vh;background:#fff;border-right:1px solid var(--gray-200);overflow-y:auto;z-index:100;padding:22px 0}
+  #sidebar::-webkit-scrollbar{width:6px}#sidebar::-webkit-scrollbar-thumb{background:var(--gray-300);border-radius:3px}
+  #sidebar .logo{padding:0 24px 18px;border-bottom:1px solid var(--gray-200)}
+  #sidebar .logo .logo-icon{font-size:26px;margin-bottom:4px}
+  #sidebar .logo .logo-text{font-size:16px;font-weight:800;color:var(--primary);line-height:1.4}
+  #sidebar .logo small{display:block;font-size:11px;font-weight:400;color:var(--gray-500);margin-top:4px}
+  #sidebar nav{padding:12px 0}
+  #sidebar nav a{display:block;padding:7px 24px 7px 30px;color:var(--gray-700);text-decoration:none;font-size:13px;transition:all .15s;border-left:3px solid transparent}
+  #sidebar nav a:hover{background:var(--gray-50);color:var(--primary)}
+  #sidebar nav a.active{background:var(--primary-light);color:var(--primary);border-left-color:var(--primary);font-weight:600}
+  #sidebar nav .nav-group{padding:16px 24px 4px;font-size:10.5px;text-transform:uppercase;letter-spacing:1px;color:var(--gray-300);font-weight:800}
+  #sidebar nav a.sub{font-size:12px;color:var(--gray-500);padding-left:42px}
+
+  #main{margin-left:286px;max-width:980px;padding:0 48px 140px}
+  .hero{padding:46px 0 26px;border-bottom:2px solid var(--gray-200);margin-bottom:8px}
+  .hero h1{font-size:33px;font-weight:800;color:var(--gray-900);line-height:1.3;margin-bottom:10px}
+  .hero .subtitle{font-size:15px;color:var(--gray-500);margin-bottom:16px}
+  .hero .meta-row{display:flex;flex-wrap:wrap;gap:8px}
+
+  h2.part-title{font-size:15px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;color:#fff;background:linear-gradient(90deg,var(--primary),var(--info));padding:10px 18px;border-radius:8px;margin:60px 0 6px;scroll-margin-top:80px}
+  h2.section-title{font-size:25px;font-weight:800;margin:42px 0 8px;color:var(--gray-900);scroll-margin-top:80px}
+  h2.section-title .emoji{margin-right:8px}
+  .section-desc{font-size:14px;color:var(--gray-500);margin-bottom:20px}
+  h3{font-size:18.5px;font-weight:700;margin:28px 0 10px;color:var(--gray-800);scroll-margin-top:80px}
+  h3 .src{font-size:11px;font-weight:600;color:var(--info);margin-left:8px;vertical-align:middle}
+  h4{font-size:15.5px;font-weight:600;margin:20px 0 8px;color:var(--gray-700)}
+  p{margin-bottom:14px}
+  a{color:var(--primary);text-decoration:none}a:hover{text-decoration:underline}
+  strong{color:var(--gray-900)}
+  ul,ol{margin:8px 0 16px 24px}li{margin-bottom:5px}
+  code{background:var(--gray-100);padding:2px 6px;border-radius:4px;font-family:"JetBrains Mono","Consolas",monospace;font-size:12.5px;color:var(--danger)}
+  .formula{background:var(--gray-900);color:#E5E7EB;padding:16px 20px;border-radius:var(--radius);margin:14px 0;font-family:"JetBrains Mono","Cambria Math","Consolas",monospace;font-size:14.5px;line-height:1.9;overflow-x:auto;text-align:center}
+  .formula .annot{color:#a29bfe;font-size:12px}
+  .formula .var{color:#ffeaa7}
+  table{width:100%;border-collapse:collapse;margin:14px 0 18px;font-size:13.5px}
+  th{background:var(--primary-light);text-align:left;padding:10px 12px;font-weight:700;color:var(--gray-800);border:1px solid var(--gray-200)}
+  td{padding:10px 12px;border:1px solid var(--gray-200);vertical-align:top}
+  tr:nth-child(even){background:var(--gray-50)}
+
+  .badge{display:inline-block;padding:2px 9px;border-radius:11px;font-size:11.5px;font-weight:700;line-height:1.6}
+  .b-src{background:var(--info-light);color:var(--info);border:1px solid #bfe0fb;font-weight:600}
+  .b-key{background:var(--success-light);color:var(--success);border:1px solid #bff3e6}
+
+  .callout{padding:15px 18px;border-radius:var(--radius);margin:16px 0;border-left:4px solid}
+  .callout-title{font-weight:700;margin-bottom:6px}
+  .callout p{margin-bottom:6px;font-size:14px}.callout p:last-child{margin-bottom:0}
+  .callout-info{background:var(--info-light);border-color:var(--info)}.callout-info .callout-title{color:var(--info)}
+  .callout-success{background:var(--success-light);border-color:var(--success)}.callout-success .callout-title{color:var(--success)}
+  .callout-warning{background:var(--warning-light);border-color:var(--warning)}.callout-warning .callout-title{color:#b7791f}
+  .callout-danger{background:var(--danger-light);border-color:var(--danger)}.callout-danger .callout-title{color:var(--danger)}
+  .callout-teal{background:var(--teal-light);border-color:var(--teal)}.callout-teal .callout-title{color:var(--teal)}
+
+  details.tech{background:#fff;border:1px solid var(--gray-200);border-left:4px solid var(--primary);border-radius:var(--radius);margin:14px 0;box-shadow:var(--shadow)}
+  details.tech>summary{padding:12px 18px;cursor:pointer;font-weight:700;font-size:14px;color:var(--primary-dark);list-style:none;display:flex;align-items:center;gap:8px;user-select:none}
+  details.tech>summary::-webkit-details-marker{display:none}
+  details.tech>summary::before{content:'🔬';font-size:15px}
+  details.tech[open]>summary::before{content:'▾'}
+  details.tech>summary::after{content:'（点击展开技术细节与公式）';font-size:11.5px;color:var(--gray-400);font-weight:400;margin-left:6px}
+  details.tech[open]>summary::after{content:'（点击收起）'}
+  details.tech .tech-body{padding:4px 20px 18px;font-size:14px}
+
+  .concept-card{background:#fff;border-radius:var(--radius);padding:20px 24px;margin:14px 0;box-shadow:var(--shadow);border:1px solid var(--gray-200);border-top:4px solid var(--primary)}
+  .concept-card.el{border-top-color:var(--danger)}
+  .concept-card.tr{border-top-color:var(--info)}
+  .concept-card.lm{border-top-color:var(--success)}
+  .concept-card .ctitle{font-size:16px;font-weight:800;color:var(--gray-900);margin-bottom:8px}
+
+  .flow{text-align:center;margin:22px 0}
+  .flow-row{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:6px}
+  .flow-step{display:inline-block;background:var(--primary);color:#fff;padding:9px 14px;border-radius:8px;font-weight:600;font-size:12.5px}
+  .flow-step.el{background:var(--danger)}.flow-step.tr{background:var(--info)}.flow-step.lm{background:var(--success)}
+  .flow-arrow{color:var(--gray-400);font-size:18px}
+
+  .analogy{background:linear-gradient(135deg,#fffaf0,#fff7e6);border:1px dashed var(--warning);border-radius:var(--radius);padding:14px 18px;margin:14px 0;font-size:14px}
+  .analogy .at{font-weight:700;color:#b7791f;margin-bottom:4px}
+
+  .compare{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:16px 0}
+  .compare .col{background:#fff;border-radius:var(--radius);padding:16px 20px;box-shadow:var(--shadow);border:1px solid var(--gray-200)}
+  .compare .col h4{margin:0 0 8px}
+  @media(max-width:760px){.compare{grid-template-columns:1fr}}
+
+  .toc-box{background:var(--primary-light);border-radius:var(--radius);padding:18px 22px;margin:18px 0;border:1px solid #d8d0f7}
+  .toc-box h4{color:var(--primary-dark);margin:0 0 8px}
+
+  #back-top{position:fixed;bottom:30px;right:30px;width:44px;height:44px;background:var(--primary);color:#fff;border:none;border-radius:50%;cursor:pointer;font-size:20px;box-shadow:var(--shadow-lg);opacity:0;transition:opacity .3s;z-index:200}
+  #back-top.show{opacity:1}
+  .foot-note{font-size:13px;color:var(--gray-500);margin-top:40px;padding:18px;background:var(--gray-100);border-radius:var(--radius);line-height:1.9}
+  @media(max-width:900px){#sidebar{transform:translateX(-100%)}#main{margin-left:0;padding:0 20px 100px}}
+</style>
+</head>
+<body>
+<div id="progress-bar"></div>
+
+<aside id="sidebar">
+  <div class="logo">
+    <div class="logo-icon">🧬</div>
+    <div class="logo-text">大模型 · Transformer · 神经网络底层原理</div>
+    <small>分层图解版 · 每论断附来源</small>
+  </div>
+  <nav id="nav">
+    <div class="nav-group">导论</div>
+    <a href="#intro" class="active">三层认知地图</a>
+    <a href="#bigpic">一张图看懂全链路</a>
+
+    <div class="nav-group">第一篇 · 神经网络</div>
+    <a href="#p1">神经网络基础</a>
+    <a href="#neuron" class="sub">神经元与感知机</a>
+    <a href="#mlp" class="sub">多层感知机 MLP</a>
+    <a href="#act" class="sub">激活函数</a>
+    <a href="#fwd" class="sub">前向 / 反向传播</a>
+    <a href="#gd" class="sub">梯度下降"下山"</a>
+    <a href="#loss" class="sub">损失与优化器</a>
+    <a href="#ppl" class="sub">困惑度 PPL</a>
+    <a href="#overfit" class="sub">过拟合与正则化</a>
+
+    <div class="nav-group">第二篇 · 深度学习</div>
+    <a href="#p2">表示学习与深度</a>
+    <a href="#deep" class="sub">为什么要"深"</a>
+    <a href="#autoencoder" class="sub">自编码器</a>
+    <a href="#residual" class="sub">残差连接 ResNet</a>
+    <a href="#norm" class="sub">归一化 LayerNorm</a>
+    <a href="#cnrnn" class="sub">CNN / RNN 背景</a>
+    <a href="#lstm" class="sub">RNN/LSTM 门控</a>
+
+    <div class="nav-group">第三篇 · Transformer</div>
+    <a href="#p3">Transformer 全解</a>
+    <a href="#attn-intro" class="sub">注意力直觉</a>
+    <a href="#selfattn" class="sub">自注意力 QKV</a>
+    <a href="#causalmask" class="sub">因果掩码 Causal Mask</a>
+    <a href="#multihead" class="sub">多头注意力</a>
+    <a href="#mha-mqa-gqa" class="sub">MHA / MQA / GQA</a>
+    <a href="#posenc" class="sub">位置编码</a>
+    <a href="#encdec" class="sub">Encoder/Decoder</a>
+
+    <div class="nav-group">第四篇 · 大模型</div>
+    <a href="#p4">大模型原理</a>
+    <a href="#lm-history" class="sub">语言模型简史</a>
+    <a href="#token" class="sub">分词 Tokenization</a>
+    <a href="#embedding" class="sub">词嵌入 Embedding</a>
+    <a href="#pretrain" class="sub">预训练目标</a>
+    <a href="#scaling" class="sub">Scaling Law</a>
+    <a href="#moe" class="sub">混合专家 MoE</a>
+    <a href="#kvcache" class="sub">KV Cache</a>
+    <a href="#maxpos" class="sub">上下文长度限制</a>
+    <a href="#config" class="sub">config.json 解读</a>
+    <a href="#filesize" class="sub">模型文件大小与精度</a>
+    <a href="#safetensors" class="sub">safetensors 存什么</a>
+
+    <div class="nav-group">第五篇 · 对齐与推理</div>
+    <a href="#p5">对齐与推理优化</a>
+    <a href="#sft" class="sub">SFT 监督微调</a>
+    <a href="#rlhf" class="sub">RLHF 对齐</a>
+    <a href="#cot" class="sub">CoT 推理模型</a>
+    <a href="#inferopt" class="sub">推理优化技术</a>
+    <a href="#quant-deep" class="sub">量化原理深化</a>
+    <a href="#pagedattn" class="sub">PagedAttention / vLLM</a>
+
+    <div class="nav-group">收尾</div>
+    <a href="#summary">完整链条总结</a>
+    <a href="#refs">参考文献</a>
+  </nav>
+</aside>
+
+<main id="main">
+
+  <section class="hero" id="top">
+    <h1>大模型 · Transformer · 神经网络底层原理</h1>
+    <p class="subtitle">从单个神经元到千亿参数大模型 · 分层讲解（通俗主体 + 可折叠技术细节）· 每个关键论断附原始论文来源</p>
+    <div class="meta-row">
+      <span class="badge b-key">分层阅读</span>
+      <span class="badge b-src">15+ arXiv 来源</span>
+      <span class="badge" style="background:var(--teal-light);color:var(--teal);border:1px solid #a3e9e0">公式可展开</span>
+    </div>
+    <div class="toc-box">
+      <h4>📖 如何阅读本文</h4>
+      <p style="font-size:14px;margin:0;color:var(--gray-700)">正文用<strong>通俗语言 + 类比</strong>讲清每个概念的核心思想，所有人可读；标有 <strong>🔬</strong> 的灰色框是<strong>可折叠的技术细节</strong>（含数学公式、推导、维度变化），供有技术背景或想深入者展开。每个关键概念标注原始论文 arXiv 编号，便于溯源核证。</p>
+    </div>
+  </section>
+
+  <!-- 导论 -->
+  <section id="intro">
+    <h2 class="section-title"><span class="emoji">🗺️</span>三层认知地图</h2>
+    <p>理解大模型，先建立一张"三层地图"。这三层是<strong>包含关系</strong>而非并列——大模型<strong>是</strong> Transformer 架构的特例，Transformer<strong>是</strong>神经网络的一种。理解每一层如何突破前一层的局限，整条技术脉络就理顺了。</p>
+
+    <div class="concept-card el">
+      <div class="ctitle">第一层：神经网络（Neural Network）</div>
+      <p><strong>解决什么：</strong>如何让机器从数据中自动"学习"规律，而不是由人手写规则。它的基本单元是模仿生物神经元的"神经元"——接收输入、加权求和、通过激活函数产生输出。无数神经元层层连接，通过<strong>反向传播</strong>算法自动调整参数。</p>
+      <p style="margin:0"><span class="badge b-src">起源：McCulloch-Pitts 神经元模型 1943；Rosenblatt 感知机 1958；反向传播 Rumelhart et al. 1986</span></p>
+    </div>
+
+    <div class="concept-card tr">
+      <div class="ctitle">第二层：Transformer 架构</div>
+      <p><strong>解决什么：</strong>传统神经网络处理"序列"（如一句话）时，必须一个词一个词地算（RNN），既慢又容易忘记前面内容。Transformer 用<strong>注意力机制</strong>让每个词一次性"看到"句子里所有其他词，实现并行计算和长距离依赖建模。这是大模型的<strong>唯一架构基石</strong>。</p>
+      <p style="margin:0"><span class="badge b-src">Vaswani et al., "Attention Is All You Need", arXiv:1706.03762, 2017</span></p>
+    </div>
+
+    <div class="concept-card lm">
+      <div class="ctitle">第三层：大语言模型（LLM）</div>
+      <p><strong>解决什么：</strong>当把 Transformer 做得极大（千亿参数）、用海量文本训练后，模型涌现出惊人的语言理解和生成能力。大模型 = <strong>超大 Transformer + 海量数据 + 规模定律 + 对齐技术</strong>。它不是新架构，而是把 Transformer 推到极致的工程产物。</p>
+      <p style="margin:0"><span class="badge b-src">GPT-3, arXiv:2005.14165；Scaling Law, arXiv:2001.08361</span></p>
+    </div>
+  </section>
+
+  <section id="bigpic">
+    <h2 class="section-title"><span class="emoji">🔗</span>一张图看懂全链路</h2>
+    <p>从原始文本到 AI 回答，数据流经这条完整链条。本文将自下而上逐一拆解每一环。</p>
+    <div class="flow">
+      <div class="flow-row">
+        <span class="flow-step">原始文本</span><span class="flow-arrow">→</span>
+        <span class="flow-step">分词 Tokenization</span><span class="flow-arrow">→</span>
+        <span class="flow-step">词嵌入 Embedding</span><span class="flow-arrow">→</span>
+        <span class="flow-step">位置编码</span>
+      </div>
+      <div class="flow-arrow" style="margin:6px 0">↓</div>
+      <div class="flow-row">
+        <span class="flow-step tr">Transformer 层 ×N（自注意力 + 前馈网络 + 残差 + LayerNorm）</span>
+      </div>
+      <div class="flow-arrow" style="margin:6px 0">↓</div>
+      <div class="flow-row">
+        <span class="flow-step">输出概率分布</span><span class="flow-arrow">→</span>
+        <span class="flow-step lm">下一个 Token</span><span class="flow-arrow">→</span>
+        <span class="flow-step lm">循环生成完整回答</span>
+      </div>
+    </div>
+    <div class="callout callout-teal">
+      <div class="callout-title">最关键的一句话</div>
+      <p>大模型的本质，是在做<strong>"下一个词预测"</strong>（next-token prediction）：给定前面所有词，预测下一个最可能出现的词。所有令人惊叹的能力——对话、推理、写代码——都源自这个被反复执行亿万次的简单任务。</p>
+    </div>
+  </section>
+
+  <!-- ============ 第一篇 ============ -->
+  <h2 class="part-title">第一篇 · 神经网络基础</h2>
+
+  <section id="p1">
+    <p class="section-desc">一切从这里开始。这一篇讲清：单个神经元如何工作、如何堆叠成网络、网络如何"学习"（反向传播）、用什么标准衡量对错（损失函数）、如何改进（优化器）。</p>
+
+    <h3 id="neuron">① 神经元与感知机 <span class="src">McCulloch-Pitts 1943 / Rosenblatt 1958</span></h3>
+    <p><strong>通俗理解：</strong>一个人造神经元做的事情极其简单——它有若干个输入（比如 x₁, x₂, x₃），每个输入有一个"权重"（重要性 w₁, w₂, w₃）。神经元把所有输入乘以各自的权重后加起来，再加上一个"偏置"（基础倾向 b），然后通过一个"激活函数" f 决定输出什么。</p>
+    <div class="analogy"><span class="at">💡 类比</span>想象你在决定是否出门：天气（权重高）、是否有约会（权重中）、心情（权重低）。各项打分加权求和，超过某个阈值（偏置）就出门，否则不出门——这就是一个神经元。</div>
+
+    <details class="tech"><summary>感知机的数学表达</summary>
+      <div class="tech-body">
+        <p>单个神经元的输出：</p>
+        <div class="formula">y = f( w₁·x₁ + w₂·x₂ + … + wₙ·xₙ + b ) &nbsp;&nbsp; 即 &nbsp;&nbsp; y = f(<span class="var">w</span>·<span class="var">x</span> + b)</div>
+        <p>其中 <code>w</code> 是权重向量，<code>x</code> 是输入向量，<code>b</code> 是偏置标量，<code>f</code> 是激活函数。</p>
+        <p><strong>感知机（Perceptron）</strong>是 Rosenblatt 于 1958 年提出的最早的可学习神经元模型，激活函数是阶跃函数（输出 0 或 1）。1969 年 Minsky 指出单层感知机无法解决 XOR（异或）问题，这曾导致神经网络研究进入"寒冬"，直到多层网络与反向传播算法成熟才复苏。</p>
+      </div>
+    </details>
+
+    <h3 id="mlp">② 多层感知机（MLP）：为什么需要"层"和"非线性"</h3>
+    <p>单个神经元能力有限。把许多神经元<strong>排成一列</strong>叫一层；把多层串联起来（输入层 → 隐藏层 → 输出层），就构成了<strong>多层感知机</strong>。前一层每个神经元的输出作为后一层每个神经元的输入。</p>
+    <p><strong>两个关键点：</strong></p>
+    <ul>
+      <li><strong>隐藏层</strong>让网络能学习输入的"中间表示"——网络自己发现数据的有用特征，而非靠人手写。</li>
+      <li><strong>激活函数必须是非线性的</strong>。若所有层都是线性的，多层叠加在数学上等价于一层（线性组合的线性组合仍是线性的），网络再深也没用。非线性激活赋予网络逼近任意复杂函数的能力（万能逼近定理）。</li>
+    </ul>
+
+    <details class="tech"><summary>前馈计算：一层 MLP 的完整算式</summary>
+      <div class="tech-body">
+        <p>设输入向量 x（维度 d_in），隐藏层有 H 个神经元，输出维度 d_out。</p>
+        <p><strong>第一层（隐藏层）：</strong></p>
+        <div class="formula">h = f( <span class="var">W</span>₁·x + <span class="var">b</span>₁ ) &nbsp;&nbsp;<span class="annot"># W₁ 是 H×d_in 矩阵，h 是 H 维向量</span></div>
+        <p><strong>第二层（输出层）：</strong></p>
+        <div class="formula">y = g( <span class="var">W</span>₂·h + <span class="var">b</span>₂ ) &nbsp;&nbsp;<span class="annot"># W₂ 是 d_out×H 矩阵</span></div>
+        <p>所谓"训练神经网络"，就是找到合适的 W₁, b₁, W₂, b₂ 使 y 尽可能接近真实答案。一个百亿参数大模型，本质就是数百万个这样的 W 矩阵的集合。</p>
+      </div>
+    </details>
+
+    <h3 id="act">③ 激活函数：神经元的"决策方式"</h3>
+    <p>激活函数决定神经元如何把加权输入转化为输出。它的非线性是神经网络能力的基础。</p>
+    <table>
+      <tr><th>激活函数</th><th>公式</th><th>特点 / 用途</th></tr>
+      <tr><td><strong>Sigmoid</strong></td><td>σ(x) = 1 / (1 + e⁻ˣ)</td><td>输出 (0,1)，早期常用；缺点：梯度易消失、非零中心</td></tr>
+      <tr><td><strong>Tanh</strong></td><td>tanh(x) = (eˣ − e⁻ˣ)/(eˣ + e⁻ˣ)</td><td>输出 (−1,1)，零中心；仍有梯度消失问题</td></tr>
+      <tr><td><strong>ReLU</strong></td><td>ReLU(x) = max(0, x)</td><td>计算极快、缓解梯度消失；现代网络主力。<strong>Transformer 前馈网络默认用 ReLU/GeLU</strong></td></tr>
+      <tr><td><strong>GELU</strong></td><td>x · Φ(x)</td><td>ReLU 的平滑变体；<strong>GPT、BERT 等大模型广泛使用</strong></td></tr>
+    </table>
+    <div class="callout callout-info"><div class="callout-title">为什么 ReLU 革命性地改善了深度网络</div><p>ReLU 在正区间梯度恒为 1，<strong>不会像 Sigmoid 那样在反向传播时层层衰减</strong>（梯度消失），使得训练几十上百层的网络成为可能。它是 2012 年后深度学习爆发的工程基础之一。</p></div>
+
+    <h3 id="fwd">④ 前向传播与反向传播：网络如何"学习"</h3>
+    <p><strong>前向传播（Forward）：</strong>数据从输入层逐层计算到输出层，得到预测结果。这就是"使用"网络的过程。</p>
+    <p><strong>反向传播（Backpropagation）：</strong>网络"学习"的核心算法。它计算<strong>每个参数对当前误差的贡献</strong>（梯度），然后微调参数以减少误差。这个过程依赖微积分的<strong>链式法则</strong>，从输出层向输入层逐层反推。</p>
+    <div class="analogy"><span class="at">💡 类比</span>前向传播像考试答题（从题到答案）；反向传播像老师批改后逐题分析"哪一步想错了、错多少"（从答案倒推每个环节的责任），下次改进。如此反复千万次，网络就"学会"了。</div>
+
+    <details class="tech"><summary>反向传播的数学本质（链式法则）</summary>
+      <div class="tech-body">
+        <p>设损失函数为 L，网络中某参数为 w。反向传播要算的是<strong>偏导数 ∂L/∂w</strong>——损失对参数的梯度。</p>
+        <p>对于多层网络，损失对深层参数的梯度通过<strong>链式法则</strong>逐层展开：</p>
+        <div class="formula">∂L/∂w = (∂L/∂y) · (∂y/∂h) · (∂h/∂w)</div>
+        <p>反向传播算法（Rumelhart, Hinton, Williams, 1986）<strong>高效地复用中间结果</strong>，一次性算出所有参数的梯度，复杂度仅约为前向传播的 2 倍。现代深度学习框架（PyTorch、TensorFlow）的"自动微分"自动完成这一过程。</p>
+        <p><strong>梯度下降更新：</strong>算出梯度后，沿梯度反方向更新参数：</p>
+        <div class="formula">w ← w − η · (∂L/∂w) &nbsp;&nbsp;<span class="annot"># η 是学习率 learning rate</span></div>
+      </div>
+    </details>
+
+    <h3 id="gd">⑤ 梯度下降直观理解：网络如何"下山" <span class="src">Robbins & Monro 1951 / Kingma & Ba arXiv:1412.6980</span></h3>
+    <p>上一节讲了反向传播算出"梯度"——它告诉你每个参数该往哪个方向调。但<strong>具体怎么调、调多大幅度、用什么节奏</strong>，就是<strong>梯度下降（Gradient Descent）</strong>要回答的问题。它是所有优化器（SGD、Adam）的共同骨架。</p>
+    <div class="analogy"><span class="at">💡 类比：蒙眼下山</span>把损失函数想象成一片<strong>起伏的山地</strong>，每个参数组合对应山上的一个位置，<strong>高度=损失值</strong>。训练的目标是走到<strong>最低的山谷</strong>（损失最小）。你蒙着眼看不见全貌，只能用脚探一探<strong>当前脚下哪边最陡</strong>（梯度），然后朝<strong>下坡最陡的方向</strong>（梯度的<strong>反方向</strong>）迈一小步——如此反复，最终走到谷底。</div>
+
+    <h4>三个关键概念</h4>
+    <ul>
+      <li><strong>梯度 = 最陡方向</strong>。梯度是损失对各参数的偏导数向量，指向<strong>损失上升最快</strong>的方向。所以更新参数时要沿<strong>梯度的反方向</strong>走（下坡），这就是"梯度<strong>下降</strong>"名字的由来。</li>
+      <li><strong>学习率 η（learning rate）= 步子大小</strong>。每步走多远由 η 决定，它是训练最重要的超参数之一。
+        <ul>
+          <li><strong>太大</strong>：一步跨过山谷，在对面的山坡上震荡甚至发散，永远到不了谷底。</li>
+          <li><strong>太小</strong>：每步挪一点，下到谷底要无穷无尽的时间，还可能卡在半山腰的小坑里（局部最优）。</li>
+        </ul>
+      </li>
+      <li><strong>Mini-batch SGD（小批量随机梯度下降）</strong>。算梯度时<strong>不用全部训练数据</strong>（太慢），而是每次随机抽一小批（如 32/64/128 条）来估计梯度。好处有二：① <strong>速度快</strong>（一批比全量省得多）；② <strong>随机性反而是好事</strong>——它让下山路径带有抖动，有助于跳出浅坑、找到更优的谷底。</li>
+    </ul>
+
+    <details class="tech"><summary>梯度下降的更新公式 与 三种变体</summary>
+      <div class="tech-body">
+        <p><strong>参数更新公式</strong>（沿梯度反方向走一步）：</p>
+        <div class="formula">w ← w − η · ∇L(w) &nbsp;&nbsp;<span class="annot"># ∇L(w) 是损失对参数的梯度，η 是学习率</span></div>
+        <p>根据每次用多少数据算梯度，分三种：</p>
+        <table>
+          <tr><th>变体</th><th>每次用的数据</th><th>特点</th></tr>
+          <tr><td><strong>批量梯度下降 BGD</strong></td><td>全部训练数据</td><td>梯度准、稳定，但极慢、内存吃不下</td></tr>
+          <tr><td><strong>随机梯度下降 SGD</strong></td><td>每次 1 条</td><td>极快但抖动剧烈，难以收敛</td></tr>
+          <tr><td><strong>小批量 SGD</strong></td><td>一小批（32~512）</td><td><strong>工程默认</strong>，兼顾速度与稳定性</td></tr>
+        </table>
+        <p><strong>局部最优（local minima）</strong>：山地里不止一个谷。全量梯度下降可能卡在某个浅谷；而 mini-batch SGD 的随机性会"踉跄"一下，<strong>抖出浅谷</strong>，更可能落到更深的谷（更好的解）。这是随机性在优化中的妙用。</p>
+      </div>
+    </details>
+
+    <div class="callout callout-info"><div class="callout-title">Adam = SGD 的"智能升级版"</div><p>现代深度学习和大模型训练几乎不用裸 SGD，而用 <strong>Adam</strong>（Kingma & Ba, arXiv:1412.6980）。它在 SGD 基础上加了两个智能机制：① <strong>动量（Momentum）</strong>——累积历史梯度方向，像带上惯性，下坡更稳、更快；② <strong>自适应学习率</strong>——为<strong>每个参数</strong>单独维护一个学习率，常更新的参数自动调小、少更新的自动调大。<strong>大模型里上亿个参数，每个都有自己的步子大小</strong>，这是 Adam 比固定学习率的 SGD 强大的关键（详见下一节技术细节框中的 Adam 公式）。</p></div>
+
+    <h3 id="loss">⑥ 损失函数与优化器：衡量对错与改进方向</h3>
+    <p><strong>损失函数（Loss Function）</strong>衡量预测值与真实值的差距，是学习的"靶心"。对语言模型，最核心的是<strong>交叉熵损失</strong>——它衡量模型预测的下一个词的概率分布，与真实那个词的差距。</p>
+    <p><strong>优化器（Optimizer）</strong>决定如何根据梯度更新参数。最基础的是<strong>梯度下降</strong>（SGD）；现代深度学习与大模型训练几乎都用 <strong>Adam</strong>（自适应矩估计），它为每个参数维护独立的自适应学习率。</p>
+
+    <details class="tech"><summary>交叉熵损失 与 Adam 优化器</summary>
+      <div class="tech-body">
+        <p><strong>交叉熵损失</strong>（语言模型核心）。设模型对词表 V 中每个词预测概率 pᵢ，真实下一个词是词 c：</p>
+        <div class="formula">L = − log(p_c) &nbsp;&nbsp;<span class="annot"># 即真实词的负对数概率</span></div>
+        <p>预测越准（p_c 越接近 1），L 越接近 0。语言模型训练就是在大规模语料上最小化所有位置的平均交叉熵。<strong>所谓"loss"就是平均交叉熵</strong>，Scaling Law 研究的正是它如何随规模下降。</p>
+        <p><strong>Adam</strong>（Kingma & Ba, arXiv:1412.6980, 2014）结合了动量（历史梯度方向）和自适应学习率（按梯度方差缩放），对超参数不敏感、收敛快：</p>
+        <div class="formula">
+          m_t = β₁·m_{t−1} + (1−β₁)·g_t &nbsp;&nbsp;<span class="annot"># 一阶矩（动量）</span><br>
+          v_t = β₂·v_{t−1} + (1−β₂)·g_t² &nbsp;<span class="annot"># 二阶矩（梯度平方）</span><br>
+          w_t = w_{t−1} − η · m̂_t / (√v̂_t + ε)
+        </div>
+      </div>
+    </details>
+    <figure style="margin:18px 0;text-align:center">
+      <img src="../images/diagrams/softmax-cross-entropy.svg" alt="分类模型流程：输入 x → 线性得分 z → Softmax 概率 → 交叉熵损失" style="max-width:680px;width:100%;border-radius:8px">
+      <figcaption style="font-size:12px;color:var(--gray-500);margin-top:6px">线性得分 z = Wx+b → Softmax → 交叉熵损失 的计算流程</figcaption>
+    </figure>
+
+    <h3 id="ppl">⑦ 困惑度 Perplexity（PPL）：loss 的"人话版" <span class="src">交叉熵的指数变换</span></h3>
+    <p>看语言模型评测榜时，除了 loss，更常出现的指标是<strong>困惑度（Perplexity, PPL）</strong>。它和交叉熵损失本质上是<strong>同一个东西的两种表达</strong>——PPL 就是 loss 做了一次指数变换。</p>
+    <div class="formula">PPL = e<sup>L</sup> &nbsp;&nbsp;<span class="annot"># L 是平均交叉熵损失（以 e 为底的自然对数）</span></div>
+    <div class="analogy"><span class="at">💡 类比：模型在几个词之间"纠结"</span>PPL 越低越好。直观理解：<strong>PPL = k，相当于模型在每一步都像在 k 个差不多的候选词之间犹豫</strong>。PPL=1 表示模型每次都笃定地选对（完美）；PPL=100 表示模型每步像在 100 个词里乱猜（很差）。所以 PPL 把抽象的 loss 数值翻译成了"模型有多困惑"的人话。</div>
+    <div class="callout callout-info"><div class="callout-title">为什么评测榜爱用 PPL 而非 loss</div><p>loss 是对数尺度（如 2.0、3.5），数值差距感觉不直观；PPL 是指数尺度（如 e²·⁰≈7.4、e³·⁵≈33），差距被放大，<strong>更直观地体现模型好坏</strong>。几乎所有语言模型评测都用 PPL 作为核心指标——它和 loss 等价（知道一个就能算出另一个），但更贴合人对"困惑程度"的直觉。</p></div>
+
+    <h3 id="overfit">⑧ 过拟合与正则化：为什么"练太多反而考砸"</h3>
+    <p>训练时 loss 一直在降，是不是模型就越来越好？<strong>不一定</strong>。深度学习里有个反直觉的现象：模型可能在训练数据上表现越来越好，但在没见过的数据上反而越来越差。这就是<strong>过拟合（Overfitting）</strong>——理解它，是理解大模型 Scaling Law"为什么数据必须和参数同步放大"的前提。</p>
+    <div class="analogy"><span class="at">💡 类比：死记硬背模拟题</span>一个学生把模拟卷（<strong>训练集</strong>）每道题连答案带标点都背得滚瓜烂熟，模拟考满分。但一到真正的考试（<strong>测试集</strong>），题目稍微变个花样就懵了——因为他<strong>没有学到解题的通用规律，只是记住了具体题目的答案</strong>。这就是过拟合：训练集表现极好，测试集一塌糊涂。</div>
+
+    <h4>过拟合的现象与本质</h4>
+    <p><strong>典型现象</strong>：训练 loss 持续下降，但<strong>验证 loss 先降后升</strong>——转折点之后，模型不是在"学规律"，而是在"背噪声"。这个转折点就是<strong>早停（Early Stopping）</strong>的时机。</p>
+    <p><strong>根本原因</strong>：当<strong>模型容量（参数量）远大于数据所蕴含的信息</strong>时，模型有足够富余的能力去<strong>记住训练数据里的偶然噪声和细节</strong>（比如某张图恰好有个污点），而不是学到背后真正的通用规律。<strong>"记住了"≠"理解了"</strong>——记住的东西无法泛化到新数据。</p>
+
+    <details class="tech"><summary>正则化：约束模型，逼它学"规律"而非"背答案"</summary>
+      <div class="tech-body">
+        <p><strong>正则化（Regularization）</strong>是一切防止过拟合手段的统称，核心思想是<strong>给模型加约束，让它没那么多富余容量去死记硬背</strong>。常见方法：</p>
+        <table>
+          <tr><th>方法</th><th>原理</th><th>直觉</th></tr>
+          <tr><td><strong>L2 正则化（权重衰减）</strong></td><td>在损失里加一项 λ·‖w‖²，惩罚过大的权重</td><td>逼权重保持小而分散，不让某个参数"独大"去硬记噪声</td></tr>
+          <tr><td><strong>L1 正则化</strong></td><td>加 λ·‖w‖₁，倾向于产生稀疏权重（很多为 0）</td><td>自动做特征选择，扔掉无关维度</td></tr>
+          <tr><td><strong>Dropout</strong></td><td>训练时随机"丢弃"一部分神经元（置零）</td><td>强迫网络<strong>冗余学习</strong>——不能依赖某几个神经元，每条信息要多路径备份，提升鲁棒性</td></tr>
+          <tr><td><strong>早停 Early Stopping</strong></td><td>监控验证 loss，一旦回升就停止训练</td><td>在模型"开始背噪声"前及时刹车</td></tr>
+          <tr><td><strong>数据增强</strong></td><td>人为制造变体（图像翻转、文本同义改写）</td><td>扩充有效数据量，稀释噪声的影响</td></tr>
+        </table>
+        <p>正则化的本质是<strong>在"训练集拟合"和"泛化能力"之间做权衡（bias-variance tradeoff）</strong>——完全不约束会过拟合，约束太狠又会欠拟合（学不到东西）。</p>
+      </div>
+    </details>
+
+    <div class="callout callout-warning"><div class="callout-title">与 Scaling Law 的直接关系：Chinchilla 的"20 tokens/parameter"</div><p>过拟合正是 Scaling Law 研究要回答的核心问题之一：<strong>参数量 N 和数据量 D 该怎么配比</strong>？如果参数很大而数据太少（如早期 GPT-3：175B 参数 / 300B tokens），模型就有大量富余容量去背训练集，<strong>严重过拟合、浪费算力</strong>。Chinchilla（arXiv:2203.15556）的结论——<strong>最优训练 token 数约为参数量的 20 倍</strong>——本质上就是一条<strong>避免过拟合的经验配比</strong>：数据量必须和参数量同步放大，让模型"有足够多的题可做"，从而学到通用规律而非死记硬背。这也是为什么 DeepSeek、Llama 等现代大模型动辄用万亿级 token 训练的原因。</p></div>
+  </section>
+
+  <!-- ============ 第二篇 ============ -->
+  <h2 class="part-title">第二篇 · 深度学习与表示学习</h2>
+
+  <section id="p2">
+    <p class="section-desc">把神经网络做"深"是现代 AI 成功的关键，但也带来了训练难题。这一篇讲清：为什么要深、深带来的问题（梯度消失）及其解法（残差连接、归一化），以及为什么 Transformer 能取代曾经的 CNN/RNN。</p>
+
+    <h3 id="deep">① 为什么要"深"——层次化特征表示</h3>
+    <p>浅层网络理论上也能逼近任何函数（万能逼近定理），但所需神经元数呈指数增长。<strong>深层网络用更少参数表达更复杂函数</strong>，因为每一层在前一层基础上抽象出更高层次的特征——这叫<strong>表示学习</strong>。</p>
+    <div class="analogy"><span class="at">💡 类比</span>识别一张人脸：第一层检测边缘 → 第二层组合成五官轮廓 → 第三层组合成人脸。这种<strong>由低级到高级的层次抽象</strong>，正是深度学习强大的根源，也是"深度"二字的含义。</div>
+
+    <h3 id="autoencoder">② 自编码器（Autoencoder）：表示学习的最简模型 <span class="src">Hinton & Salakhutdinov 2006</span></h3>
+    <p>"表示学习"听起来抽象，有没有一个最简单的模型能直观演示它？有——<strong>自编码器（Autoencoder）</strong>。它的核心思想是"<strong>自我压缩再解压</strong>"：把输入压缩成一个低维的"精华表示"，再尝试从这个精华还原出原始输入。</p>
+    <div class="flow">
+      <div class="flow-row">
+        <span class="flow-step">输入 x（如 784 维图像）</span><span class="flow-arrow">→</span>
+        <span class="flow-step tr">编码器 Encoder</span><span class="flow-arrow">→</span>
+        <span class="flow-step lm">潜在表示 z（低维，如 32 维）</span><span class="flow-arrow">→</span>
+        <span class="flow-step tr">解码器 Decoder</span><span class="flow-arrow">→</span>
+        <span class="flow-step">重构 x̂（还原输入）</span>
+      </div>
+    </div>
+    <div class="analogy"><span class="at">💡 类比：精炼复述</span>让你读完一篇文章后，先用 30 个字概括核心（编码→潜在表示），再凭这 30 个字把原文重新展开（解码→重构）。<strong>如果 30 个字就能还原出原文的精髓，说明你抓住了本质</strong>；如果只能还原出无关细节，说明没学到要害。自编码器就是这样逼网络学"精华"。</div>
+    <p><strong>核心洞察：</strong>潜在表示 z 的维度<strong>远小于</strong>输入 x。要在如此大的压缩比下还能重构出输入，编码器<strong>被迫丢弃冗余、提炼出最本质的特征</strong>——这就是"学到好的表示"。如果<strong>不压缩</strong>（z 和 x 同维），网络大可以直接"复制粘贴"，就什么也学不到。</p>
+    <p><strong>重构误差（Reconstruction Error）</strong>：输入 x 与重构 x̂ 的差距。误差越小，说明潜在表示的信息承载力越强、表示能力越好。训练自编码器就是最小化这个重构误差。</p>
+
+    <details class="tech"><summary>自编码器的训练目标 与 现代意义</summary>
+      <div class="tech-body">
+        <p><strong>损失函数</strong>（最小化重构误差）：</p>
+        <div class="formula">L = ‖ x − x̂ ‖² &nbsp;&nbsp;<span class="annot"># x̂ = Decoder(Encoder(x))</span></div>
+        <p>注意自编码器是<strong>无监督学习</strong>——不需要任何标签，只靠"输入=目标"自我重构就能学到有用的表示。这种"数据本身即是监督信号"的特性，正是后来大模型"用下一个词预测做无监督预训练"思想的雏形。</p>
+        <p><strong>历史地位与现代传承</strong>：Hinton 等人 2006 年用自编码器复兴了深度学习研究。它的"压缩→潜在空间"思想一路演进：</p>
+        <ul>
+          <li><strong>降噪自编码器</strong>：重构被加噪的输入，学更鲁棒的表示。</li>
+          <li><strong>VAE（变分自编码器）</strong>：让潜在空间结构化、可生成，是重要生成模型。</li>
+          <li><strong>扩散模型（Diffusion）</strong>：现代图像生成（Stable Diffusion、DALL·E）的技术祖先之一，其"逐步去噪还原"与自编码器的"重构"一脉相承。</li>
+        </ul>
+        <p>理解了自编码器，就理解了"<strong>潜在空间 / 表示学习</strong>"这个贯穿现代生成式 AI 的核心概念。</p>
+      </div>
+    </details>
+
+    <h3 id="residual">③ 梯度消失与残差连接（ResNet） <span class="src">He et al. arXiv:1512.03385</span></h3>
+    <p>把网络做深立刻遇到致命问题：<strong>梯度消失/爆炸</strong>。反向传播时梯度要逐层相乘，层数一多，梯度会指数级缩小（消失，网络学不动）或放大（爆炸，训练崩溃）。这曾让 20+ 层网络几乎无法训练。</p>
+    <p><strong>残差连接（Residual Connection / Skip Connection）</strong>是 2015 年 ResNet 提出的革命性结构，巧妙解决此问题：不直接学习目标映射，而是学习<strong>"残差"</strong>，并额外把输入直接"跳连"到输出相加。</p>
+
+    <details class="tech"><summary>残差连接的算式与直觉</summary>
+      <div class="tech-body">
+        <p>普通层：<code>y = F(x)</code>。残差层：</p>
+        <div class="formula">y = F(x) + x &nbsp;&nbsp;<span class="annot"># 输出 = 该层变换 F(x) + 原始输入 x</span></div>
+        <p><strong>为什么有效：</strong>梯度反向传播时，<code>+x</code> 这条捷径让梯度可以"直达"浅层（梯度至少为 1），<strong>打破了连乘衰减</strong>。这使得训练 100+ 层甚至 1000 层网络成为可能。ResNet 因此在 ImageNet 上夺冠（2015）。</p>
+        <div class="callout callout-success"><div class="callout-title">与大模型的直接关联</div><p>残差连接是 <strong>Transformer 的标配组件</strong>——每个注意力子层和前馈子层都包了一个残差连接：<code>output = LayerNorm(x + Sublayer(x))</code>。没有 ResNet 的工程经验，就不会有可训练的深层 Transformer。</p></div>
+      </div>
+    </details>
+
+    <h3 id="norm">④ 归一化（Normalization）：稳定训练的"减震器" <span class="src">Ba et al. arXiv:1607.06450</span></h3>
+    <p>深层网络中，每层输入的分布会随训练不断变化（内部协变量偏移），导致训练不稳定。<strong>归一化层</strong>把数据强制拉回均值 0、方差 1 的稳定分布，显著加速并稳定训练。</p>
+    <div class="compare">
+      <div class="col"><h4>BatchNorm（2015）</h4><p style="font-size:13.5px;color:var(--gray-600)">在<strong>一个 batch 的样本间</strong>做归一化。适合 CNN、固定 batch size 训练。但对序列长度可变的 NLP 任务和超长序列不友好。</p></div>
+      <div class="col"><h4>LayerNorm（2016）</h4><p style="font-size:13.5px;color:var(--gray-600)">在<strong>单个样本的特征维度上</strong>做归一化，与 batch 大小无关。<strong>Transformer 和所有大模型的标准选择</strong>。</p></div>
+    </div>
+
+    <details class="tech"><summary>LayerNorm 公式</summary>
+      <div class="tech-body">
+        <p>对单个向量 x（一个 token 的隐藏表示），在其所有维度上：</p>
+        <div class="formula">μ = mean(x), &nbsp; σ² = var(x)<br>LN(x) = γ · (x − μ) / √(σ² + ε) + β</div>
+        <p>γ、β 是可学习参数，恢复表达能力。LayerNorm 让每个 token 的表示数值稳定，是深层 Transformer 能稳定训练的关键之一（Ba et al., "Layer Normalization", arXiv:1607.06450）。</p>
+      </div>
+    </details>
+
+    <h3 id="cnrnn">⑤ CNN 与 RNN：被 Transformer 取代的前辈</h3>
+    <p>Transformer 之前，处理序列/数据的主流神经网络有两类。理解它们的局限，才能理解 Transformer 为何是革命。</p>
+    <table>
+      <tr><th>架构</th><th>擅长</th><th>致命局限</th></tr>
+      <tr><td><strong>CNN</strong>（卷积网络）</td><td>图像（局部特征、空间结构）</td><td>感受野受限于卷积核大小，捕捉长距离依赖需堆很多层</td></tr>
+      <tr><td><strong>RNN / LSTM</strong></td><td>序列（早期 NLP、语音）</td><td><strong>必须逐步串行计算</strong>（无法并行），且长序列会"遗忘"早期信息</td></tr>
+    </table>
+    <div class="callout callout-info"><div class="callout-title">Transformer 的两大突破</div><p>① <strong>并行</strong>：自注意力让所有位置同时计算，可充分利用 GPU，训练速度数量级提升；② <strong>长距离</strong>：任意两个词之间距离恒为 1 步注意力，没有 RNN 的遗忘问题。这两点使"用整个互联网文本训练千亿模型"在工程上成为可能。</p></div>
+
+    <h3 id="lstm">⑥ RNN/LSTM 门控机制：序列建模的前王者 <span class="src">Hochreiter & Schmidhuber 1997 / Cho et al. arXiv:1406.1078</span></h3>
+    <p>上表说 RNN 有"遗忘早期信息"的致命局限。那在 Transformer 出现之前的二十年里，人们是怎么缓解这个问题的？答案是 <strong>LSTM（长短期记忆网络）</strong>和它的简化版 <strong>GRU</strong>——它们通过精巧的"<strong>门控</strong>"机制，曾是序列建模（语音、翻译、文本生成）的绝对王者。理解它们为何最终被 Transformer 取代，能更深刻地理解自注意力的革命性。</p>
+
+    <h4>RNN 的核心难题：梯度消失与长期依赖丢失</h4>
+    <p>原始 RNN 处理序列时，把上一步的"隐藏状态"作为这一步的输入，形成<strong>记忆</strong>。但反向传播要把梯度沿时间步一步步往回传，链条一长，梯度就<strong>指数级衰减（消失）</strong>或<strong>爆炸</strong>。结果是：<strong>模型"前面说的话全忘了"</strong>——读到句尾已经记不起句首的内容，无法建模长距离依赖。</p>
+    <div class="analogy"><span class="at">💡 类比：金鱼记忆</span>原始 RNN 像一条只有 7 秒记忆的金鱼：刚读完一句话的开头，读到结尾时已经忘了开头说了什么。要它根据段首的指代去理解段尾的代词，几乎不可能。</div>
+    <figure style="margin:18px 0;text-align:center">
+      <img src="../images/diagrams/rnn.svg" alt="RNN 循环神经网络结构：上一步隐藏状态作为下一步输入" style="max-width:640px;width:100%;border-radius:8px">
+      <figcaption style="font-size:12px;color:var(--gray-500);margin-top:6px">RNN 结构示意：把上一步的隐藏状态作为这一步的输入，形成"记忆"链</figcaption>
+    </figure>
+
+    <details class="tech"><summary>LSTM 的解法：三个"门"控制记忆的保留与丢弃</summary>
+      <div class="tech-body">
+        <p><strong>LSTM</strong>（Hochreiter & Schmidhuber, 1997）的解法是引入一条<strong>贯穿所有时间步的"细胞状态"（cell state）</strong>，并用三个<strong>门（gate）</strong>——本质是 sigmoid 控制的小开关（输出 0~1）——精确控制信息的流向：</p>
+        <table>
+          <tr><th>门</th><th>作用</th><th>直觉</th></tr>
+          <tr><td><strong>遗忘门 f</strong></td><td>决定细胞状态里<strong>丢掉</strong>哪些旧信息</td><td>"上一句的主语已经不重要了，忘掉吧"</td></tr>
+          <tr><td><strong>输入门 i</strong></td><td>决定把<strong>哪些新信息</strong>写进细胞状态</td><td>"这个新出现的人名很关键，记下来"</td></tr>
+          <tr><td><strong>输出门 o</strong></td><td>决定细胞状态里<strong>哪些部分</strong>作为当前输出</td><td>"现在该用到刚才记的人名了，输出它"</td></tr>
+        </table>
+        <p>细胞状态的更新公式（核心是一条加法通路，让梯度可以长程流转而不衰减）：</p>
+        <div class="formula">
+          C_t = f_t ⊙ C_{t−1} + i_t ⊙ C̃_t &nbsp;&nbsp;<span class="annot"># 旧记忆 × 遗忘门 + 新候选 × 输入门</span><br>
+          h_t = o_t ⊙ tanh(C_t) &nbsp;&nbsp;<span class="annot"># 输出门控制暴露多少</span>
+        </div>
+        <p>关键在于 <code>f_t ⊙ C_{t−1}</code> 这条<strong>加法通路</strong>：当遗忘门 f_t 接近 1 时，细胞状态几乎<strong>原样传递</strong>，梯度也能无衰减地反向流过长序列——这正是 LSTM 能记住几百步之前信息的原因。</p>
+      </div>
+    </details>
+
+    <div class="callout callout-info"><div class="callout-title">门控的直觉：选择性记忆</div><p>三个门的本质是<strong>选择性记忆</strong>——像人会自动"重要的留下、噪声丢弃"一样，LSTM 通过可学习的门，自己学会在序列里<strong>该记什么、该忘什么、该用什么</strong>。这比原始 RNN 的"无差别覆盖式记忆"聪明得多。这种"门控"思想后来也渗透进了其它架构（如 GRU、甚至部分注意力变体）。</p></div>
+
+    <h4>GRU：LSTM 的简化版</h4>
+    <p><strong>GRU（门控循环单元，Cho et al., arXiv:1406.1078）</strong>把 LSTM 的三个门<strong>合并成两个</strong>（更新门、重置门），并取消了独立的细胞状态。<strong>参数更少、训练更快</strong>，在多数任务上效果与 LSTM 相当，是 LSTM 的流行替代。</p>
+
+    <div class="callout callout-warning"><div class="callout-title">为什么 LSTM/GRU 最终输给了 Transformer</div><p>LSTM/GRU 解决了"长期依赖"，但有一个<strong>无法逾越的硬伤：必须逐步串行计算</strong>。处理第 t 个词必须先算完第 t−1 个词，<strong>无法并行</strong>。这让它们在海量数据 + GPU 并行的时代显得极慢。Transformer 用<strong>自注意力</strong>一举取代了它：所有位置<strong>同时</strong>计算、任意两词距离恒为 1 步——既全并行又无遗忘。所以并不是 LSTM 的门控思想错了，而是<strong>串行计算范式在"大力出奇迹"的规模下被并行范式淘汰</strong>。</p></div>
+  </section>
+
+  <!-- ============ 第三篇 ============ -->
+  <h2 class="part-title">第三篇 · Transformer 全解</h2>
+
+  <section id="p3">
+    <p class="section-desc">这是全篇核心。Transformer 是所有现代大模型的架构基础，其灵魂是"注意力机制"。这一篇逐步拆解：注意力的直觉、自注意力（QKV）、多头注意力、位置编码、Encoder/Decoder 的关系。</p>
+
+    <h3 id="attn-intro">① 注意力机制的直觉</h3>
+    <p>"注意力"源自一个直觉：<strong>处理一个词时，应该更"关注"句子中与之相关的其他词</strong>。比如"The animal didn't cross the street because <strong>it</strong> was tired"中，"it"指代谁？人脑会自动判断它指 animal 而非 street——注意力机制让模型学会这种"分配关注度"。</p>
+    <div class="analogy"><span class="at">💡 类比：图书馆检索</span>注意力机制用三个角色描述这种关系：<br>
+    <strong>Query（查询 Q）</strong>——你想找什么（当前词："it 指代谁？"）<br>
+    <strong>Key（键 K）</strong>——每本书/每个词的标签（"animal""street"各自的标签）<br>
+    <strong>Value（值 V）</strong>——每本书的实际内容（检索到后要取用的信息）<br>
+    用 Q 和每个 K 比较相关度，按相关度加权取出对应的 V——这就是注意力。</div>
+    <figure style="margin:18px 0;text-align:center">
+      <img src="../images/diagrams/encoder-decoder-attention.svg" alt="编码器-解码器 + 注意力：解码器动态关注编码器的不同位置" style="max-width:640px;width:100%;border-radius:8px">
+      <figcaption style="font-size:12px;color:var(--gray-500);margin-top:6px">注意力机制的起源：编码器-解码器 + 注意力（翻译中解码器动态对齐源句不同位置）</figcaption>
+    </figure>
+
+    <h3 id="selfattn">② 自注意力（Self-Attention）：QKV 机制 <span class="src">arXiv:1706.03762</span></h3>
+    <p>"自"注意力指 Q、K、V 都来自<strong>同一个输入序列</strong>（句子里每个词既当查询者也当被查询者）。每个词的最终表示，是<strong>所有词的 V 按注意力权重加权求和</strong>的结果——这样每个词都融合了整句话的上下文信息。</p>
+    <p>具体步骤：输入序列先通过三个不同的权重矩阵，变换出 Q、K、V 三个矩阵；然后用 Q 和 K 算"相关度分数"，softmax 归一化成权重，再对 V 加权求和。</p>
+
+    <details class="tech"><summary>缩放点积注意力的完整公式与维度</summary>
+      <div class="tech-body">
+        <p><strong>核心公式</strong>（Vaswani et al., 2017）：</p>
+        <div class="formula">Attention(Q, K, V) = softmax( Q·Kᵀ / √d_k ) · V</div>
+        <p><strong>逐步拆解</strong>（设序列长度 n，每个向量维度 d_k）：</p>
+        <ul>
+          <li><code>Q·Kᵀ</code>：n×n 矩阵，第 i 行 j 列 = 第 i 个词与第 j 个词的"相关度"（点积）</li>
+          <li><code>/ √d_k</code>：<strong>缩放</strong>。防止点积过大导致 softmax 进入梯度极小的饱和区（d_k 是键向量维度）</li>
+          <li><code>softmax(·)</code>：对每行做归一化，把分数变成加起来等于 1 的<strong>注意力权重</strong></li>
+          <li><code>· V</code>：用权重对 V 加权求和 → 每个 token 得到融合了全局上下文的新表示</li>
+        </ul>
+        <p><strong>QKV 的来源</strong>：输入 X 通过三个可学习矩阵变换：</p>
+        <div class="formula">Q = X·W_Q, &nbsp; K = X·W_K, &nbsp; V = X·W_V</div>
+        <p>所以自注意力本质上是：<strong>学习三个矩阵 W_Q, W_K, W_V，让模型自己决定每个词该如何关注其他词</strong>。</p>
+      </div>
+    </details>
+
+    <div class="callout callout-warning"><div class="callout-title">为什么除以 √d_k（缩放）很重要</div><p>当 d_k 较大时，点积 Q·Kᵀ 的数值会很大，使 softmax 输出趋近 one-hot（一个词 1、其余 0），梯度几乎为 0，训练停滞。除以 √d_k 把方差控制在合理范围。这个看似小的工程细节对训练稳定性至关重要。</p></div>
+
+    <h3 id="causalmask">③ 因果注意力掩码（Causal Mask）：Decoder 不能"作弊" <span class="src">Vaswani et al. arXiv:1706.03762</span></h3>
+    <p>自注意力让每个词都能"看到"句子里所有其他词——这对 BERT 这种<strong>理解</strong>任务很好（可以双向看全句）。但 GPT 这类 <strong>Decoder（生成模型）</strong>有个铁律：<strong>生成第 i 个词时，绝对不能偷看第 i+1、i+2… 这些"未来"的词</strong>，否则就是作弊（答案提前泄露）。如何在自注意力里实现"只许看过去、不许看未来"？答案就是<strong>因果掩码（Causal Mask）</strong>。</p>
+    <div class="analogy"><span class="at">💡 类比：考试不许看后面</span>想象你在做听写，老师读一句你写一句。你能参考<strong>已经写下的</strong>前面内容，但绝不能翻到老师<strong>还没读</strong>的后半段。因果掩码就是那个"挡住后半段"的挡板。</div>
+
+    <details class="tech"><summary>下三角掩码矩阵：■ 可见 / □ 遮蔽</summary>
+      <div class="tech-body">
+        <p>做法：在算 <code>Q·Kᵀ</code> 得到的 n×n 注意力分数矩阵上，叠加一个<strong>下三角掩码</strong>——把"未来"位置（上三角）的分数设为 <strong>−∞</strong>，softmax 后这些位置的权重就变成 0（被完全遮蔽）。</p>
+        <p>对于一个 4 词序列，掩码矩阵长这样：</p>
+        <pre style="background:transparent;padding:0;margin:12px 0;border:none;box-shadow:none;font-size:14px;line-height:1.7"><code>           位置1   位置2   位置3   位置4
+位置1  →   <span style="color:#00B894">■</span>      <span style="color:#ccc">□</span>      <span style="color:#ccc">□</span>      <span style="color:#ccc">□</span>
+位置2  →   <span style="color:#00B894">■</span>      <span style="color:#00B894">■</span>      <span style="color:#ccc">□</span>      <span style="color:#ccc">□</span>
+位置3  →   <span style="color:#00B894">■</span>      <span style="color:#00B894">■</span>      <span style="color:#00B894">■</span>      <span style="color:#ccc">□</span>
+位置4  →   <span style="color:#00B894">■</span>      <span style="color:#00B894">■</span>      <span style="color:#00B894">■</span>      <span style="color:#00B894">■</span></code></pre>
+        <p><strong><span style="color:#00B894">■</span> = 可见</strong>（对角线及以下，即 ≤ 自己的位置），<strong><span style="color:#ccc">□</span> = 被遮蔽</strong>（严格大于自己的"未来"位置）。</p>
+        <ul>
+          <li><strong>位置 1</strong>（第一个词）只能看到自己——它没有任何前文。</li>
+          <li><strong>位置 3</strong>能看到位置 1、2、3，但<strong>看不到位置 4</strong>（未来）。</li>
+          <li><strong>位置 4</strong>（最后一个词）能看到全部。</li>
+        </ul>
+        <p>这样每个位置 i <strong>只能关注 ≤ i 的位置</strong>，保证了<strong>自回归生成</strong>（autoregressive）的合法性：预测下一个词时，模型真的只能依据已生成的前文，没偷看答案。</p>
+      </div>
+    </details>
+
+    <div class="callout callout-success"><div class="callout-title">与 KV Cache 的深刻联系</div><p>因果掩码不仅是"防作弊"，它还<strong>直接保证了 KV Cache 可行</strong>。因为有了 mask，<strong>位置 i 的 K/V 一旦算出来，就永远不会被未来的计算改变</strong>——未来位置 j（j>i）只能"看"位置 i，而不会反过来修改 i 的 K/V。<strong>历史 token 的 K/V 永不变</strong>，所以才能放心地缓存起来反复用（详见第四篇 KV Cache）。可以说：没有因果掩码，就没有 KV Cache，也就没有今天高效的大模型推理。</p></div>
+
+    <h3 id="multihead">④ 多头注意力（Multi-Head Attention）</h3>
+    <p>单次自注意力只能学一种"关注模式"。多头注意力把 Q、K、V 分成 <strong>h 份（头）</strong>，每个头独立做一次自注意力——相当于让模型<strong>同时从多个视角</strong>理解句子（一个头关注语法、一个关注指代、一个关注情感……），最后拼接起来。</p>
+    <div class="analogy"><span class="at">💡 类比</span>像一个阅读小组：每个人（头）带着不同关注点读同一句话（有人盯动词、有人盯人名、有人盯数字），读完后汇总，比单人读得全面。</div>
+
+    <details class="tech"><summary>多头注意力的算式</summary>
+      <div class="tech-body">
+        <div class="formula">
+          head_i = Attention(Q·W_i^Q, &nbsp; K·W_i^K, &nbsp; V·W_i^V)<br>
+          MultiHead = Concat(head_1, …, head_h) · W^O
+        </div>
+        <p>每个头用独立的 W_i^Q, W_i^K, W_i^V（维度为 d_model/h），h 个头的结果拼接后用 W^O 投影回原维度。例如 GPT-3 用 96 个头。代价是计算量与头数成正比，但表达力显著增强。</p>
+      </div>
+    </details>
+
+    <h3 id="mha-mqa-gqa">⑤ 多头注意力的现代变体：MHA / MQA / GQA <span class="src">Shazeer arXiv:1911.02150 / Ainslie arXiv:2305.13245</span></h3>
+    <p>标准的多头注意力（<strong>MHA</strong>）每个头都有自己独立的 K、V，带来强大表达力的同时，也留下一个"后遗症"：KV Cache 的大小<strong>正比于头数 H</strong>。在大模型推理时，这个开销极为昂贵（详见第四篇 KV Cache）。于是人们从注意力结构本身动刀，发展出三种变体，成为现代大模型的<strong>标配设计选择</strong>。</p>
+    <table>
+      <tr><th>变体</th><th>K/V 的设计</th><th>KV Cache 相对 MHA</th><th>质量 / 速度权衡</th></tr>
+      <tr>
+        <td><strong>MHA</strong>（标准多头）</td>
+        <td>每个头独立一套 K、V</td>
+        <td>1× （基线）</td>
+        <td>质量最好，但 KV Cache 最大</td>
+      </tr>
+      <tr>
+        <td><strong>MQA</strong>（Multi-Query）</td>
+        <td>所有头<strong>共享同一套</strong> K、V</td>
+        <td>1/H （最省）</td>
+        <td>推理最快、最省显存，但质量有明显下降</td>
+      </tr>
+      <tr>
+        <td><strong>GQA</strong>（Grouped-Query）</td>
+        <td>把头分成 G 组，<strong>每组共享一套</strong> K、V</td>
+        <td>1/G （折中）</td>
+        <td>质量接近 MHA，显存大幅省 —— <strong>主流大模型首选</strong></td>
+      </tr>
+    </table>
+    <div class="analogy"><span class="at">💡 类比：会议室翻译</span>把每个注意力头想成会议里的翻译员。<strong>MHA</strong>：每位翻译员配一个独立资料柜（K、V），资料全但柜子占地方；<strong>MQA</strong>：所有人共用一个大柜子，最省空间但资料不够个性化；<strong>GQA</strong>：把翻译员分成几组，每组一个柜子 —— 既省空间，又比"全共用"更灵活。</div>
+
+    <details class="tech"><summary>MHA / MQA / GQA 的本质：Q 头与 K/V 头的解耦</summary>
+      <div class="tech-body">
+        <p>关键洞察：注意力里<strong>查询头数</strong>（num_attention_heads）与<strong>K/V 头数</strong>（num_key_value_heads）可以<strong>不相等</strong>。Q 头照常并行计算，而 K、V 只需按更少的"组"来生成和缓存。</p>
+        <ul>
+          <li><strong>MHA</strong>：Q 头 = K/V 头 = H（如 32）</li>
+          <li><strong>MQA</strong>（Shazeer, arXiv:1911.02150）：Q 头 = H，K/V 头 = <strong>1</strong>（所有 Q 共享一套 K、V）</li>
+          <li><strong>GQA</strong>（Ainslie et al., arXiv:2305.13245）：Q 头 = H，K/V 头 = G（如 8），即 H/G 个 Q 头共享一组 K、V</li>
+        </ul>
+        <p><strong>实例</strong>：DeepSeek-R1-Distill-Qwen-1.5B 的 <code>config.json</code> 中 <code>num_attention_heads=12</code> 而 <code>num_key_value_heads=2</code>，即每 6 个 Q 头共享一套 K、V —— KV Cache 仅为 MHA 的 1/6。</p>
+        <div class="callout callout-success"><div class="callout-title">谁在用 GQA，谁没用</div><p>现代主流大模型 <strong>Llama 2/3、Mistral、Qwen</strong> 等几乎都采用 GQA。它在"KV Cache 内存"和"模型质量"之间取得了最佳平衡，是 KV Cache 优化中最有效、应用最广的方法之一。<br><strong>例外：DeepSeek 不用 GQA</strong>，而是自研 <strong>MLA（Multi-head Latent Attention）</strong>——通过低维潜在向量压缩 K/V 来减少 KV Cache，与 GQA 思路类似但实现完全不同：GQA 是"多个 Q 头共享同一套 K/V 头"，MLA 是"把 K/V 压缩到低维潜在向量再解压还原"。两者都能减小 KV Cache，但路线不同。</p></div>
+      </div>
+    </details>
+    <figure style="margin:18px 0;text-align:center">
+      <img src="../images/diagrams/transformer-layer.svg" alt="单个 Transformer 层结构：多头自注意力 → 残差相加 → 层归一化 → 前馈网络 → 残差相加 → 层归一化" style="max-width:400px;width:100%;border-radius:8px">
+      <figcaption style="font-size:12px;color:var(--gray-500);margin-top:6px">单个 Transformer 层的完整结构：多头自注意力 → 残差相加 → 层归一化 → 前馈网络 → 残差相加 → 层归一化</figcaption>
+    </figure>
+
+    <h3 id="posenc">⑥ 位置编码（Positional Encoding）</h3>
+    <p>自注意力有个"副作用"：<strong>它对位置无感</strong>。因为每个词和所有词对称地计算注意力，打乱句子顺序，结果不变（词袋模型）。但语言顺序至关重要（"狗咬人"≠"人咬狗"）。<strong>位置编码</strong>把每个词的位置信息注入它的表示，让模型知道"谁在前谁在后"。</p>
+    <table>
+      <tr><th>方式</th><th>原理</th><th>代表</th></tr>
+      <tr><td><strong>正弦/余弦编码</strong></td><td>用不同频率的 sin/cos 函数生成位置向量，加到词嵌入上</td><td>原始 Transformer（2017）</td></tr>
+      <tr><td><strong>可学习位置编码</strong></td><td>每个位置一个可训练向量</td><td>BERT、GPT-2/3</td></tr>
+      <tr><td><strong>RoPE 旋转位置编码</strong></td><td>用旋转矩阵把相对位置编码进注意力</td><td>LLaMA、Qwen、DeepSeek 等现代大模型主流</td></tr>
+    </table>
+    <details class="tech"><summary>原始 Transformer 的正弦位置编码</summary>
+      <div class="tech-body">
+        <div class="formula">
+          PE(pos, 2i) = sin( pos / 10000^(2i/d) )<br>
+          PE(pos, 2i+1) = cos( pos / 10000^(2i/d) )
+        </div>
+        <p>pos 是位置，i 是维度序号，d 是模型维度。不同频率的正余弦让每个位置有唯一编码，且能外推到训练时未见过的更长序列。</p>
+      </div>
+    </details>
+    <figure style="margin:18px 0;text-align:center">
+      <img src="../images/diagrams/pos-embedding.svg" alt="位置编码示意：词嵌入与位置嵌入相加，注入顺序信息" style="max-width:380px;width:100%;border-radius:8px">
+      <figcaption style="font-size:12px;color:var(--gray-500);margin-top:6px">位置编码直觉：词的语义向量与位置向量分别嵌入后<strong>相加</strong>，让模型感知词序</figcaption>
+    </figure>
+
+    <h3 id="encdec">⑦ Encoder vs Decoder：GPT / BERT / T5 的根源</h3>
+    <p>原始 Transformer 是<strong>编码器-解码器</strong>结构。后来人们只用其中一半，发展出三条至今影响深远的路线：</p>
+    <div class="compare" style="grid-template-columns:1fr 1fr 1fr">
+      <div class="col"><h4 style="color:var(--success)">Decoder-only（GPT 路线）</h4><p style="font-size:13px;color:var(--gray-600)"><strong>只保留解码器</strong>，从左到右预测下一个词（自回归）。<strong>所有现代对话大模型（GPT、Claude、LLaMA、Qwen、DeepSeek）都是这条路线</strong>。</p></div>
+      <div class="col"><h4 style="color:var(--info)">Encoder-only（BERT 路线）</h4><p style="font-size:13px;color:var(--gray-600)"><strong>只保留编码器</strong>，双向看全句，擅长<strong>理解</strong>（分类、检索）。代表 BERT。不适合生成。</p></div>
+      <div class="col"><h4 style="color:var(--danger)">Encoder-Decoder（T5 路线）</h4><p style="font-size:13px;color:var(--gray-600)"><strong>保留完整结构</strong>，把所有任务统一成"文本→文本"。代表 T5、BART。</p></div>
+    </div>
+    <div class="callout callout-success"><div class="callout-title">为什么 Decoder-only 赢得了大模型时代</div><p>Decoder-only 的自回归范式（预测下一个词）<strong>天然适合无监督的海量文本训练</strong>（不需要人工标注，下一个词就是天然标签），且生成能力强。Scaling Law 的力量让它在规模放大后，理解和生成能力全面超越另两条路线。</p></div>
+
+    <details class="tech"><summary>一个完整 Transformer 层的内部结构</summary>
+      <div class="tech-body">
+        <p>大模型是把如下"<strong>Transformer Block</strong>"堆叠 N 次（GPT-3 是 96 层）。每层包含：</p>
+        <div class="flow">
+          <div class="flow-row"><span class="flow-step tr">输入 x</span><span class="flow-arrow">→</span>
+          <span class="flow-step tr">多头自注意力</span><span class="flow-arrow">→</span>
+          <span class="flow-step tr">残差 + LayerNorm</span><span class="flow-arrow">→</span>
+          <span class="flow-step tr">前馈网络 FFN</span><span class="flow-arrow">→</span>
+          <span class="flow-step tr">残差 + LayerNorm</span><span class="flow-arrow">→</span>
+          <span class="flow-step tr">输出</span></div>
+        </div>
+        <p>前馈网络 FFN 通常是两层 MLP 加激活函数（GELU）：</p>
+        <div class="formula">FFN(x) = GELU(x·W₁ + b₁)·W₂ + b₂ &nbsp;&nbsp;<span class="annot"># 中间层通常扩展 4 倍维度</span></div>
+        <p>每个子层都套 <code>LayerNorm(x + Sublayer(x))</code> 的"残差+归一化"结构。注意力负责"词与词的信息混合"，FFN 负责"每个位置的非线性变换"，二者交替堆叠构成强大表征。</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ 第四篇 ============ -->
+  <h2 class="part-title">第四篇 · 大模型原理</h2>
+
+  <section id="p4">
+    <p class="section-desc">把 Transformer 做到千亿参数、用全网文本训练，就跨入"大模型"领域。这一篇讲清大模型区别于普通神经网络的几个关键概念：语言模型简史、分词、词嵌入、预训练目标、规模定律、混合专家、KV Cache、上下文长度限制。</p>
+    <figure style="margin:18px 0;text-align:center">
+      <img src="../images/ai4b/ai-nlp.png" alt="NLP 任务全景手绘图：文本分类、情感分析、NER、问答、文本生成、机器翻译等" style="max-width:100%;border-radius:8px;border:1px solid var(--border)">
+      <figcaption style="font-size:12px;color:var(--gray-500);margin-top:6px">大模型能解决的 NLP 任务全景（分类、情感分析、NER、问答、生成、翻译…）手绘图 by <a href="https://twitter.com/girlie_mac">@girlie_mac</a> · <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a> · 来源 <a href="https://github.com/microsoft/AI-For-Beginners">微软 AI-For-Beginners</a></figcaption>
+      <div style="margin-top:10px;padding:12px 16px;background:#f8fafc;border-left:3px solid #1057cb;border-radius:0 6px 6px 0;font-size:13px;line-height:1.85;color:#334155;text-align:left"><strong style="color:#1057cb">📖 图中要点（中英对照）：</strong>NLP（自然语言处理）的典型任务——Text Classification 文本分类（如垃圾邮件 Spam 识别、体育 / 政治分类）、Sentiment Analysis 情感分析、NER 命名实体识别、Keyword Extraction 关键词提取、Text Clustering 文本聚类、Text Summarization 文本摘要、Question Answering 问答、Text Generation 文本生成、Machine Translation 机器翻译。大模型几乎能统一完成这些过去各自独立的任务。</div>
+    </figure>
+
+    <h3 id="lm-history">① 语言模型简史：从 n-gram 到 NNLM <span class="src">Bengio et al. 2003</span></h3>
+    <p>在理解大模型"为什么会接话"之前，先回答一个更根本的问题：<strong>语言模型（Language Model）到底在做什么？</strong>答案出奇地简单——<strong>预测一句话出现的概率</strong>，或等价地，<strong>在给定前文的情况下预测下一个词的概率</strong>。今天 GPT/Claude 做的"下一个 token 预测"，本质就是 70 多年前统计语言模型的延续。</p>
+
+    <h4>n-gram 模型：靠"数频率"猜下一个词</h4>
+    <p>最早的实用语言模型是 <strong>n-gram 模型</strong>：用训练语料里连续 n 个词出现的<strong>频率</strong>来估计概率。比如 trigram（n=3）会统计"今天 天气 真"出现多少次，据此估计"真"接在"今天 天气"后的概率。</p>
+    <div class="analogy"><span class="at">💡 类比</span>n-gram 像一个只会"查频率表"的文盲统计员：它见过"今天 天气 真"100 次，就猜下一个词大概率是"好"；但它<strong>不理解</strong>"天气""好"是什么意思，只是机械套用历史频率。</div>
+    <p>n-gram 有两个致命缺陷：</p>
+    <ul>
+      <li><strong>只能看很短的上下文</strong>。受数据和计算限制，n 一般只能取 3 或 4。再远的上下文完全看不到，长距离依赖无从谈起。</li>
+      <li><strong>无法理解词语相似性，泛化能力极差</strong>。模型只认"具体词串"。它学过"猫 喜欢 吃 鱼"，但遇到"狗 喜欢 吃 骨头"会很茫然——因为它不知道"猫"和"狗"、"鱼"和"骨头"在语义上是相似的。没见过的词组合，概率就被估为 0。</li>
+    </ul>
+
+    <details class="tech"><summary>维度灾难（Curse of Dimensionality）</summary>
+      <div class="tech-body">
+        <p>假设要预测一句话里 10 个词的组合概率，每个词有 10 万种可能，那么总的组合数为 <strong>10万¹⁰</strong>——一个天文数字。训练语料再大，相对这个空间也<strong>极其稀疏</strong>：绝大多数合理的句子模型从未见过，概率只能估为 0。这就是"<strong>维度灾难</strong>"，是传统 n-gram 无法跨越的根本障碍，也正是 Bengio 试图用神经网络攻克的难题。</p>
+      </div>
+    </details>
+
+    <h4>NPLM（2003）：词向量 + 神经网络，大模型原理的历史起点</h4>
+    <p>2003 年，Bengio 等人提出 <strong>神经概率语言模型（NPLM, A Neural Probabilistic Language Model）</strong>，一举解决 n-gram 两大缺陷。它的两大核心创新：</p>
+    <ul>
+      <li><strong>为每个词学习一个"词向量"</strong>：把词映射成低维稠密向量，让相似词在向量空间里靠近——这样模型就知道"猫"和"狗"相似，能从"猫 吃 鱼"泛化到"狗 吃 骨头"。</li>
+      <li><strong>用神经网络学习语言模型</strong>：网络能建模复杂的非线性关系，更好地利用上下文，并捕捉词语间的相似性，泛化到未见过的句子。</li>
+    </ul>
+    <p>NPLM 的结构简洁而奠基性：</p>
+    <div class="flow">
+      <div class="flow-row">
+        <span class="flow-step">输入层（前 n−1 个词）</span><span class="flow-arrow">→</span>
+        <span class="flow-step tr">词嵌入层（查词向量）</span><span class="flow-arrow">→</span>
+        <span class="flow-step tr">隐藏层（tanh 非线性）</span><span class="flow-arrow">→</span>
+        <span class="flow-step lm">输出层（softmax 预测下一词概率）</span>
+      </div>
+    </div>
+    <div class="callout callout-success"><div class="callout-title">比 Transformer 早了 14 年</div><p>NPLM（2003）首次把<strong>词向量</strong>和<strong>神经网络</strong>引入语言模型，奠定了"用低维稠密向量表示语义、用网络学习语言规律"这条主线。Transformer（2017）和今天的大模型，本质上仍在这条路上狂奔——<strong>大模型原理的历史起点，正是这篇 2003 年的论文</strong>。理解了 NPLM，就理解了为什么大模型"能理解语言"。</p></div>
+
+    <h3 id="token">② 分词（Tokenization）：文本如何变成模型的输入 <span class="src">Sennrich et al. arXiv:1508.07909</span></h3>
+    <p>神经网络只懂数字，不懂文字。第一步是把文本切成一个个<strong>token（词元）</strong>，每个 token 映射为一个整数 ID，再查表变成向量。最主流的方法是 <strong>BPE（Byte Pair Encoding，字节对编码）</strong>。</p>
+    <p>BPE 不是按词切（词表太大、生词多），也不是按字符切（太碎、丢失语义），而是<strong>按统计高频子词切分</strong>。如"unbelievable"可能切成"un""believ""able"。好处：词表适中（几万）、能处理任何新词和拼写错误、常见词整体保留语义。</p>
+
+    <details class="tech"><summary>BPE 工作原理与 Token 计费</summary>
+      <div class="tech-body">
+        <p><strong>BPE 训练过程</strong>（Sennrich et al., arXiv:1508.07909）：从字符级开始，反复合并语料中出现频率最高的相邻符号对，直到词表达到目标大小。合并规则保存下来，推理时按同样规则切分。</p>
+        <p><strong>示例</strong>："lower" "newer" "lower" → 统计发现 "er" 高频 → 合并为一个 token。最终常见后缀、词根都成为独立 token。</p>
+        <p><strong>实践影响</strong>：API 按 token 计费，不同模型分词器不同（GPT 用 tiktoken/BPE 变体；中文一个字通常≈1 token，英文一个词≈1-2 token）。理解 token 是理解大模型"上下文长度""成本""速度"的基础。</p>
+      </div>
+    </details>
+
+    <h3 id="embedding">③ 词嵌入（Embedding）：从离散 token 到连续语义空间 <span class="src">Bengio et al. 2003 / Mikolov arXiv:1301.3781</span></h3>
+    <p>token 只是一个整数 ID（如 "猫"→3472），数字本身没有语义。神经网络无法直接处理这种"无意义编号"。必须把每个 token 映射成一个<strong>低维稠密向量</strong>（如 4096 维浮点数），让语义相近的词在向量空间里<strong>距离也相近</strong>——这就是<strong>词嵌入（Word Embedding）</strong>。它是 2003 年 Bengio 神经概率语言模型（NPLM）的核心遗产。</p>
+    <div class="analogy"><span class="at">💡 类比</span>把每个词想象成高维语义空间里的一个"坐标点"。"猫"和"狗"都是宠物、四条腿、会动，所以它们的坐标靠得很近；而"猫"和"宪法"毫无关联，坐标相距甚远。模型通过<strong>坐标的距离</strong>来衡量词语的<strong>语义相似度</strong>。</div>
+
+    <details class="tech"><summary>one-hot 的缺陷 与 分布式表示</summary>
+      <div class="tech-body">
+        <p><strong>朴素的 one-hot 编码</strong>：每个词用一个长度=词表大小（如 50000）的向量表示，只有自己位置是 1，其余全 0。</p>
+        <ul>
+          <li><strong>缺陷 1：维度爆炸且全稀疏。</strong>50000 维向量只有 1 个 1，浪费严重。</li>
+          <li><strong>缺陷 2：所有词两两正交。</strong>任意两个 one-hot 向量的点积都是 0，模型完全无法表达"猫"和"狗"相似——语义信息为零。</li>
+        </ul>
+        <p><strong>分布式表示（Distributed Representation）</strong>：放弃 one-hot，让每个词用一个<strong>低维稠密</strong>向量（如 300 或 4096 维）表示，每一维都承载一部分语义。这就是 Bengio 在 NPLM（2003）中提出的革命性思想，也是所有现代词向量的基础。</p>
+      </div>
+    </details>
+
+    <details class="tech"><summary>词向量矩阵 与 查表过程</summary>
+      <div class="tech-body">
+        <p>整个词表所有词的向量堆在一起，构成一个<strong>词向量矩阵（Embedding Matrix）</strong>，维度为 <code>vocab_size × hidden_size</code>。</p>
+        <div class="formula">Embedding 矩阵 ∈ ℝ<sup>V × d</sup> &nbsp;&nbsp;<span class="annot"># V = 词表大小，d = 嵌入维度</span></div>
+        <p><strong>实例</strong>：DeepSeek-V3 的 <code>vocab_size=129280</code>，<code>hidden_size=7168</code>，则词向量矩阵 = 129280 × 7168 ≈ 9.26 亿参数，约占 1.77 GB（bfloat16）。</p>
+        <p><strong>查表（Lookup）过程</strong>：拿到 token ID（如 3472），直接去矩阵里<strong>取第 3472 行</strong>，就得到该词的向量。这就是"嵌入层（Embedding Layer）"做的事——本质是一个可学习的查找表。</p>
+        <div class="flow">
+          <div class="flow-row">
+            <span class="flow-step">文本 "猫"</span><span class="flow-arrow">→</span>
+            <span class="flow-step">分词 → token ID 3472</span><span class="flow-arrow">→</span>
+            <span class="flow-step">查 Embedding 矩阵第 3472 行</span><span class="flow-arrow">→</span>
+            <span class="flow-step lm">词向量 [0.31, −0.05, 0.82, …]</span>
+          </div>
+        </div>
+      </div>
+    </details>
+
+    <div class="callout callout-success"><div class="callout-title">语义可计算：king − man + woman ≈ queen</div>
+<p>词向量最经典的特性是<strong>语义可由向量运算刻画</strong>。Mikolov 等人（Word2Vec, arXiv:1301.3781）发现：把"king"的向量减去"man"再加上"woman"，得到的新向量，最接近的词恰好是"queen"。这说明词向量空间里<strong>编码了类比、性别、国家关系等结构</strong>。这种"几何即语义"的特性，是模型能理解语言的根本原因。</p></div>
+
+    <details class="tech"><summary>词向量的三种生成方式</summary>
+      <div class="tech-body">
+        <table>
+          <tr><th>方式</th><th>训练范式</th><th>代表</th></tr>
+          <tr><td><strong>Word2Vec</strong></td><td>独立训练：用中心词预测上下文（Skip-gram）或反之（CBOW），训练完向量固定供下游使用</td><td>Word2Vec (arXiv:1301.3781)</td></tr>
+          <tr><td><strong>GloVe</strong></td><td>独立训练：基于全局词共现矩阵优化</td><td>GloVe (Pennington et al., 2014)</td></tr>
+          <tr><td><strong>Transformer 嵌入层</strong></td><td><strong>端到端学习</strong>：嵌入矩阵只是模型的一层权重，随整个大模型一起预训练、反向传播更新</td><td>GPT / BERT / LLaMA 等所有现代大模型</td></tr>
+        </table>
+        <p>现代大模型几乎都用第三种——词向量不再是"事先训好再加载"的外部资源，而是<strong>模型自身权重的一部分</strong>（存在 <code>model.safetensors</code> 里）。这也是为什么同一个词在不同大模型里的向量不同：它们是各自模型在自己的语料和目标下学出来的。</p>
+      </div>
+    </details>
+    <figure style="margin:18px 0;text-align:center">
+      <img src="../images/diagrams/word2vec-cbow-skipgram.svg" alt="Word2Vec 的 CBOW 与 Skip-gram 模型结构" style="max-width:620px;width:100%;border-radius:8px">
+      <figcaption style="font-size:12px;color:var(--gray-500);margin-top:6px">Word2Vec 两种经典模型：CBOW（用上下文预测中心词）与 Skip-gram（用中心词预测上下文）——早期独立训练词向量的代表</figcaption>
+    </figure>
+
+    <h3 id="pretrain">④ 预训练目标：自回归语言建模</h3>
+    <p>大模型预训练时到底在做什么任务？<strong>Decoder-only 大模型（GPT 路线）的核心目标只有一个：给定前文，预测下一个 token</strong>。这个看似简单的任务，在海量文本上重复万亿遍，就逼出了语言能力。</p>
+    <div class="callout callout-info"><div class="callout-title">为什么"预测下一个词"这么强大</div><p>要准确预测下一个词，模型<strong>被迫理解</strong>语法、事实、推理、世界知识——因为只有真正"懂"了，才能猜对。比如要预测"法国的首都是___"的下一个词，模型必须"知道"巴黎。预训练因此把海量知识压缩进了参数。</p></div>
+    <table>
+      <tr><th>路线</th><th>预训练目标</th><th>代表</th></tr>
+      <tr><td>Decoder-only</td><td><strong>自回归</strong>：从左到右预测下一个词（causal LM）</td><td>GPT 全系、LLaMA、Qwen、DeepSeek</td></tr>
+      <tr><td>Encoder-only</td><td><strong>掩码语言建模 MLM</strong>：随机遮盖部分词，让模型还原</td><td>BERT</td></tr>
+    </table>
+    <figure style="margin:18px 0;text-align:center">
+      <img src="../images/diagrams/bert-masked-lm.svg" alt="BERT 掩码语言建模：随机遮盖 15% 的词元，让模型预测被遮的词" style="max-width:600px;width:100%;border-radius:8px">
+      <figcaption style="font-size:12px;color:var(--gray-500);margin-top:6px">BERT 的掩码语言建模（MLM）：随机遮盖 15% 词元，用双向上下文预测被遮的词——与 GPT 的"预测下一个词"形成对照</figcaption>
+    </figure>
+
+    <h3 id="scaling">⑤ 规模定律（Scaling Law） <span class="src">Kaplan et al. arXiv:2001.08361 / Hoffmann et al. arXiv:2203.15556</span></h3>
+    <p>这是大模型时代最重要的经验发现：<strong>模型性能（loss）随参数量、数据量、计算量呈可预测的幂律（power-law）提升</strong>。换句话说，只要持续放大规模，能力就会持续提升——这给了行业"大力出奇迹"的信心和路线图。</p>
+
+    <details class="tech"><summary>Kaplan Scaling Law（2020）与 Chinchilla 最优比例（2022）</summary>
+      <div class="tech-body">
+        <p><strong>Kaplan et al.（arXiv:2001.08361, 2020）</strong>发现测试损失随参数量 N、数据量 D、计算量 C 近似服从幂律：</p>
+        <div class="formula">L(N) ∝ N^(−α_N), &nbsp;&nbsp; L(D) ∝ D^(−α_D), &nbsp;&nbsp; L(C) ∝ C^(−α_C)</div>
+        <p>这意味着性能<strong>可外推预测</strong>——先在小规模上拟合曲线，就能预测千亿模型的 loss。这是 GPT-3 及后续军备竞赛的理论依据。</p>
+        <p><strong>Chinchilla（Hoffmann et al., arXiv:2203.15556, 2022）</strong>修正了 Kaplan 的结论：在固定计算预算下，<strong>模型和数据应同步放大</strong>，最优训练 token 数约为<strong>参数量的 20 倍</strong>（20 tokens/parameter）。此前 GPT-3（175B 参数 / 300B tokens）<strong>严重欠训练</strong>。</p>
+        <p>DeepMind 用 70B 参数 + 1.4T tokens 训练的 <strong>Chinchilla 反超了 5 倍大的 Gopher</strong>（MMLU 67.5%，提升 7%+）。这一发现深刻改变了训练策略——大家不再一味堆参数，而是投入更多数据。</p>
+      </div>
+    </details>
+
+    <h3 id="moe">⑥ 混合专家（MoE）：用更少算力做更大模型 <span class="src">Shazeer arXiv:1701.06538 / Fedus arXiv:2101.03961</span></h3>
+    <p>把模型做大，推理算力成本也线性飙升。<strong>混合专家（Mixture of Experts）</strong>是一个精妙的解法：模型里放很多个"专家"网络，但每个 token 只<strong>激活其中少数几个</strong>（其余休眠）。这样<strong>总参数很大（容量大），但单次计算量很小（成本低）</strong>。</p>
+    <div class="analogy"><span class="at">💡 类比</span>一家大医院（模型）有 256 位专科医生（专家），但每个病人（token）只挂 2 个最对口的科室。<strong>医院总人手很多</strong>（参数大、知识广），<strong>但单次看病只动用 2 位医生</strong>（激活少、计算省）。DeepSeek-R1（671B 总参数，37B 激活）正是这个原理。</div>
+
+    <details class="tech"><summary>MoE 的门控机制与代表模型</summary>
+      <div class="tech-body">
+        <p>每个 MoE 层把传统的 FFN 替换为"<strong>门控路由 + 多个专家 FFN</strong>"：</p>
+        <div class="formula">y = Σ_i G(x)_i · E_i(x) &nbsp;&nbsp;<span class="annot"># G(x) 是门控网络经 softmax+top-k 后的输出（多数为 0，少数为非零 softmax 权重，和为 1）</span></div>
+        <p>门控网络 G 根据输入 x 决定激活哪几个专家。Switch Transformer（Fedus et al., arXiv:2101.03961）简化为<strong>每个 token 只路由到 1 个专家</strong>，扩展到万亿参数。</p>
+        <table>
+          <tr><th>模型</th><th>总参数</th><th>激活参数</th><th>专家数</th></tr>
+          <tr><td>Mixtral</td><td>~47B</td><td>~13B</td><td>8 选 2</td></tr>
+          <tr><td>DeepSeek-V3 / R1</td><td>671B</td><td>37B</td><td>256 选 8</td></tr>
+          <tr><td>openPangu 2.0 Pro</td><td>505B</td><td>18B</td><td>—</td></tr>
+        </table>
+        <p>MoE 的挑战是<strong>负载均衡</strong>（避免所有 token 都涌向少数专家）和<strong>通信开销</strong>（专家分布在不同 GPU）。DeepSeek 提出的<strong>无辅助损失负载均衡</strong>（auxiliary-loss-free）是重要工程创新。</p>
+      </div>
+    </details>
+
+    <h3 id="kvcache">⑦ KV Cache：推理加速的关键工程</h3>
+    <p>大模型<strong>逐词生成</strong>回答，这种方式叫<strong>自回归解码（Auto-regressive Decoding）</strong>：每生成一个新词，都要把它和前面所有已生成词拼起来，作为下一步的上下文。生成第 N 个词时，前 N−1 个词的 K、V 向量要重新算吗？<strong>不需要</strong>——它们在前面步骤已算过且<strong>永不会变</strong>。<strong>KV Cache</strong> 就是把这些已算好的 K、V 缓存起来，每生成一个新词只算新词的 K、V 并追加，<strong>避免重复计算</strong>。</p>
+
+    <details class="tech"><summary>为什么 KV Cache 把复杂度从 O(n²) 降到 O(n)</summary>
+      <div class="tech-body">
+        <p><strong>没有 KV Cache 时</strong>：生成第 N 个词，要重新计算前 N−1 个词的 K、V；生成第 N+1 个词，又要重新计算前 N 个词的 K、V……随着序列变长，重复计算量呈<strong>平方级</strong>增长，长文本几乎不可用。</p>
+        <p><strong>有 KV Cache 后</strong>：历史词的 K、V 已缓存，每生成一个新词只需算<strong>这一个新词</strong>的 K、V 并追加进缓存，再用它的 Q 与缓存里所有 K 做注意力。每步计算量<strong>与序列长度无关（恒定）</strong>，整体复杂度从<strong>二次方 O(n²) 降到线性 O(n)</strong>。</p>
+        <div class="flow">
+          <div class="flow-row">
+            <span class="flow-step">生成第 N 词</span><span class="flow-arrow">→</span>
+            <span class="flow-step tr">读 KV Cache（前 N−1 词的 K/V）</span><span class="flow-arrow">→</span>
+            <span class="flow-step tr">只算新词的 Q/K/V</span><span class="flow-arrow">→</span>
+            <span class="flow-step lm">新 K/V 追加进 Cache</span>
+          </div>
+        </div>
+      </div>
+    </details>
+
+    <details class="tech"><summary>KV Cache 内存占用公式 与 实例</summary>
+      <div class="tech-body">
+        <p>KV Cache 的总大小由五个因素决定：</p>
+        <div class="formula">KV Cache 内存 ≈ L × N × H × D × 2 × sizeof(dtype)</div>
+        <ul>
+          <li><code>L</code> = 序列长度（输入+输出总 token 数）</li>
+          <li><code>N</code> = Transformer 层数</li>
+          <li><code>H</code> = 注意力头数</li>
+          <li><code>D</code> = 每个头的维度</li>
+          <li><code>2</code> = K 和 V 两份</li>
+          <li><code>sizeof(dtype)</code> = 每个数占的字节数（float16 / bfloat16 = 2 字节）</li>
+        </ul>
+        <p><strong>实例（Llama-7B，单序列）</strong>（注：Llama-7B 为 MHA 架构，32 头全独立 K/V；GQA 从 Llama-2 70B 起才采用）：</p>
+        <div class="formula">4096 × 32 × 32 × 128 × 2 × 2 字节 ≈ 2,147 MB ≈ 2.1 GB</div>
+        <p>注意：这只是<strong>单条序列</strong>的 KV Cache（尚未算模型参数本身）。若做批处理同时服务 32 个用户，仅 KV Cache 就要 67 GB——这正是大模型推理的显存大头。</p>
+      </div>
+    </details>
+
+    <details class="tech"><summary>TTFT、Prefill 阶段 与 KV Cache 三大限制</summary>
+      <div class="tech-body">
+        <p><strong>TTFT（Time-To-First-Token，首 token 响应时间）</strong>：用户发出请求到收到第一个词的延迟，是体验的关键指标。TTFT 的主因是 <strong>Prefill 阶段</strong>——模型要一次性处理整段长上下文（prompt），计算所有 prompt 词的 K、V 并<strong>构建初始 KV Cache</strong>。prompt 越长，Prefill 越慢，TTFT 越高。</p>
+        <p><strong>解码阶段（Decode）</strong>则相反：每步只算一个新词（得益于 KV Cache），单步很快，但逐步累积。</p>
+        <div class="callout callout-warning"><div class="callout-title">KV Cache 直接限制了三件事</div>
+<ul><li><strong>最大上下文长度</strong>：序列越长，KV Cache 越大，显存撑不住就截断。</li><li><strong>批处理量（Batch Size）</strong>：每条请求都要自己的 KV Cache，显存决定了能并发服务多少用户。</li><li><strong>可部署的模型大小</strong>：模型越大（层数多、头数多），单条 KV Cache 就越大，留给批处理的余量越小。</li></ul></div>
+        <p>这三条限制，催生了下一节的 MQA/GQA（从结构上减少 K、V 数量）和第五篇的 PagedAttention（从内存管理上榨干显存）。</p>
+      </div>
+    </details>
+
+    <h3 id="maxpos">⑧ 上下文长度限制：max_position_embeddings</h3>
+    <p>翻看任何大模型的 <code>config.json</code>，都会看到一个关键参数 <strong><code>max_position_embeddings</code></strong>（如 DeepSeek-V3 = 163840）。它决定了模型能处理的最大序列长度，但这个"长度天花板"背后是一连串技术权衡。</p>
+    <div class="callout callout-info"><div class="callout-title">核心定义：输入 + 输出 的总长度</div><p><code>max_position_embeddings</code> 约束的是<strong>输入 prompt 与输出生成拼成完整序列后的总长度</strong>，而非只算输入。例如设为 4096，则"输入 3000 + 输出 1096"合法，但"输入 4000 + 输出 100"会触发截断。因为自回归模型把输入输出当成<strong>一条连续序列</strong>处理，所有 token 两两计算注意力，总长受限于位置编码覆盖范围。</p></div>
+
+    <details class="tech"><summary>为什么上下文不能无限长：三大瓶颈</summary>
+      <div class="tech-body">
+        <p><strong>① RoPE 远端失效</strong>。现代大模型多用旋转位置编码（RoPE），其旋转角度差异随位置距离<strong>指数级衰减</strong>。当两词距离超出训练长度（如原设计 4096），远端 token 的旋转差异趋近于零，模型<strong>无法区分</strong>它们的位置关系，注意力得分失效。</p>
+        <p><strong>② 注意力稀释（Attention Dilution）</strong>。softmax 归一化后，序列越长，每个位置分到的注意力权重越分散。极端情况下，关键信息被均摊到海量 token 上，权重趋近 1/n，模型对关键信息的捕捉能力<strong>随长度下降</strong>。</p>
+        <p><strong>③ 显存 O(n²) 黑洞</strong>。注意力机制要存储 <code>(batch, heads, seq_len, seq_len)</code> 的注意力矩阵，显存随序列长度<strong>平方增长</strong>。设 seq_len=163840，单头注意力矩阵就约 53.7 GB，128 头总计约 6874 GB——远超任何单卡 GPU。即便用 FlashAttention 规避存储完整矩阵，计算量仍是 O(n²)。</p>
+      </div>
+    </details>
+
+    <details class="tech"><summary>外推方案：YaRN 与 滑动窗口</summary>
+      <div class="tech-body">
+        <p>训练时用较短长度（如 4096），推理时却想用更长上下文——这叫<strong>长度外推（Extrapolation）</strong>。主流方案：</p>
+        <ul>
+          <li><strong>YaRN</strong>（Yet another RoPE extensioN）：在推理时调整 RoPE 的频率参数，临时扩展长度上限。代价是超出原训练长度后，准确率会下降约 5–20%。</li>
+          <li><strong>滑动窗口注意力（Sliding Window）</strong>：每个 token 只关注最近 N 个 token（窗口大小 N ≤ max_position），而非全部。内存与序列长度无关，适合长文本流式推理（如 Mistral、LongFormer），但跨窗口的长程依赖会断裂。</li>
+          <li><strong>分块处理（Chunking）</strong>：把超长文档切成多块分别处理，再合并结果。缺点是块间信息丢失可达 15–30%。</li>
+        </ul>
+        <p>所以 <code>max_position_embeddings</code> 不是简单的数字设定，而是<strong>硬件算力、数据质量、算法创新</strong>三者的动态平衡点——既要给模型足够的能力空间，又要防止它被自身的计算重量压垮。</p>
+      </div>
+    </details>
+
+    <h3 id="config">⑨ config.json 关键字段解读：模型结构的"身份证" <span class="src">HuggingFace Transformers 标准</span></h3>
+    <p>从 HuggingFace 下载一个大模型，除了体量巨大的权重文件，一定还有一个几十行的 <code>config.json</code>。它是模型的<strong>"身份证"和施工图</strong>——把模型架构、各层维度、数据类型等关键信息全部写明，框架据此<strong>重建出正确的网络结构</strong>再加载权重。理解它的关键字段，就能在不读代码的情况下看懂一个模型长什么样。</p>
+    <table>
+      <tr><th>字段</th><th>含义</th><th>实例（DeepSeek-R1-Distill-Qwen-1.5B）</th></tr>
+      <tr><td><code>architectures</code></td><td>模型架构类名，决定用哪套网络实现</td><td><code>["Qwen2ForCausalLM"]</code>（Qwen2 架构，因果语言建模）</td></tr>
+      <tr><td><code>hidden_size</code></td><td>隐藏层维度（每个 token 的向量维度 d）</td><td><code>1536</code></td></tr>
+      <tr><td><code>num_attention_heads</code></td><td>注意力头数（Q 头数 H）</td><td><code>12</code></td></tr>
+      <tr><td><code>num_hidden_layers</code></td><td>Transformer 层数 N（堆叠几个 Block）</td><td><code>28</code></td></tr>
+      <tr><td><code>num_key_value_heads</code></td><td>K/V 头数（小于 Q 头数即 GQA）</td><td><code>2</code>（每 6 个 Q 头共享一套 K/V）</td></tr>
+      <tr><td><code>rope_theta</code></td><td>RoPE 旋转位置编码的基准频率 θ</td><td><code>10000</code></td></tr>
+      <tr><td><code>max_position_embeddings</code></td><td>最大可处理序列长度（输入+输出总和）</td><td><code>131072</code></td></tr>
+      <tr><td><code>torch_dtype</code></td><td>模型参数的数据类型（决定文件大小）</td><td><code>"bfloat16"</code>（每参数 2 字节）</td></tr>
+      <tr><td><code>vocab_size</code></td><td>词表大小 V（决定词嵌入矩阵规模）</td><td><code>151936</code></td></tr>
+    </table>
+    <div class="callout callout-success"><div class="callout-title">几个字段一眼看懂模型规模</div><p>看到 <code>hidden_size=1536</code>、<code>num_hidden_layers=28</code>、<code>num_key_value_heads=2 < num_attention_heads=12</code>，就能立刻判断：这是个小模型（约 1.5B），用 <strong>GQA</strong>（K/V 头只有 2 个），KV Cache 仅为标准 MHA 的 1/6；<code>torch_dtype=bfloat16</code> 说明权重按每参数 2 字节存储。<strong>这几个数字组合起来，就勾勒出了模型的"身材轮廓"。</strong></p></div>
+
+    <details class="tech"><summary>DeepSeek-V3（671B）的 config.json 关键值对比</summary>
+      <div class="tech-body">
+        <p>作为对比，DeepSeek-V3（671B 总参 / 37B 激活的 MoE 模型）的关键字段明显大一个量级：</p>
+        <table>
+          <tr><th>字段</th><th>DeepSeek-V3</th><th>对比 1.5B 小模型</th></tr>
+          <tr><td><code>hidden_size</code></td><td><code>7168</code></td><td>约为 1536 的 4.7 倍</td></tr>
+          <tr><td><code>num_hidden_layers</code></td><td><code>61</code></td><td>约 2 倍层数</td></tr>
+          <tr><td><code>num_attention_heads</code></td><td><code>128</code></td><td>远多于 12 头</td></tr>
+          <tr><td><code>num_key_value_heads</code></td><td><code>128</code></td><td>与 Q 头数相等（见下方 MLA 注释，并非 GQA）</td></tr>
+          <tr><td><code>vocab_size</code></td><td><code>129280</code></td><td>略小（V3 词表反而更精简）</td></tr>
+          <tr><td><code>max_position_embeddings</code></td><td><code>163840</code></td><td>超长上下文</td></tr>
+          <tr><td><code>torch_dtype</code></td><td><code>"bfloat16"</code></td><td>同为每参数 2 字节</td></tr>
+        </table>
+        <div class="callout callout-warning"><div class="callout-title">注意：V3 的 128/128 不是 GQA</div><p>DeepSeek-V3 用自研 <strong>MLA（Multi-head Latent Attention）</strong>，<strong>不是 GQA/MQA</strong>。这里 <code>num_attention_heads=128</code> 与 <code>num_key_value_heads=128</code> 相等，并不代表它是标准 MHA 或 GQA——V3 的 K/V 通过 <code>kv_lora_rank</code>（潜在压缩维度）压成一个低维潜在向量，缓存和推理时只存/解压这个潜在向量，而非原始 128 个 K/V 头。所以"两个值相等"只是 HuggingFace 兼容字段下的表象，注意力机制本身与 GQA 完全不同。</p></div>
+        <p>注意：V3 还会有 MoE 相关字段（如 <code>n_routed_experts</code> 专家数、<code>num_experts_per_tok</code> 每 token 激活专家数），这是它<strong>总参 671B 但单次只激活 37B</strong> 的配置来源。</p>
+      </div>
+    </details>
+
+    <h3 id="filesize">⑩ 模型文件大小与参数精度：671B 到底多大 <span class="src">参数量 × 每参数字节数</span></h3>
+    <p>一个常被问的问题：<strong>671B 的大模型，<code>model.safetensors</code> 文件到底有多大？</strong>答案是——<strong>取决于用哪种精度存储</strong>。模型文件大小的本质公式极简：</p>
+    <div class="formula">模型文件大小 = 参数量 × 每参数字节数</div>
+    <p>参数量（如 671B = 6710 亿）由模型结构固定，剩下唯一变量就是"每参数字节数"，即上一节（量化原理深化）那张精度表的内容：</p>
+    <table>
+      <tr><th>精度</th><th>每参数字节</th><th>671B 模型文件大小（约）</th></tr>
+      <tr><td><strong>FP32</strong>（float32 单精度）</td><td>4 字节</td><td>671B × 4 = 2684 GB ≈ <strong>2.68 TB</strong></td></tr>
+      <tr><td><strong>FP16</strong>（float16 半精度）</td><td>2 字节</td><td>671B × 2 = 1342 GB ≈ <strong>1.34 TB</strong></td></tr>
+      <tr><td><strong>BF16</strong>（bfloat16）</td><td>2 字节</td><td>671B × 2 = 1342 GB ≈ <strong>1.34 TB</strong></td></tr>
+      <tr><td><strong>INT8</strong>（8 位整数）</td><td>1 字节</td><td>671B × 1 = <strong>671 GB</strong></td></tr>
+      <tr><td><strong>INT4</strong>（4 位整数，如 Q4_K_M）</td><td>0.5 字节</td><td>671B × 0.5 ≈ <strong>335 GB</strong></td></tr>
+    </table>
+    <div class="callout callout-info"><div class="callout-title">从 2.68 TB 到 335 GB：精度即体积</div><p>同一个 671B 模型，FP32 要 <strong>2.68 TB</strong>（基本没人会用这么大的精度去存/推理），到 INT4 量化后只剩约 <strong>335 GB</strong>——<strong>缩小到原来的 1/8</strong>。这正是 Ollama 上 DeepSeek-V3 的 Q4_K_M 版本约 404GB 的来源（含少量元数据，且 4 位量化有 4.0~4.9 位的不同变体）。<strong>精度选择直接决定模型能不能塞进一块/几张 GPU。</strong></p></div>
+
+    <details class="tech"><summary>混合精度训练：文件里的参数不一定是同一精度</summary>
+      <div class="tech-body">
+        <p><strong>model.safetensors 里的参数精度可能是不统一的。</strong>原因有二：</p>
+        <ul>
+          <li><strong>混合精度训练（Mixed Precision Training）</strong>：为兼顾训练速度、显存占用与数值稳定性，现代模型训练时不同部分用不同精度——<strong>对精度敏感的部分（如注意力权重、损失计算相关）用 FP32，其余（如 FFN 权重）用 FP16/BF16</strong>。导出的权重文件里各张量自然精度各异。</li>
+          <li><strong>量化部署</strong>：推理部署时为减小体积、加速，把部分或全部 FP16/BF16 权重进一步量化成 INT8/INT4。</li>
+        </ul>
+        <p>要确认每个参数张量的真实精度，可以查看 <code>config.json</code> 的 <code>torch_dtype</code>（主精度），或用 HuggingFace Transformers 加载后遍历 <code>model.named_parameters()</code> 打印每个张量的 <code>dtype</code>。</p>
+      </div>
+    </details>
+
+    <h3 id="safetensors">⑪ model.safetensors 存什么：权重的安全容器 <span class="src">HuggingFace Safetensors 格式</span></h3>
+    <p>下载模型时，<code>model.safetensors</code> 几乎总是最大的文件（小到几百 MB，大到数百 GB）。它里面装的是<strong>模型学习到的全部权重（Weights）</strong>——也就是反向传播亿万次后沉淀下来的、决定模型行为的那堆数字。</p>
+
+    <details class="tech"><summary>为什么是 .safetensors 而不是 pickle</summary>
+      <div class="tech-body">
+        <p><strong>Safetensors</strong> 是 HuggingFace 推出的一种<strong>安全、快速、简单</strong>的张量序列化格式，专门用来存储模型权重。</p>
+        <ul>
+          <li><strong>安全</strong>：传统 PyTorch 用 <code>pickle</code> 格式存权重，而 pickle 在反序列化时<strong>可能执行任意代码</strong>（加载来路不明的 .bin 模型有被植入恶意代码的风险）。Safetensors <strong>只存张量数据，不含任何可执行代码</strong>，从根上规避了这一安全风险。</li>
+          <li><strong>快速</strong>：采用零拷贝（zero-copy）加载，读取比 pickle 更快。</li>
+        </ul>
+        <p>所以现在 HuggingFace Hub 上新模型默认用 <code>.safetensors</code>，<code>.bin</code>（pickle）格式正逐步被淘汰。</p>
+      </div>
+    </details>
+
+    <h4>权重文件里到底装了哪些权重</h4>
+    <p>以一个 Transformer 大模型为例，<code>model.safetensors</code> 里存的就是前几篇讲过的所有可学习参数：</p>
+    <table>
+      <tr><th>权重类型</th><th>对应组件</th><th>说明</th></tr>
+      <tr><td><strong>词嵌入矩阵</strong></td><td>Embedding Layer</td><td>词表 V × 隐藏维度的查找表（见 ③ 词嵌入）</td></tr>
+      <tr><td><strong>注意力权重 Q/K/V/O</strong></td><td>每层 Multi-Head Attention</td><td>四个投影矩阵 W_Q, W_K, W_V, W_O（见 ② 自注意力）</td></tr>
+      <tr><td><strong>FFN 权重</strong></td><td>每层前馈网络</td><td>两层 MLP 的 W₁, W₂（含 MoE 时还有各专家的权重）</td></tr>
+      <tr><td><strong>LayerNorm 参数（γ/β）</strong></td><td>每个归一化层</td><td>归一化的缩放与偏移两个可学习参数</td></tr>
+      <tr><td><strong>偏置（Bias）</strong></td><td>各线性层</td><td>每个神经元的偏置项 b（部分模型如 LLaMA 不用偏置）</td></tr>
+    </table>
+
+    <details class="tech"><summary>为什么只存权重，不存优化器状态</summary>
+      <div class="tech-body">
+        <p>训练阶段，Adam 等优化器会为<strong>每个参数额外维护动量、二阶矩等状态</strong>（optimizer state），这些状态加起来体积与权重相当甚至更大。但 <strong>model.safetensors 里不存这些</strong>——原因很简单：</p>
+        <ul>
+          <li><strong>推理只需要权重</strong>。前向传播算出预测，靠的是 W, b 这些参数本身，<strong>优化器状态在推理时用不到</strong>。</li>
+          <li><strong>优化器状态只在"继续训练"时需要</strong>。若要断点续训，会单独保存一个 <code>optimizer.pt</code> 之类的文件，与权重文件分离。</li>
+        </ul>
+        <p>所以分发给用户做推理用的 <code>model.safetensors</code> 只保留<strong>做预测必需的权重</strong>，把与推理无关的训练状态全部剥离，让文件尽可能小、加载尽可能快。</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ 第五篇 ============ -->
+  <h2 class="part-title">第五篇 · 对齐与推理优化</h2>
+
+  <section id="p5">
+    <p class="section-desc">预训练出的基础模型会"接话"但不懂"听指令"、会乱说话。让模型变得有用、诚实、无害（对齐），并让它学会深度推理，是 2022 年后大模型工程的核心。这一篇讲清 SFT、RLHF、CoT 推理模型，以及推理加速技术。</p>
+
+    <div class="flow">
+      <div class="flow-row">
+        <span class="flow-step">基础模型（预训练）</span><span class="flow-arrow">→</span>
+        <span class="flow-step">SFT 监督微调</span><span class="flow-arrow">→</span>
+        <span class="flow-step">RLHF 人类反馈强化学习</span><span class="flow-arrow">→</span>
+        <span class="flow-step lm">对齐的对话模型（如 ChatGPT）</span>
+      </div>
+    </div>
+
+    <h3 id="sft">① SFT：监督微调——教模型"听指令"</h3>
+    <p>预训练模型只会"续写"。SFT（Supervised Fine-Tuning，监督微调）用<strong>数万条人工编写的"指令-回答"示例</strong>微调模型，让它学会<strong>按人类指令格式作答</strong>，而不是无脑续写。这一步把"语言模型"变成"助手雏形"。</p>
+
+    <h3 id="rlhf">② RLHF：人类反馈强化学习——让模型"对齐"人类偏好 <span class="src">Ouyang et al. arXiv:2203.02155</span></h3>
+    <p>SFT 后的模型仍可能啰嗦、错误、有害。<strong>RLHF（Reinforcement Learning from Human Feedback）</strong>是 ChatGPT 的核心对齐技术，分三步：</p>
+    <ol>
+      <li><strong>SFT</strong>：先用指令数据微调（即上一步）。</li>
+      <li><strong>训练奖励模型（RM）</strong>：让模型对同一问题生成多个回答，<strong>人类标注员给回答排序</strong>；训练一个"奖励模型"学习人类的偏好打分。</li>
+      <li><strong>强化学习优化</strong>：用奖励模型的分数作为奖励信号，用 PPO 等算法优化语言模型，让它生成高分回答。</li>
+    </ol>
+    <div class="callout callout-success"><div class="callout-title">RLHF 的历史地位</div><p>InstructGPT（Ouyang et al., arXiv:2203.02155，2022 年 1 月提交）首次系统落地 SFT+RLHF，是<strong>ChatGPT（2022-11）的直接技术基础</strong>。RLHF 让模型从"会接话"变成"好用、安全、符合人类意图"，是大模型走向大众的关键一跃。</p></div>
+
+    <details class="tech"><summary>RLHF 的目标函数（PPO）</summary>
+      <div class="tech-body">
+        <p>RLHF 最大化奖励的同时，要防止模型为迎合奖励而"跑偏"（偏离原始语言能力），故加 KL 惩罚项：</p>
+        <div class="formula">maximize &nbsp; E[ r_φ(x,y) ] − β · KL[ π_θ(·|x) ‖ π_SFT(·|x) ]</div>
+        <p>其中 r_φ 是奖励模型打分，π_θ 是当前策略，π_SFT 是 SFT 模型，β 控制偏离程度。<strong>DeepSeek-R1 用的 GRPO</strong>（Group Relative Policy Optimization）是 PPO 的简化变体——免去价值网络，用组内相对优势估计，更省算力。</p>
+      </div>
+    </details>
+
+    <h3 id="cot">③ CoT 与推理模型：让模型"先想后答" <span class="src">Wei et al. arXiv:2201.11903</span></h3>
+    <p>普通大模型直接给答案，遇到复杂数学/逻辑题容易出错。<strong>思维链（Chain-of-Thought, CoT）</strong>的发现（Wei et al., 2022）：只要让模型<strong>在给出最终答案前，先一步步写出推理过程</strong>，准确率就大幅提升——就像人解难题要打草稿。</p>
+    <div class="analogy"><span class="at">💡 类比：系统 1 vs 系统 2</span>心理学家卡尼曼把思维分两类：<strong>系统 1</strong>（直觉、快速，普通模型）和<strong>系统 2</strong>（深思、慢速，推理模型）。CoT 和推理模型（o1、R1）正是给大模型装上"系统 2"——通过强化学习训练它在内部进行长思维链推理。</div>
+    <p><strong>推理模型</strong>（OpenAI o1, 2024-09；DeepSeek-R1, 2025-01）把 CoT 推向极致：用强化学习直接训练模型<strong>自主生成高质量思维链</strong>。DeepSeek-R1-Zero 更进一步证明<strong>纯 RL（无 SFT）即可激发推理能力</strong>。</p>
+
+    <details class="tech"><summary>CoT 为何有效 / R1-Zero 的关键发现</summary>
+      <div class="tech-body">
+        <p>Wei et al.（arXiv:2201.11903）发现：在 few-shot 示例中加入推理过程，模型在算术、常识、符号推理任务上<strong>显著提升</strong>。本质是<strong>把复杂问题分解为多个简单步骤</strong>，每步的计算量增加，但每步更可靠。</p>
+        <p><strong>R1-Zero 的突破</strong>（arXiv:2501.12948）：直接对基础模型做 RL（GRPO），用可验证奖励（数学题有标准答案）训练，<strong>不经过任何 SFT</strong>，推理能力就涌现——AIME 2024 pass@1 从 15.6% 提升到 71.0%（R1-Zero）；进一步加入少量冷启动数据的 R1 模型则达到 79.8%。这颠覆了"必须先 SFT 再 RL"的常识。</p>
+      </div>
+    </details>
+
+    <h3 id="inferopt">④ 推理与训练优化技术</h3>
+    <p>大模型的训练和推理极其昂贵，催生了一系列关键优化技术。这些技术是"用得起"大模型的工程基础。</p>
+    <table>
+      <tr><th>技术</th><th>解决什么</th><th>来源</th></tr>
+      <tr><td><strong>FlashAttention</strong></td><td>注意力计算 IO 优化，<strong>精确</strong>加速（无近似），省显存</td><td>Dao et al., arXiv:2205.14135, 2022</td></tr>
+      <tr><td><strong>LoRA</strong></td><td>微调时<strong>冻结原参数</strong>，只训练注入的低秩矩阵，省显存/算力</td><td>Hu et al., arXiv:2106.09685, 2021</td></tr>
+      <tr><td><strong>量化（Quantization）</strong></td><td>把参数从 16 位压缩到 8/4 位，大幅省显存、加速推理（轻微精度损失）</td><td>工程方法</td></tr>
+      <tr><td><strong>知识蒸馏（Distillation）</strong></td><td>用大模型（教师）的输出训练小模型（学生），小模型逼近大模型能力</td><td>R1 蒸馏出 6 个小模型</td></tr>
+      <tr><td><strong>并行训练</strong></td><td>数据/张量/流水线并行，把千亿模型拆到数千 GPU 上训练</td><td>工程方法</td></tr>
+    </table>
+
+    <details class="tech"><summary>FlashAttention 与 LoRA 的核心原理</summary>
+      <div class="tech-body">
+        <p><strong>FlashAttention</strong>（arXiv:2205.14135）：注意力计算的瓶颈不是算力，而是<strong>GPU 高带宽内存（HBM）的读写</strong>（IO）。FlashAttention 用<strong>分块（tiling）+ 在线重缩放</strong>，把中间结果尽量留在高速 SRAM 中，减少对慢速 HBM 的读写。<strong>结果完全精确</strong>（exact attention），却快数倍、省数倍显存。几乎所有现代大模型推理都用它。</p>
+        <p><strong>LoRA</strong>（Low-Rank Adaptation, arXiv:2106.09685）：微调时冻结原权重 W₀，只训练一个低秩更新：</p>
+        <div class="formula">W = W₀ + ΔW = W₀ + B·A &nbsp;&nbsp;<span class="annot"># B 是 d×r，A 是 r×d，r 远小于 d</span></div>
+        <p>若原矩阵是 4096×4096（1600 万参数），取 r=8 则 B、A 共 (4096+4096)×8 ≈ 6.5 万参数，<strong>可训练参数减少 99%+</strong>，显存和算力大幅下降，而效果接近全参数微调。这是个人/小团队微调大模型的标准方法。</p>
+      </div>
+    </details>
+
+    <h3 id="quant-deep">量化原理深化：从浮点到整数，scale 与 zero-point 的数学 <span class="src">工程方法 · KV Cache 量化 arXiv:2405.14256</span></h3>
+    <p>上一节表格里提到"量化把参数从 16 位压缩到 8/4 位"。这里展开它背后的<strong>数学原理</strong>——量化到底在做什么，以及为什么"量化粒度"对精度影响巨大。</p>
+    <p><strong>量化的本质：把一个浮点数范围映射到一个整数范围。</strong>具体靠两个参数完成：一个 <strong>Scale（缩放因子）</strong>决定浮点范围被压缩的程度；一个 <strong>Zero-point（零点偏移）</strong>记录"浮点数中的 0"对应量化后的哪个整数。</p>
+
+    <details class="tech"><summary>量化的核心公式：量化与反量化</summary>
+      <div class="tech-body">
+        <p>把浮点值 F.P. 量化成整数，再用整数反量化回浮点值：</p>
+        <div class="formula">
+          量化值 = round( 浮点值 / <span class="var">Scale</span> ) + <span class="var">Zero-point</span><br>
+          浮点值 = ( 量化值 − <span class="var">Zero-point</span> ) × <span class="var">Scale</span>
+        </div>
+        <p><strong>逐步拆解</strong>（以把 <code>[−1.0, 1.0]</code> 范围的浮点数量化到 <code>[−128, 127]</code> 的 INT8 为例，取 Scale = 1/127、Zero-point = 0）：</p>
+        <ul>
+          <li>浮点数 <code>0.5</code> → 除以 Scale：<code>0.5 / (1/127) = 63.5</code></li>
+          <li>加 Zero-point：<code>63.5 + 0 = 63.5</code></li>
+          <li>四舍五入（round）→ 得到量化整数 <code>64</code></li>
+          <li>反量化：<code>(64 − 0) × (1/127) = 0.5039…</code>（与原始 0.5 接近，但有<strong>舍入误差</strong>）</li>
+        </ul>
+        <p>这个舍入误差就是量化"轻微精度损失"的来源。Scale 选得越贴合一组数据的真实分布范围，误差越小。</p>
+      </div>
+    </details>
+
+    <h4>精度等级：每个参数占多少字节</h4>
+    <p>量化的代价与收益，直观体现在"每个参数占几个字节"上。下表是常见精度等级（也是 G.章节后文计算模型文件大小的基础）：</p>
+    <table>
+      <tr><th>精度</th><th>位数</th><th>每参数字节</th><th>说明</th></tr>
+      <tr><td><strong>FP32</strong>（单精度浮点）</td><td>32 位</td><td>4 字节</td><td>范围/精度最高，训练默认；推理太占显存</td></tr>
+      <tr><td><strong>FP16</strong>（半精度浮点）</td><td>16 位</td><td>2 字节</td><td>比 FP32 省一半空间，精度略低</td></tr>
+      <tr><td><strong>BF16</strong>（Brain Float）</td><td>16 位</td><td>2 字节</td><td>与 FP16 同为 2 字节，但动态范围更大，<strong>大模型训练主流</strong></td></tr>
+      <tr><td><strong>INT8</strong>（8 位整数）</td><td>8 位</td><td>1 字节</td><td>只占 FP32 的 1/4，计算更快，精度损失较大</td></tr>
+      <tr><td><strong>INT4</strong>（4 位整数）</td><td>4 位</td><td>0.5 字节</td><td>极致压缩，推理常用于省显存（如 Q4_K_M 量化）</td></tr>
+    </table>
+
+    <h4>量化粒度：Per-Tensor / Per-Channel / Per-Token</h4>
+    <p>同样是量化到 INT8，<strong>用一套 Scale 还是多套 Scale</strong>，对精度影响极大。这就是"量化粒度（Quantization Granularity）"——为一个多大的范围共用同一组 Scale 和 Zero-point。</p>
+    <table>
+      <tr><th>粒度</th><th>Scale 共享范围</th><th>特点</th></tr>
+      <tr><td><strong>Per-Tensor</strong>（每张量）</td><td>整个张量（整个矩阵/层）共用<strong>一个</strong> Scale</td><td>最省存储，但若张量内数值分布跨度大，少量离群值会撑大 Scale，其余值精度被严重拉低</td></tr>
+      <tr><td><strong>Per-Channel</strong>（每通道）</td><td>每个通道（如每行/每列）独立一个 Scale</td><td>更贴合各行/列各自的分布，精度更好，是权重量化的常见选择</td></tr>
+      <tr><td><strong>Per-Token</strong>（每 Token）</td><td>KV Cache 中<strong>每个 Token</strong>（甚至每个 Token 的 K/V 向量的每个维度）独立一套 Scale 和 Zero-point</td><td>最细粒度，能精确捕捉每个 Token 各维度的真实分布，量化误差最小</td></tr>
+    </table>
+    <div class="callout callout-info"><div class="callout-title">为什么 KV Cache 量化要用 Per-Token</div><p>推理过程中 KV Cache 的值<strong>非常活跃</strong>，分布随序列动态变化。若用粗粒度 Per-Tensor，少量数值大的 Token 会让全局 Scale 偏大，其余绝大多数 Token 的精度被压垮。Per-Token/Per-Channel 这种<strong>细粒度量化</strong>能为每个 Token 各自拟合最贴合的 Scale，从而把量化误差降到最低——这是 KV Cache 量化（如 ZipCache, arXiv:2405.14256）的关键设计。</p></div>
+
+    <details class="tech"><summary>对称量化 vs 非对称量化</summary>
+      <div class="tech-body">
+        <p>根据 Zero-point 是否为 0，量化分两类：</p>
+        <ul>
+          <li><strong>对称量化（Symmetric）</strong>：Zero-point = 0，即浮点的 0 量化的整数也是 0。整数范围关于 0 对称（如 INT8 用 <code>[−128, 127]</code>）。计算简单、反量化快，适合<strong>分布大致关于 0 对称</strong>的权重。</li>
+          <li><strong>非对称量化（Asymmetric）</strong>：Zero-point ≠ 0，允许整数范围整体偏移以贴合<strong>分布不以 0 为中心</strong>的数据（如激活值常全为正）。精度更好，但量化/反量化多一次加法。</li>
+        </ul>
+        <p>实践中，<strong>权重</strong>多用对称量化（分布对称、省算），<strong>激活/KV Cache</strong>多用非对称或细粒度量化（分布偏移大、需精拟合）。</p>
+      </div>
+    </details>
+
+    <h3 id="pagedattn">⑤ PagedAttention 与 vLLM：KV Cache 的内存管理革命 <span class="src">Kwon et al. arXiv:2309.06180</span></h3>
+    <p>前面看到 KV Cache 是显存大户。但问题不止"占用大"，还有更隐蔽的<strong>内存浪费</strong>。传统推理引擎为每条请求的 KV Cache <strong>预分配一整块连续显存</strong>，这在实际服务中暴露出致命问题，而 <strong>PagedAttention</strong> 借鉴操作系统虚拟内存的分页思想，彻底解决了它。</p>
+
+    <details class="tech"><summary>连续分配的三大浪费</summary>
+      <div class="tech-body">
+        <ul>
+          <li><strong>内存碎片</strong>：不同请求序列长度不同，且会动态增长/结束，显存里很快布满零散小块。即使总剩余显存够，也找不到<strong>足够大的连续块</strong>给新请求，触发 OOM（显存不足）。</li>
+          <li><strong>预分配浪费</strong>：为避免上述问题，常按"最大可能长度"预分配，但绝大多数请求用不满，造成大量闲置。</li>
+          <li><strong>批处理填充（padding）浪费</strong>：一个批次里所有序列必须填充到最长序列的长度，短请求被迫陪跑，算力和显存双重浪费。</li>
+        </ul>
+        <p>实测中，这些浪费可使显存利用率低至 20–40%——大多数显存不是被有效数据占用，而是被碎片和 padding 吃掉了。</p>
+      </div>
+    </details>
+
+    <details class="tech"><summary>PagedAttention：像操作系统管理内存那样管理 KV Cache</summary>
+      <div class="tech-body">
+        <p><strong>核心思想</strong>（Kwon et al., vLLM, arXiv:2309.06180）：KV Cache 不再要求一整块连续显存，而是由许多<strong>固定大小的小块（Block / Page）</strong>组成，这些块可以<strong>分散在显存的任意位置</strong>。每条请求通过一张<strong>"逻辑→物理"映射表</strong>记录自己用了哪些物理块。</p>
+        <div class="flow">
+          <div class="flow-row">
+            <span class="flow-step">请求序列</span><span class="flow-arrow">→</span>
+            <span class="flow-step tr">按需申请若干离散 Block</span><span class="flow-arrow">→</span>
+            <span class="flow-step tr">映射表记录逻辑→物理</span><span class="flow-arrow">→</span>
+            <span class="flow-step lm">序列增长时再申请新 Block</span>
+          </div>
+        </div>
+        <p><strong>带来的三大收益</strong>：</p>
+        <ul>
+          <li><strong>消除碎片</strong>：显存利用率几乎拉满，几乎无浪费，OOM 大幅减少。</li>
+          <li><strong>动态扩展</strong>：序列按需增长，无需预分配最大长度。</li>
+          <li><strong>更大批处理量</strong>：同批可高效混跑不同长度的请求，无需 padding，吞吐显著提升。</li>
+        </ul>
+        <p><strong>写时复制（Copy-on-Write）共享前缀</strong>：多条请求常共享相同前缀（如同一个 system prompt）。PagedAttention 让它们<strong>共享同一批物理 Block</strong>，只有当某条请求开始生成自己独有的内容时，才复制出新 Block。这在多用户服务同一基础指令时省下大量显存。</p>
+      </div>
+    </details>
+
+    <div class="callout callout-success"><div class="callout-title">vLLM：推理吞吐提升 2–4 倍</div><p>PagedAttention 是开源推理引擎 <strong>vLLM</strong> 的核心技术。凭借几乎消除显存浪费、支持高并发混跑，vLLM 在主流大模型推理场景下把<strong>吞吐量（tokens/sec）提升了 2–4 倍</strong>，是当前 LLM 推理后端最先进的内存管理技术之一，也是多数线上大模型服务的事实标准之一。</p></div>
+  </section>
+
+  <!-- 总结 -->
+  <section id="summary">
+    <h2 class="section-title"><span class="emoji">🧭</span>完整链条总结：从数学到产业</h2>
+    <p>把全篇串起来，大模型的完整技术链条是这样的：</p>
+    <div class="flow">
+      <div class="flow-row">
+        <span class="flow-step el">神经元 + 反向传播</span><span class="flow-arrow">→</span>
+        <span class="flow-step el">+ 残差/归一化 = 深度网络</span><span class="flow-arrow">→</span>
+        <span class="flow-step tr">+ 自注意力 = Transformer</span>
+      </div>
+      <div class="flow-arrow" style="margin:6px 0">↓</div>
+      <div class="flow-row">
+        <span class="flow-step tr">+ 海量文本预训练</span><span class="flow-arrow">→</span>
+        <span class="flow-step lm">+ Scaling Law 放大</span><span class="flow-arrow">→</span>
+        <span class="flow-step lm">基础大模型</span>
+      </div>
+      <div class="flow-arrow" style="margin:6px 0">↓</div>
+      <div class="flow-row">
+        <span class="flow-step">+ SFT + RLHF 对齐</span><span class="flow-arrow">→</span>
+        <span class="flow-step">+ CoT / 推理模型</span><span class="flow-arrow">→</span>
+        <span class="flow-step lm">现代 AI 助手（ChatGPT / Claude / R1）</span>
+      </div>
+    </div>
+    <div class="callout callout-teal">
+      <div class="callout-title">一句话本质</div>
+      <p>大模型 = <strong>"预测下一个词"这个极简目标</strong> + <strong>Transformer 这个高效架构</strong> + <strong>规模定律这个放大杠杆</strong> + <strong>RLHF/CoT 这套对齐与推理工程</strong>。它的每一次惊艳表现，都是这套链条在万亿参数和万亿 token 上运行的必然结果——而非魔法。</p>
+    </div>
+    <div class="callout callout-warning">
+      <div class="callout-title">保持严谨：能力的边界</div>
+      <p>大模型强，但<strong>不是万能</strong>。它会"幻觉"（编造事实）、受训练数据污染影响榜单表现、"涌现"说法在学术界有争议（Schaeffer et al., arXiv:2304.15004）。理解原理，恰恰是为了既善用其力，也清醒认识其局限。</p>
+    </div>
+  </section>
+
+  <!-- 参考文献 -->
+  <section id="refs">
+    <h2 class="section-title"><span class="emoji">📚</span>参考文献（已交叉验证）</h2>
+    <p class="section-desc">本文每个关键论断的原始论文，arXiv 编号均已通过检索核证。</p>
+    <table>
+      <tr><th>编号</th><th>论文 / 来源</th><th>arXiv / 出处</th><th>年份</th></tr>
+      <tr><td>1</td><td>Attention Is All You Need（Transformer）</td><td>arXiv:1706.03762</td><td>2017</td></tr>
+      <tr><td>2</td><td>BERT</td><td>arXiv:1810.04805</td><td>2018</td></tr>
+      <tr><td>3</td><td>GPT-3（Language Models are Few-Shot Learners）</td><td>arXiv:2005.14165</td><td>2020</td></tr>
+      <tr><td>4</td><td>Scaling Laws for Neural Language Models</td><td>arXiv:2001.08361</td><td>2020</td></tr>
+      <tr><td>5</td><td>InstructGPT（RLHF）</td><td>arXiv:2203.02155</td><td>2022</td></tr>
+      <tr><td>6</td><td>Training Compute-Optimal LLM（Chinchilla）</td><td>arXiv:2203.15556</td><td>2022</td></tr>
+      <tr><td>7</td><td>Chain-of-Thought Prompting Elicits Reasoning</td><td>arXiv:2201.11903</td><td>2022</td></tr>
+      <tr><td>8</td><td>Switch Transformers（MoE）</td><td>arXiv:2101.03961</td><td>2021</td></tr>
+      <tr><td>9</td><td>Outrageously Large NN（原始 Sparsely-Gated MoE）</td><td>arXiv:1701.06538</td><td>2017</td></tr>
+      <tr><td>10</td><td>FlashAttention</td><td>arXiv:2205.14135</td><td>2022</td></tr>
+      <tr><td>11</td><td>LoRA: Low-Rank Adaptation</td><td>arXiv:2106.09685</td><td>2021</td></tr>
+      <tr><td>12</td><td>Deep Residual Learning（ResNet，残差连接）</td><td>arXiv:1512.03385</td><td>2015/2016</td></tr>
+      <tr><td>13</td><td>Layer Normalization</td><td>arXiv:1607.06450</td><td>2016</td></tr>
+      <tr><td>14</td><td>Neural MT of Rare Words with Subword Units（BPE）</td><td>arXiv:1508.07909</td><td>2016</td></tr>
+      <tr><td>15</td><td>Adam: A Method for Stochastic Optimization</td><td>arXiv:1412.6980</td><td>2014</td></tr>
+      <tr><td>16</td><td>Are Emergent Abilities a Mirage?（涌现争议）</td><td>arXiv:2304.15004</td><td>2023</td></tr>
+      <tr><td>17</td><td>DeepSeek-R1</td><td>arXiv:2501.12948</td><td>2025</td></tr>
+      <tr><td>18</td><td>DeepSeek-V3</td><td>arXiv:2412.19437</td><td>2024</td></tr>
+      <tr><td>19</td><td>A Neural Probabilistic Language Model（NPLM，词向量+神经网络语言模型鼻祖）</td><td>JMLR 2003（Bengio et al.）</td><td>2003</td></tr>
+      <tr><td>20</td><td>Word2Vec（Distributed Representations of Words，king−man+woman≈queen）</td><td>arXiv:1301.3781</td><td>2013</td></tr>
+      <tr><td>21</td><td>Fast Transformer Decoding（Multi-Query Attention, MQA）</td><td>arXiv:1911.02150</td><td>2019</td></tr>
+      <tr><td>22</td><td>GQA: Training Generalized Multi-Query Transformer Models（Grouped-Query）</td><td>arXiv:2305.13245</td><td>2023</td></tr>
+      <tr><td>23</td><td>Efficient Memory Management for LLM Serving（PagedAttention / vLLM）</td><td>arXiv:2309.06180</td><td>2023</td></tr>
+      <tr><td>24</td><td>Keep the Cost Down（KV Cache 优化综述）</td><td>arXiv:2407.18003</td><td>2024</td></tr>
+    </table>
+
+    <div class="foot-note">
+      <strong>关于严谨性：</strong>本文所有公式、参数、arXiv 编号均经检索交叉验证。神经网络基础部分（感知机、反向传播、激活函数）为成熟的教科书级经典内容，依据标准机器学习教材与上述原始论文表述。所有"涌现""登顶""SOTA"等表述均按学术研究做了降级或附条件处理，遵循"杜绝虚构、每论断附来源"的原则。
+    </div>
+  </section>
+
+</main>
+
+<button id="back-top" title="回到顶部">↑</button>
+
+<script>
+  const pb=document.getElementById('progress-bar');
+  window.addEventListener('scroll',()=>{
+    const h=document.documentElement;
+    pb.style.width=(h.scrollTop/(h.scrollHeight-h.clientHeight)*100)+'%';
+    document.getElementById('back-top').classList.toggle('show',h.scrollTop>400);
+    let cur='intro';
+    document.querySelectorAll('section[id],h3[id]').forEach(s=>{
+      if(window.scrollY>=s.offsetTop-120)cur=s.id;
+    });
+    document.querySelectorAll('#sidebar nav a').forEach(a=>{
+      a.classList.toggle('active',a.getAttribute('href')==='#'+cur);
+    });
+  });
+  document.getElementById('back-top').onclick=()=>window.scrollTo({top:0,behavior:'smooth'});
+</script>
+</body>
+</html>

@@ -1,0 +1,69 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 290" font-family="'PingFang SC','Microsoft YaHei','Segoe UI',system-ui,sans-serif">
+  <defs>
+    <marker id="arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#1057cb"/>
+    </marker>
+  </defs>
+
+  <rect x="6" y="6" width="588" height="278" rx="14" fill="#ffffff" stroke="#1057cb" stroke-width="2"/>
+  <text x="300" y="30" text-anchor="middle" font-size="15" font-weight="700" fill="#0f172a">分类模型流程：从输入特征到交叉熵损失</text>
+
+  <!-- 输入 x -->
+  <text x="51" y="56" text-anchor="middle" font-size="12" font-weight="600" fill="#0f172a">输入 x</text>
+  <rect x="30" y="64" width="42" height="124" rx="5" fill="none" stroke="#64748b" stroke-width="1.4"/>
+  <rect x="30" y="64"  width="42" height="31" fill="#94a3b8" stroke="#cbd5e1"/>
+  <rect x="30" y="95"  width="42" height="31" fill="#cbd5e1" stroke="#cbd5e1"/>
+  <rect x="30" y="126" width="42" height="31" fill="#94a3b8" stroke="#cbd5e1"/>
+  <rect x="30" y="157" width="42" height="31" fill="#e2e8f0" stroke="#cbd5e1"/>
+  <text x="51" y="204" text-anchor="middle" font-size="10" fill="#64748b">特征</text>
+
+  <line x1="74" y1="126" x2="120" y2="126" stroke="#1057cb" stroke-width="1.8" marker-end="url(#arr)"/>
+  <text x="97" y="118" text-anchor="middle" font-size="11" fill="#1057cb" font-weight="600">z = Wx + b</text>
+
+  <!-- 得分 z -->
+  <text x="151" y="56" text-anchor="middle" font-size="12" font-weight="600" fill="#0f172a">得分 z</text>
+  <rect x="130" y="64" width="42" height="124" rx="5" fill="none" stroke="#1057cb" stroke-width="1.4"/>
+  <rect x="130" y="64"  width="42" height="31" fill="#3b82f6" stroke="#93c5fd"/>
+  <rect x="130" y="95"  width="42" height="31" fill="#60a5fa" stroke="#93c5fd"/>
+  <rect x="130" y="126" width="42" height="31" fill="#93c5fd" stroke="#93c5fd"/>
+  <rect x="130" y="157" width="42" height="31" fill="#dbeafe" stroke="#93c5fd"/>
+  <text x="151" y="204" text-anchor="middle" font-size="10" fill="#64748b">原始分</text>
+
+  <line x1="174" y1="126" x2="220" y2="126" stroke="#1057cb" stroke-width="1.8" marker-end="url(#arr)"/>
+  <text x="197" y="118" text-anchor="middle" font-size="11" fill="#1057cb" font-weight="600">Softmax</text>
+
+  <!-- 概率 p -->
+  <text x="251" y="56" text-anchor="middle" font-size="12" font-weight="600" fill="#0f172a">概率 p</text>
+  <rect x="230" y="64" width="42" height="124" rx="5" fill="none" stroke="#7c3aed" stroke-width="1.4"/>
+  <rect x="230" y="64"  width="42" height="31" fill="#8b5cf6" stroke="#c4b5fd"/><text x="251" y="84" text-anchor="middle" font-size="10" fill="#fff" font-weight="700">0.7</text>
+  <rect x="230" y="95"  width="42" height="31" fill="#c4b5fd" stroke="#c4b5fd"/><text x="251" y="115" text-anchor="middle" font-size="10" fill="#fff" font-weight="700">0.2</text>
+  <rect x="230" y="126" width="42" height="31" fill="#ddd6fe" stroke="#c4b5fd"/><text x="251" y="146" text-anchor="middle" font-size="10" fill="#6d28d9" font-weight="700">0.1</text>
+  <rect x="230" y="157" width="42" height="31" fill="#ede9fe" stroke="#c4b5fd"/><text x="251" y="177" text-anchor="middle" font-size="10" fill="#6d28d9" font-weight="700">0.0</text>
+  <text x="251" y="204" text-anchor="middle" font-size="10" fill="#64748b">和为 1</text>
+
+  <!-- 真实标签 y -->
+  <text x="341" y="56" text-anchor="middle" font-size="12" font-weight="600" fill="#0f172a">真实标签 y</text>
+  <rect x="320" y="64" width="42" height="124" rx="5" fill="none" stroke="#b45309" stroke-width="1.4"/>
+  <rect x="320" y="64"  width="42" height="31" fill="#fbbf24" stroke="#fcd34d"/><text x="341" y="84" text-anchor="middle" font-size="11" fill="#7c2d12" font-weight="700">1</text>
+  <rect x="320" y="95"  width="42" height="31" fill="#f1f5f9" stroke="#cbd5e1"/><text x="341" y="115" text-anchor="middle" font-size="11" fill="#94a3b8">0</text>
+  <rect x="320" y="126" width="42" height="31" fill="#f1f5f9" stroke="#cbd5e1"/><text x="341" y="146" text-anchor="middle" font-size="11" fill="#94a3b8">0</text>
+  <rect x="320" y="157" width="42" height="31" fill="#f1f5f9" stroke="#cbd5e1"/><text x="341" y="177" text-anchor="middle" font-size="11" fill="#94a3b8">0</text>
+  <text x="341" y="204" text-anchor="middle" font-size="10" fill="#64748b">独热编码</text>
+
+  <!-- p 与 y 汇入交叉熵 -->
+  <path d="M 272 126 H 410" fill="none" stroke="#1057cb" stroke-width="1.8"/>
+  <path d="M 362 126 H 410" fill="none" stroke="#1057cb" stroke-width="1.8"/>
+  <circle cx="425" cy="126" r="15" fill="#f97316" stroke="#c2410c" stroke-width="1.5"/>
+  <text x="425" y="131" text-anchor="middle" font-size="14" font-weight="700" fill="#fff">H</text>
+  <line x1="440" y1="126" x2="486" y2="126" stroke="#1057cb" stroke-width="1.8" marker-end="url(#arr)"/>
+  <text x="425" y="158" text-anchor="middle" font-size="10.5" fill="#9a3412">交叉熵</text>
+
+  <!-- 损失值 -->
+  <rect x="490" y="106" width="76" height="40" rx="7" fill="#fff7ed" stroke="#f97316" stroke-width="1.8"/>
+  <text x="528" y="132" text-anchor="middle" font-size="15" font-weight="700" fill="#9a3412">损失 0.36</text>
+  <text x="528" y="162" text-anchor="middle" font-size="10" fill="#64748b">越小越好</text>
+
+  <!-- 底部公式 -->
+  <text x="300" y="240" text-anchor="middle" font-size="12" fill="#0f172a">Softmax：p_i = exp(z_i) / Σ exp(z_j)</text>
+  <text x="300" y="262" text-anchor="middle" font-size="12" fill="#0f172a">交叉熵损失：L = − Σ y_i · log(p_i)</text>
+</svg>

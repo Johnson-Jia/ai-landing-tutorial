@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 430" font-family="'PingFang SC','Microsoft YaHei','Segoe UI',system-ui,sans-serif">
+  <defs>
+    <marker id="arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#1057cb"/>
+    </marker>
+  </defs>
+
+  <rect x="6" y="6" width="348" height="418" rx="14" fill="#ffffff" stroke="#1057cb" stroke-width="2"/>
+  <text x="180" y="32" text-anchor="middle" font-size="15" font-weight="700" fill="#0f172a">位置编码：把词序信息注入词向量</text>
+
+  <!-- 词嵌入向量（暖色 = 语义） -->
+  <text x="93" y="52" text-anchor="middle" font-size="13" font-weight="600" fill="#0f172a">词嵌入</text>
+  <rect x="70" y="58" width="46" height="120" rx="6" fill="none" stroke="#f59e0b" stroke-width="1.6"/>
+  <rect x="70" y="58"  width="46" height="24" fill="#fde68a" stroke="#fcd34d"/>
+  <rect x="70" y="82"  width="46" height="24" fill="#fbbf24" stroke="#fcd34d"/>
+  <rect x="70" y="106" width="46" height="24" fill="#f59e0b" stroke="#fcd34d"/>
+  <rect x="70" y="130" width="46" height="24" fill="#fcd34d" stroke="#fcd34d"/>
+  <rect x="70" y="154" width="46" height="24" fill="#fde68a" stroke="#fcd34d"/>
+  <text x="93" y="194" text-anchor="middle" font-size="11" fill="#92400e">语义信息</text>
+
+  <!-- 位置嵌入向量（冷色 = 词序） -->
+  <text x="267" y="52" text-anchor="middle" font-size="13" font-weight="600" fill="#0f172a">位置嵌入</text>
+  <rect x="244" y="58" width="46" height="120" rx="6" fill="none" stroke="#0ea5e9" stroke-width="1.6"/>
+  <rect x="244" y="58"  width="46" height="24" fill="#bae6fd" stroke="#7dd3fc"/>
+  <rect x="244" y="82"  width="46" height="24" fill="#7dd3fc" stroke="#7dd3fc"/>
+  <rect x="244" y="106" width="46" height="24" fill="#38bdf8" stroke="#7dd3fc"/>
+  <rect x="244" y="130" width="46" height="24" fill="#0ea5e9" stroke="#7dd3fc"/>
+  <rect x="244" y="154" width="46" height="24" fill="#7dd3fc" stroke="#7dd3fc"/>
+  <text x="267" y="194" text-anchor="middle" font-size="11" fill="#075985">词序信息</text>
+
+  <!-- 汇流到 ⊕ -->
+  <path d="M 93 200 Q 93 232 165 234" fill="none" stroke="#1057cb" stroke-width="1.8" marker-end="url(#arr)"/>
+  <path d="M 267 200 Q 267 232 195 234" fill="none" stroke="#1057cb" stroke-width="1.8" marker-end="url(#arr)"/>
+  <circle cx="180" cy="248" r="15" fill="#fbbf24" stroke="#b45309" stroke-width="1.5"/>
+  <text x="180" y="254" text-anchor="middle" font-size="18" font-weight="700" fill="#7c2d12">+</text>
+
+  <!-- ⊕ → 最终嵌入 -->
+  <line x1="180" y1="263" x2="180" y2="282" stroke="#1057cb" stroke-width="1.8" marker-end="url(#arr)"/>
+  <text x="180" y="298" text-anchor="middle" font-size="13" font-weight="600" fill="#0f172a">最终嵌入</text>
+  <!-- 最终嵌入向量（紫色 = 混合） -->
+  <rect x="157" y="304" width="46" height="100" rx="6" fill="none" stroke="#7c3aed" stroke-width="1.6"/>
+  <rect x="157" y="304" width="46" height="20" fill="#ddd6fe" stroke="#c4b5fd"/>
+  <rect x="157" y="324" width="46" height="20" fill="#c4b5fd" stroke="#c4b5fd"/>
+  <rect x="157" y="344" width="46" height="20" fill="#a78bfa" stroke="#c4b5fd"/>
+  <rect x="157" y="364" width="46" height="20" fill="#8b5cf6" stroke="#c4b5fd"/>
+  <rect x="157" y="384" width="46" height="20" fill="#c4b5fd" stroke="#c4b5fd"/>
+
+  <text x="180" y="420" text-anchor="middle" font-size="11" fill="#475569">最终嵌入 = 词嵌入 + 位置嵌入</text>
+</svg>
