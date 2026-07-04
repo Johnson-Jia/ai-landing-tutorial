@@ -5,7 +5,24 @@
 1. **AI 代码占比度量**（提炼自 `ai-code-ratio`）：用**三层识别算法**真实识别 AI 代码
 2. **提效同比**（提炼自提效统计）：解析上线记录 Excel，算需求/Bug/人均的同比
 
+## 环境准备（先看完再跑）
+
+跑这个 demo 需要两样东西：
+
+1. **Python 3.8+**（下载：[python.org/downloads](https://www.python.org/downloads/)）。安装时 Windows 务必勾选 **Add Python to PATH**。用 `pip --version` 验证 pip 可用。
+2. **git**（demo 里的 `main.py` 会自动生成一个示例 git 仓库来度量 AI 代码占比）。没装的去 [git-scm.com](https://git-scm.com/downloads) 下载。
+
+**打开终端**：Windows 用 `cmd` / PowerShell；Mac 用 Terminal。
+
+**进入目录**（关键）：先 `cd` 到本 demo 目录，否则找不到文件：
+
+```bash
+cd demos/ai-metrics
+```
+
 ## 快速运行
+
+确认 `cd` 进了 `demos/ai-metrics` 目录后，执行：
 
 ```bash
 pip install -r requirements.txt   # openpyxl
@@ -68,3 +85,12 @@ ai-metrics/
 2. **提效同比**：按 `workspace/data/template.xlsx` 录入你的上线记录，替换 `workspace/data/sample_releases.xlsx`
 
 注：生产版 `ai-code-ratio` 用 Go 实现、TF-IDF 加权（IDF 来自全局语料）、Web 报告、多仓库；本 demo 用 Python 简化（TF + 单仓库 + Markdown），核心识别算法一致。
+
+## 常见报错（卡住了先看这里）
+
+| 报错 | 原因 | 解决 |
+|---|---|---|
+| `ModuleNotFoundError: No module named 'openpyxl'` | 依赖没装上 | 单独装一下：`pip install openpyxl`；仍失败多是国内源慢，换镜像：`pip install openpyxl -i https://pypi.tuna.tsinghua.edu.cn/simple` |
+| `'git' 不是内部或外部命令` / git 找不到 | 没装 git，或没加进 PATH | 去 [git-scm.com](https://git-scm.com/downloads) 装上；装完重开终端，`git --version` 能出版本号就行 |
+| 路径含中文/空格导致报错 | demo 生成临时仓库时对中文路径敏感 | 把整个 `ai-landing-tutorial` 放到**纯英文路径**下（如 `D:\projects\ai-landing-tutorial`），别放桌面/文档等含中文的目录 |
+| `python: command not found` | Windows 上 Python 可能叫 `python3` 或 `py` | 换 `python3 main.py` 或 `py main.py` 试试 |

@@ -34,17 +34,17 @@
 
     <h2 id="terms">A. 术语表</h2>
     <ul>
-      <li><strong>上下文窗口</strong>：大模型一次能"看到"的 token 上限（Claude ~1M），填满后性能下降——本教程一切用法的约束原点。</li>
-      <li><strong>Agent</strong>：大模型 + 工具的组装体，能感知和改变外界。</li>
-      <li><strong>REACT</strong>：Thought→Action→Observation 循环的 Agent 运行模式。</li>
-      <li><strong>RAG</strong>：检索增强生成，先检索知识库再喂模型，减少幻觉。</li>
-      <li><strong>代码知识图谱</strong>：把代码索引成节点+边的图，供 AI 确定性查询（替代盲读）。</li>
-      <li><strong>SDD</strong>：规范驱动开发，spec/plan/tasks 三产物，纠错左移到 Markdown。</li>
-      <li><strong>Skill</strong>：可复用工作流/领域知识，两级加载（description 常驻 + 正文按需）。</li>
-      <li><strong>MCP</strong>：Model Context Protocol，AI 连接外部数据/能力的开放协议。</li>
-      <li><strong>OpenSpec / Superpowers</strong>：规范驱动框架 / 自动化执行框架，两者互补。</li>
-      <li><strong>Co-authored-by</strong>：Git commit trailer，AI 工具默认埋点，用于度量 AI 代码占比。</li>
-      <li><strong>HNSW / CrossEncoder</strong>：向量库图索引算法 / RAG 重排序模型。</li>
+      <li><strong>上下文窗口</strong> <span style="font-size:12px;color:#1e7a3c;font-weight:700">📘 必学</span> <span style="font-size:12px;color:var(--muted)">（stage0-2 会用到）</span>：大模型一次能"看到"的 token 上限（Claude ~1M），填满后性能下降——本教程一切用法的约束原点。</li>
+      <li><strong>Agent</strong> <span style="font-size:12px;color:#1e7a3c;font-weight:700">📘 必学</span> <span style="font-size:12px;color:var(--muted)">（stage0-2 会用到）</span>：大模型 + 工具的组装体，能感知和改变外界。</li>
+      <li><strong>REACT</strong> <span style="font-size:12px;color:#1e7a3c;font-weight:700">📘 必学</span> <span style="font-size:12px;color:var(--muted)">（stage0-2 会用到）</span>：Thought→Action→Observation 循环的 Agent 运行模式。</li>
+      <li><strong>RAG</strong> <span style="font-size:12px;color:#1e7a3c;font-weight:700">📘 必学</span> <span style="font-size:12px;color:var(--muted)">（stage0-2 会用到）</span>：检索增强生成，先检索知识库再喂模型，减少幻觉。</li>
+      <li><strong>代码知识图谱</strong> <span style="font-size:12px;color:#9a3412;font-weight:700">🔧 进阶</span> <span style="font-size:12px;color:var(--muted)">（stage3-6 / 大型团队）</span>：把代码索引成节点+边的图，供 AI 确定性查询（替代盲读）。</li>
+      <li><strong>SDD</strong> <span style="font-size:12px;color:#9a3412;font-weight:700">🔧 进阶</span> <span style="font-size:12px;color:var(--muted)">（stage3-6 / 大型团队）</span>：规范驱动开发，spec/plan/tasks 三产物，纠错左移到 Markdown。</li>
+      <li><strong>Skill</strong> <span style="font-size:12px;color:#1e7a3c;font-weight:700">📘 必学</span> <span style="font-size:12px;color:var(--muted)">（stage0-2 会用到）</span>：可复用工作流/领域知识，两级加载（description 常驻 + 正文按需）。</li>
+      <li><strong>MCP</strong> <span style="font-size:12px;color:#1e7a3c;font-weight:700">📘 必学</span> <span style="font-size:12px;color:var(--muted)">（stage0-2 会用到）</span>：Model Context Protocol，AI 连接外部数据/能力的开放协议。</li>
+      <li><strong>OpenSpec / Superpowers</strong> <span style="font-size:12px;color:#1e7a3c;font-weight:700">📘 必学</span> <span style="font-size:12px;color:var(--muted)">（stage0-2 会用到）</span>：规范驱动框架 / 自动化执行框架，两者互补。</li>
+      <li><strong>Co-authored-by</strong> <span style="font-size:12px;color:#1e7a3c;font-weight:700">📘 必学</span> <span style="font-size:12px;color:var(--muted)">（stage0-2 会用到）</span>：Git commit trailer，AI 工具默认埋点，用于度量 AI 代码占比。</li>
+      <li><strong>HNSW / CrossEncoder</strong> <span style="font-size:12px;color:#9a3412;font-weight:700">🔧 进阶</span> <span style="font-size:12px;color:var(--muted)">（stage3-6 / 大型团队）</span>：向量库图索引算法 / RAG 重排序模型。</li>
     </ul>
 
     <h2 id="source">B. 配套源码索引</h2>

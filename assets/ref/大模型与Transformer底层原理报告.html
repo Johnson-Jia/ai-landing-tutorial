@@ -1242,6 +1242,25 @@
 
 <script>
   const pb=document.getElementById('progress-bar');
+  const nav=document.getElementById('nav');
+  // 按 nav-group 分组（篇章标题 + 其下子项）
+  const groups=[];let curG=null;
+  Array.from(nav.children).forEach(n=>{
+    if(n.classList&&n.classList.contains('nav-group')){curG={title:n,items:[]};groups.push(curG);}
+    else if(n.tagName==='A'&&curG){curG.items.push(n);}
+  });
+  // 默认收起所有子项（只留篇章标题 nav-group）
+  groups.forEach(g=>g.items.forEach(a=>a.style.display='none'));
+  // 点击篇章标题展开/收起
+  groups.forEach(g=>{
+    g.title.style.cursor='pointer';
+    g.title.title='点击展开/收起';
+    g.title.addEventListener('click',()=>{
+      const isHidden=g.items.every(a=>a.style.display==='none');
+      g.items.forEach(a=>a.style.display=isHidden?'':'none');
+    });
+  });
+
   window.addEventListener('scroll',()=>{
     const h=document.documentElement;
     pb.style.width=(h.scrollTop/(h.scrollHeight-h.clientHeight)*100)+'%';
@@ -1250,11 +1269,18 @@
     document.querySelectorAll('section[id],h3[id]').forEach(s=>{
       if(window.scrollY>=s.offsetTop-120)cur=s.id;
     });
-    document.querySelectorAll('#sidebar nav a').forEach(a=>{
-      a.classList.toggle('active',a.getAttribute('href')==='#'+cur);
+    // 手风琴：展开当前篇章的子项 + active 高亮，其他篇章收起
+    groups.forEach(g=>{
+      const isActive=g.items.some(a=>a.getAttribute('href')==='#'+cur);
+      g.items.forEach(a=>{
+        a.classList.toggle('active',a.getAttribute('href')==='#'+cur);
+        a.style.display=isActive?'':'none';
+      });
     });
   });
   document.getElementById('back-top').onclick=()=>window.scrollTo({top:0,behavior:'smooth'});
+  // 初始触发（页面加载就展开当前篇章）
+  window.dispatchEvent(new Event('scroll'));
 </script>
 </body>
 </html>

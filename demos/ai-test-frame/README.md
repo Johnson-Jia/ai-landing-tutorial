@@ -3,7 +3,34 @@
 教程《[AI 自动化测试：方法论与实践](../../assets/ref/AI自动化测试-方法论与实践.html)》§8「动手实践」的可运行落地。
 体现「**AI 在编码期生成测试资产、运行期确定性执行**」的完整架构，**开箱即跑**。
 
+## 环境准备（先看完再跑）
+
+跑这个 demo 需要三样东西，缺一个都起不来：
+
+1. **Python 3.8+**（下载：[python.org/downloads](https://www.python.org/downloads/)）。安装时 Windows 务必勾选 **Add Python to PATH**，否则命令行找不到 python。
+2. **git**（用于 demo 内部生成示例仓库）。没装的去 [git-scm.com](https://git-scm.com/downloads) 下载。
+3. **pip**（Python 的包管理器，装 Python 时自带）。验证一下：
+
+   ```bash
+   pip --version
+   ```
+
+   能打印出 pip 版本号就 OK。
+
+**打开终端的方式**：
+- Windows：按 `Win+R` 输入 `cmd` 或用 PowerShell
+- Mac：应用程序 → 实用工具 → 终端（Terminal）
+
+**进入目录**（关键，很多人卡在这）：终端里先 `cd` 到本 demo 目录再运行命令，否则会找不到文件：
+
+```bash
+# 把下面路径换成你电脑上的实际路径
+cd demos/ai-test-frame
+```
+
 ## 快速运行
+
+确认 `cd` 进了 `demos/ai-test-frame` 目录后，依次执行：
 
 ```bash
 pip install -r requirements.txt
@@ -55,3 +82,12 @@ demo 自带 `site/index.html` 是为了开箱即跑。真实使用时：
 2. 改 `main.py` 的 `page.goto()` 指向你的系统，并加登录
 3. 照 `test_product.py` 的写法，为你的业务写更多 handler
 4. 在 `data/` 编用例（生产可用 Excel + pandas 替代 JSON，数据驱动思想一致）
+
+## 常见报错（卡住了先看这里）
+
+| 报错 | 原因 | 解决 |
+|---|---|---|
+| `'pip' 不是内部或外部命令` / `pip: command not found` | 装 Python 时没勾 Add to PATH | 重装 Python，安装界面**勾选 Add Python to PATH**，或手动把 Python 安装目录加进系统环境变量 |
+| `playwright install chromium` 下载超时 / 卡住不动 | 国内访问 Chromium 下载源慢 | 重试几次；或设镜像：`set PLAYWRIGHT_DOWNLOAD_HOST=https://npmmirror.com/mirrors/playwright`（Mac/Linux 用 `export`）后重跑 |
+| `ModuleNotFoundError: No module named 'xxx'` | 没 `cd` 进 demo 目录，或没装依赖 | 确认终端当前在 `demos/ai-test-frame`（`pwd` 看一下），再重跑 `pip install -r requirements.txt` |
+| `python: command not found` | Windows 上 Python 可能叫 `python3` 或 `py` | 换 `python3 main.py` 或 `py main.py` 试试 |
