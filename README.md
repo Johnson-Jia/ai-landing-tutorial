@@ -122,6 +122,14 @@ ai-landing-tutorial/
 | 🔔 **B站关注 + 充电** | 12 集视频合集在 B站发布，充电支持持续创作 |
 | 💬 **分享给同事** | 转发给你的团队 Leader / 技术负责人，让更多人受益 |
 
+<div align="center">
+
+| 支付宝 | 微信 |
+|:---:|:---:|
+| <img src="assets/images/ali_pay_qrcode.jpg" width="200" alt="支付宝"> | <img src="assets/images/wechat_pay_qrcode.png" width="200" alt="微信"> |
+
+</div>
+
 感谢每一位支持者 ❤️
 
 ---
