@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 720" width="1280" height="720">
+  <defs>
+    <radialGradient id="bgGlow" cx="20%" cy="40%" r="55%">
+      <stop offset="0%" stop-color="#00E5FF" stop-opacity="0.12"/>
+      <stop offset="100%" stop-color="#00E5FF" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="accGlow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="6" result="b"/>
+      <feFlood flood-color="#00E5FF" flood-opacity="0.60" result="c"/>
+      <feComposite in="c" in2="b" operator="in" result="g"/>
+      <feMerge><feMergeNode in="g"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+  <rect width="1280" height="720" fill="#0B1220"/>
+  <rect width="1280" height="720" fill="url(#bgGlow)"/>
+  <path d="M80 0V720 M160 0V720 M240 0V720 M320 0V720 M400 0V720 M480 0V720 M560 0V720 M640 0V720 M720 0V720 M800 0V720 M880 0V720 M960 0V720 M1040 0V720 M1120 0V720 M1200 0V720 M0 80H1280 M0 160H1280 M0 240H1280 M0 320H1280 M0 400H1280 M0 480H1280 M0 560H1280 M0 640H1280" fill="none" stroke="#1A2A44" stroke-width="0.5"/>
+
+  <g id="p06-header">
+    <text x="64" y="56" font-family="'Segoe UI','Microsoft YaHei','PingFang SC',sans-serif" font-size="18" font-weight="700" fill="#00E5FF" letter-spacing="3">阶段成果 · VALIDATED RESULTS</text>
+    <text x="64" y="102" font-family="'Segoe UI','Microsoft YaHei','PingFang SC',sans-serif" font-size="42" font-weight="bold" fill="#E8F0FB">试点全面超预期：3 个月、206 仓库已验证</text>
+    <line x1="64" y1="126" x2="1216" y2="126" stroke="#4A90E2" stroke-width="2"/>
+    <text x="64" y="180" font-family="'Segoe UI','Microsoft YaHei','PingFang SC',sans-serif" font-size="30" font-weight="500" fill="#E8F0FB">产出翻倍，<tspan fill="#00E5FF" font-weight="bold">质量同步提升、测试大幅加速</tspan>。</text>
+  </g>
+  <g id="p06-hero">
+    <text x="64" y="252" font-family="'Segoe UI','Microsoft YaHei','PingFang SC',sans-serif" font-size="32" font-weight="700" fill="#A8BCD4">人均代码产出</text>
+    <text x="64" y="392" font-family="Consolas, 'Courier New', monospace" font-size="108" font-weight="bold" fill="#00E5FF" filter="url(#accGlow)">+104%</text>
+    <text x="64" y="436" font-family="'Segoe UI','Microsoft YaHei','PingFang SC',sans-serif" font-size="20" font-weight="600" fill="#E8F0FB">开发人数 −9%，产出反而翻倍</text>
+    <text x="64" y="466" font-family="'Segoe UI','Microsoft YaHei','PingFang SC',sans-serif" font-size="16" fill="#6B83A1">同比基线 · 试点团队真实数据</text>
+  </g>
+  <line x1="640" y1="216" x2="640" y2="588" stroke="#243755" stroke-width="1"/>
+  <g id="p06-data-1">
+    <text x="680" y="298" font-family="Consolas, 'Courier New', monospace" font-size="64" font-weight="bold" fill="#4A90E2">76.6%</text>
+    <text x="880" y="276" font-family="'Segoe UI','Microsoft YaHei','PingFang SC',sans-serif" font-size="26" font-weight="700" fill="#E8F0FB">AI 代码占比</text>
+    <text x="880" y="306" font-family="'Segoe UI','Microsoft YaHei','PingFang SC',sans-serif" font-size="18" fill="#A8BCD4">简单 CRUD 约 90%</text>
+  </g>
+  <line x1="680" y1="330" x2="1200" y2="330" stroke="#1A2A44" stroke-width="1"/>
+  <g id="p06-data-2">
+    <text x="680" y="402" font-family="Consolas, 'Courier New', monospace" font-size="64" font-weight="bold" fill="#4A90E2">−16.4pp</text>
+    <text x="880" y="380" font-family="'Segoe UI','Microsoft YaHei','PingFang SC',sans-serif" font-size="26" font-weight="700" fill="#E8F0FB">Bug 占比</text>
+    <text x="880" y="410" font-family="'Segoe UI','Microsoft YaHei','PingFang SC',sans-serif" font-size="18" fill="#A8BCD4">38.5% → 22.1%</text>
+  </g>
+  <line x1="680" y1="434" x2="1200" y2="434" stroke="#1A2A44" stroke-width="1"/>
+  <g id="p06-data-3">
+    <text x="680" y="506" font-family="Consolas, 'Courier New', monospace" font-size="64" font-weight="bold" fill="#4A90E2">5–10×</text>
+    <text x="880" y="484" font-family="'Segoe UI','Microsoft YaHei','PingFang SC',sans-serif" font-size="26" font-weight="700" fill="#E8F0FB">测试用例生成</text>
+    <text x="880" y="514" font-family="'Segoe UI','Microsoft YaHei','PingFang SC',sans-serif" font-size="18" fill="#A8BCD4">4–8h → 10–30min</text>
+  </g>
+  <g id="p06-footer">
+    <line x1="64" y1="624" x2="1216" y2="624" stroke="#243755" stroke-width="1"/>
+    <text x="64" y="660" font-family="'Segoe UI','Microsoft YaHei','PingFang SC',sans-serif" font-size="18" fill="#A8BCD4">数据来源：真实团队 3 个月、206 个仓库的同比统计</text>
+    <text x="1216" y="688" text-anchor="end" font-family="'Segoe UI','Microsoft YaHei','PingFang SC',sans-serif" font-size="16" fill="#6B83A1">06 / 10</text>
+  </g>
+</svg>

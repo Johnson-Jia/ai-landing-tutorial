@@ -1,0 +1,21 @@
+{
+  "_comment_top": "Claude Code 项目配置样例（复制到 .claude/settings.json）。实际使用时删掉所有 _comment_* 字段、替换为你的真实值。逐项说明见下方注释。",
+
+  "_comment_permissions": "权限层：deny 优先于 allow。把敏感文件（.env/凭据/测试）写进 deny 硬拦，不只靠提示词。",
+  "permissions": {
+    "allow": ["Bash(git *)", "Write(src/**)"],
+    "deny": ["Bash(rm -rf*)", "Write(.env*)", "Write(**/*.key)", "Write(test/**)", "Edit(test/**)"]
+  },
+
+  "_comment_hooks": "事件钩子：UserPromptSubmit 在每次用户提交时触发，可用来强制评估 skill、注入上下文等。your-hook.sh 需自行实现（本 demo 不含脚本）。",
+  "hooks": {
+    "UserPromptSubmit": [
+      {
+        "matcher": "*",
+        "hooks": [
+          { "type": "command", "command": ".claude/hooks/your-hook.sh", "timeout": 30 }
+        ]
+      }
+    ]
+  }
+}

@@ -15,8 +15,8 @@
     </a>
     <nav class="topnav">
       <a href="index.html">首页</a>
-      <a href="stage0.html">总纲</a>
-      <a href="appendix.html">附录</a>
+      <a href="pages/stage0.html">总纲</a>
+      <a href="pages/appendix.html">附录</a>
     </nav>
   </div>
 </header>
@@ -25,14 +25,14 @@
   <div class="wrap">
     <p class="kicker">作者 · Johnson（技术总监 / 首席架构师）</p>
     <h1>企业级 AI 战略转型<br><span class="accent">方法论与实践教程</span></h1>
-    <p class="lead">一套经过 80+ 人研发团队、千万级用户平台实战验证的 AI 转型方法论——从思想转变到全面推广，6 个阶段，从战略规划到一线落地，一份到底。</p>
+    <p class="lead">一套经过 80+ 人研发团队、千万级用户平台实战验证的 AI 转型方法论——从思想转变到全面推广，<strong>总纲 + 6 个实施阶段</strong>，从战略规划到一线落地，一份到底。</p>
     <div class="badges">
       <div class="badge"><strong>+104%</strong><span>人均代码产出</span></div>
       <div class="badge"><strong>76.6%</strong><span>AI 代码占比</span></div>
       <div class="badge"><strong>14 期</strong><span>全过程周报</span></div>
       <div class="badge"><strong>13 组</strong><span>实战案例</span></div>
     </div>
-    <p class="note">* 数据来自真实团队 3 个月、206 个仓库的同比统计（经原始文档核验）。</p>
+    <p class="note">* 数据来自真实团队 3 个月、206 个仓库的同比统计——转型前后对比，相关性非因果（不能 100% 归功 AI）。</p>
   </div>
 </section>
 
@@ -45,11 +45,26 @@
 </section>
 
 <section class="wrap">
-  <a href="stage0.html" class="stage0-feature">
+  <a href="pages/stage0.html" class="stage0-feature">
     <span class="mnum">阶段 0 · 总纲（思想地基 · 必读）</span>
     <h3>思想转变 + AI 原理认知</h3>
     <p>转型的前提是人的转变。本章讲清核心理念 + 5 条 AI 原理（token 预测 / 上下文 1M / Agent / REACT / 精准指令）。<strong>所有人先过这一关</strong>，再进实施六阶段——人 + AI，人是根本。</p>
   </a>
+</section>
+
+<section class="wrap">
+  <h2 style="font-size:24px;color:#0f172a;margin:8px 0 8px">📌 核心术语速查（进实施阶段前先认）</h2>
+  <p style="font-size:14px;color:var(--text-soft);margin:0 0 14px">实施阶段（阶段 2-6）会反复用到这些术语，先留个印象，读到时不懵。完整定义见 <a href="pages/appendix.html#terms">附录·术语表</a>。</p>
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:10px">
+    <div style="background:#f8fafc;border:1px solid var(--border);border-radius:8px;padding:12px 14px;font-size:14px;line-height:1.7"><strong>CLAUDE.md</strong>：项目根目录的规范文件，AI 每次自动读取——团队规范资产化的载体。</div>
+    <div style="background:#f8fafc;border:1px solid var(--border);border-radius:8px;padding:12px 14px;font-size:14px;line-height:1.7"><strong>Skill</strong>：可复用的工作流 / 领域知识，AI 按需调用（两级加载：描述常驻、正文按需）。</div>
+    <div style="background:#f8fafc;border:1px solid var(--border);border-radius:8px;padding:12px 14px;font-size:14px;line-height:1.7"><strong>MCP</strong>：AI 连接外部数据 / 工具的开放协议，让 AI 能查库、调接口。</div>
+    <div style="background:#f8fafc;border:1px solid var(--border);border-radius:8px;padding:12px 14px;font-size:14px;line-height:1.7"><strong>RAG</strong>：检索增强生成——先搜知识库再喂模型，减少幻觉（阶段 3 基础设施）。</div>
+    <div style="background:#f8fafc;border:1px solid var(--border);border-radius:8px;padding:12px 14px;font-size:14px;line-height:1.7"><strong>OpenSpec</strong>：规范驱动框架，管 WHAT/WHY（写规范 spec）。</div>
+    <div style="background:#f8fafc;border:1px solid var(--border);border-radius:8px;padding:12px 14px;font-size:14px;line-height:1.7"><strong>Superpowers</strong>：自动化执行框架，管 HOW（按 spec 干活），和 OpenSpec 互补（<a href="pages/stage4.html">随能力演进用法</a>）。</div>
+    <div style="background:#f8fafc;border:1px solid var(--border);border-radius:8px;padding:12px 14px;font-size:14px;line-height:1.7"><strong>SDD</strong>：规范驱动开发，spec / plan / tasks 三产物，把纠错从「改代码」左移到「改文档」。</div>
+    <div style="background:#f8fafc;border:1px solid var(--border);border-radius:8px;padding:12px 14px;font-size:14px;line-height:1.7"><strong>Hooks</strong>：Claude Code 的事件钩子，自动跑检查 / 格式化 / 防护。</div>
+  </div>
 </section>
 
 <section class="wrap" style="padding-bottom:64px">
@@ -59,32 +74,32 @@
     <p style="font-size:14px;color:var(--text-soft);margin:0">本教程聚焦<strong>企业 AI 战略转型方法论</strong>（怎么推 AI 转型）。想深入<strong>AI 基础原理</strong>（感知机→CNN→NLP→Transformer），推荐微软 <a href="https://github.com/microsoft/AI-For-Beginners/tree/master/translations/zh-CN" target="_blank">AI-For-Beginners（中文版）</a>（12周24课，MIT 开源，含 Jupyter Notebook 代码实践）。两者互补：本教程懂"为什么转+怎么转"，AI4B 深入"原理底层"。</p>
   </div>
   <div class="modules">
-    <a class="module-card" href="stage1.html">
+    <a class="module-card" href="pages/stage1.html">
       <span class="mnum">阶段 1</span>
       <h3>战略启动</h3>
       <ul><li>为什么转、目标量化</li><li>路线图、组织、风险</li><li>岗位重构方向</li></ul>
     </a>
-    <a class="module-card" href="stage2.html">
+    <a class="module-card" href="pages/stage2.html">
       <span class="mnum">阶段 2</span>
       <h3>全员赋能</h3>
       <ul><li>工具选型（Claude Code / Codex）</li><li>全员培训、规范资产化</li><li>CLAUDE.md / Skills / Hooks</li></ul>
     </a>
-    <a class="module-card" href="stage3.html">
+    <a class="module-card" href="pages/stage3.html">
       <span class="mnum">阶段 3</span>
       <h3>基础设施（可跳过）</h3>
       <ul><li>业务知识 RAG 服务</li><li>代码知识图谱</li><li>Skill 仓库 / MCP 网关</li></ul>
     </a>
-    <a class="module-card" href="stage4.html">
+    <a class="module-card" href="pages/stage4.html">
       <span class="mnum">阶段 4</span>
       <h3>流程闭环与试点</h3>
       <ul><li>OpenSpec + Superpowers 工作流</li><li>试点验证、断点续传</li><li>防 AI 偷改测试</li></ul>
     </a>
-    <a class="module-card" href="stage5.html">
+    <a class="module-card" href="pages/stage5.html">
       <span class="mnum">阶段 5</span>
       <h3>推广与度量</h3>
       <ul><li>多 Agent 并行编排</li><li>效果度量（AI 代码占比）</li><li>各组推广实践</li></ul>
     </a>
-    <a class="module-card" href="stage6.html">
+    <a class="module-card" href="pages/stage6.html">
       <span class="mnum">阶段 6</span>
       <h3>沉淀与复用</h3>
       <ul><li>Skill 设计范式整合</li><li>知识沉淀、真实避坑</li><li>持续改进循环</li></ul>
@@ -95,7 +110,6 @@
 <footer class="foot">
   <div class="wrap">
     <p>企业级 AI 战略转型方法论教程 · 作者 Johnson</p>
-    <p style="margin-top:6px">配套：技术能力档案 · 充电档位定稿 · B站视频选题库</p>
   </div>
 </footer>
 </body>

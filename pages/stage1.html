@@ -4,13 +4,13 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>阶段1 · 战略启动 · AI 战略转型方法论</title>
-<link rel="stylesheet" href="assets/css/style.css">
+<link rel="stylesheet" href="../assets/css/style.css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/styles/atom-one-dark.min.css">
 </head>
 <body>
 <header class="topbar"><div class="wrap topbar-inner">
-  <a class="brand" href="index.html"><span class="brand-mark">⚡</span><span>AI 战略转型方法论</span></a>
-  <nav class="topnav"><a href="index.html">首页</a><a href="stage0.html">总纲</a><a href="appendix.html">附录</a></nav>
+  <a class="brand" href="../index.html"><span class="brand-mark">⚡</span><span>AI 战略转型方法论</span></a>
+  <nav class="topnav"><a href="../index.html">首页</a><a href="stage0.html">总纲</a><a href="appendix.html">附录</a></nav>
 </div></header>
 <div class="chapter">
   <aside class="side">
@@ -22,7 +22,7 @@
     <a href="stage4.html">阶段4 闭环试点</a>
     <a href="stage5.html">阶段5 推广度量</a>
     <a href="stage6.html">阶段6 沉淀复用</a>
-    <h4>其他</h4><a href="index.html">首页</a><a href="appendix.html">附录</a>
+    <h4>其他</h4><a href="../index.html">首页</a><a href="appendix.html">附录</a>
   </aside>
   <main class="content">
     <h1>阶段 1 · 战略启动</h1>
@@ -31,9 +31,11 @@
     <div class="key-conclusion"><p>战略启动 = <strong>目标量化 + 分期路线图 + 组织保障 + 风险预案</strong>。没有量化的转型是玄学，没有路线图的转型会混乱，没有组织的转型推不动，没有风险预案的转型易翻车。<strong>四件事齐备，才叫"启动"。</strong></p></div>
 
     <div style="margin:18px 0;padding:14px 18px;background:#f0f7ff;border:1px solid #bcd9ff;border-radius:10px">
-      <div style="font-weight:700;color:#1057cb;font-size:14px;margin-bottom:8px">🧰 模板速查 <span style="font-weight:400;color:#64748b;font-size:12px">（不想读全文？直接用这些）</span></div>
+      <div style="font-weight:700;color:#1057cb;font-size:14px;margin-bottom:8px">🧰 本阶段速查 <span style="font-weight:400;color:#64748b;font-size:12px">（做什么 · 产出什么 · 用什么）</span></div>
       <ul style="margin:0;padding-left:22px;font-size:14px;line-height:1.9;color:#334155">
-        <li><strong>汇报材料模板</strong>：<a href="assets/ref/汇报材料-AI生成指南.html">战略汇报 PPT / 转型计划书</a>（prompt 模板包，AI 一键生成立项汇报 + Marp 渲染 PPT）</li>
+        <li><strong>🎯 做什么</strong>：目标量化 + 立项审批 + 争取资源（Leader 主战场）</li>
+        <li><strong>📦 产出与汇报</strong>：<a href="../assets/ref/汇报材料-AI生成指南.html">转型计划书</a>（立项审批）+ <a href="../assets/ref/汇报材料-AI生成指南.html">战略汇报 PPT · 启动版</a>（要资源，用现状痛点 + 目标 + 试点计划，<strong>此阶段还没有验证数据</strong>）</li>
+        <li><strong>👥 角色手册</strong>：<a href="../assets/ref/角色操作手册.html">组长手册</a>（牵头立项、组织保障）</li>
       </ul>
     </div>
 
@@ -46,9 +48,26 @@
       <tr><th>时间</th><th>提效目标</th><th>说明</th></tr>
       <tr><td>培训后 1 个月</td><td>10%–20%</td><td>适应期，主要在简单任务</td></tr>
       <tr><td>培训后 2 个月</td><td>20%–30%</td><td>扩展到复杂任务</td></tr>
-      <tr><td>3 个月后（实测）</td><td><strong>+104%（人均产出）</strong></td><td>真实团队跑出的结果（见阶段5度量）</td></tr>
+      <tr><td>3 个月后（目标）</td><td><strong>+50%（人均产出）</strong></td><td>启动时承诺的目标；实际跑出多少见阶段 5 度量</td></tr>
     </table>
     <div class="tip"><strong>目标要前置</strong>：启动时就公开承诺目标，并配度量工具（见阶段5 的 AI 代码占比）。没有前置目标的"尽力而为"，往往沦为口号。</p></div>
+
+    <h3>2.1 预算与 ROI 测算</h3>
+    <p>目标定了，立项还要算清「要多少钱、多久回本」——这是资源规划和预期对齐的基础，比 PPT 漂亮更重要。</p>
+    <p><strong>成本构成（4 块）</strong>：</p>
+    <table>
+      <tr><th>成本项</th><th>怎么估</th><th>量级参考</th></tr>
+      <tr><td>① 工具 / API</td><td>人均月费 × 人数 × 月数</td><td>Claude Code 订阅 / 模型 API 调用（以官方价为准）</td></tr>
+      <tr><td>② 培训</td><td>2 天全员脱产 + 讲师</td><td>工时成本 + 外部讲师（可选）</td></tr>
+      <tr><td>③ 基础设施（大型团队）</td><td>RAG/图谱服务器 + 1 架构师 + 2 开发 × 2 月</td><td>小团队可跳过（见阶段3）</td></tr>
+      <tr><td>④ 推广运营</td><td>度量工具、试点激励、考核绑定</td><td>轻量</td></tr>
+    </table>
+    <p><strong>ROI 测算</strong>：投入（上述 4 块）vs 节省（人均产出 +50% 意味着：同等产出少用人，或同等人数多产出）。简化公式：<code>回本月数 ≈ 总投入 ÷（人均月薪 × 提效等效人力）</code>——以你公司的真实薪资和提效数据算，行业常见 3-6 个月回本。</p>
+    <div class="tip"><strong>立项要回答的 3 个关键问题</strong>：<br>
+    ① <strong>「要多少钱？」</strong>→ 给 4 块成本表，标清哪些一次性、哪些持续。<br>
+    ② <strong>「多久回本？」</strong>→ ROI 公式 + 同行业参考（标注来源），强调「先试点 3 个月验证，再决定全量」。<br>
+    ③ <strong>「失败了怎么办？」</strong>→ 试点可控（小范围）、可止损（3 个月没效果就回退）、沉没成本低（工具按月付、培训是能力沉淀）。<strong>把「试点验证 + 可止损」讲清，比承诺数字更扎实</strong>。</div>
+    <div class="warn"><strong>别在立项时承诺 +104%</strong>——那是阶段 5 跑出来的结果，立项时你还没有。承诺目标值（如 +50%）+ 试点验证路径，更诚实也更有力（详见 <a href="../assets/ref/汇报材料-AI生成指南.html">汇报材料指南</a> 的启动版/成果版区分）。</div>
 
     <h2>3. 路线图：三期 9–12 周</h2>
     <p>转型分三期推进，每期目标清晰：</p>
@@ -79,9 +98,20 @@
       <div class="role role-dev"><span class="role-tag">接受度风险</span><p>团队抵触 → 培训 + 试点示范 + 考核引导。</p></div>
       <div class="role role-pm"><span class="role-tag">规范风险</span><p>各搞各的 → 审核小组统一 CLAUDE.md/Skill/Hook 规范。</p></div>
     </div>
+    <div class="tip"><strong>AI 时代 Code Review 四问</strong>（审核小组的红线检查）：① <strong>提交者是否理解这段 AI 代码</strong>（不懂就退回，别让 AI 的黑箱进主干）；② <strong>是否过度工程</strong>（AI 爱加冗余抽象 / 不必要依赖）；③ <strong>调用的 API / 库是否真实存在</strong>（AI 会臆造不存在的 API——防幻觉）；④ <strong>有无安全隐患</strong>（硬编码密钥 / SQL 注入 / 越权）。<strong>这四问比「代码能不能跑」更重要</strong>。</div>
+
+    <h3>4.3 考核、接受度与失败预案</h3>
+    <p>组织保障还要回答三个实操问题：</p>
+    <p><strong>① 考核怎么定</strong>：把 AI 代码占比、人均产出纳入绩效，但<strong>循序渐进</strong>——赋能期只鼓励不惩罚（避免为冲指标乱标 AI），度量期验证有效后再逐步挂钩。<strong>考核是推动力，不是大棒</strong>。</p>
+    <p><strong>② 核心骨干抵触怎么办</strong>：抵触多来自「怕被替代」或「不信 AI 产出」。应对：试点示范（让抵触者看到同行真香）、设过渡期（不强制全量）、把他们的经验沉淀成 Skill（变阻力为贡献）——<strong>不靠命令靠示范</strong>。</p>
+    <div class="warn"><strong>③ 失败预案（3 个月没效果怎么办）</strong>：转型有风险，立项时就想好退路——<br>
+    • <strong>止损线</strong>：试点 3 个月，AI 占比 / 产出 / 质量无明显改善就触发复盘（工具没装好？培训没到位？场景选错？）；<br>
+    • <strong>回退</strong>：工具按月付费可停、试点范围可控可缩、代码在 Git 可回退——<strong>沉没成本低</strong>；<br>
+    • <strong>复盘</strong>：分清「方法错」还是「执行错」，调整后再小范围试，不一次梭哈。<br>
+    把「试点验证 + 可止损」写进立项，转型才敢真投。</div>
 
     <h2>5. 真实案例：某团队的启动设计</h2>
-    <p>某企业学习平台（80+ 人研发、1200 万+ 用户）启动 AI 转型时，战略设计包含：</p>
+    <p>某企业学习平台（80+ 人研发、千万级用户）启动 AI 转型时，战略设计包含：</p>
     <ul>
       <li><strong>两条路径并行</strong>：全员 AI 工具（即时）+ AI 原生低代码（长远）。</li>
       <li><strong>三阶段 9–12 周</strong>：准备 → 协调测试 → 优化推广。</li>
@@ -102,6 +132,16 @@
       <tr><td>问责</td><td>AI 决策的责任在人</td><td>关键决策保留 human-in-the-loop</td></tr>
     </table>
     <div class="warn"><strong>与核心理念呼应</strong>：回到总纲——「人 + AI，人是根本」。AI 伦理不是额外负担，而是"人是根本"的具体体现：AI 没有责任能力，责任永远在使用人。</div>
+
+    <h3>6.1 数据边界实操清单（落地）</h3>
+    <p>六原则里的「隐私安全」最常被问的就是：<strong>代码到底能不能给 AI？</strong>分三类处理：</p>
+    <table>
+      <tr><th>数据类型</th><th>能不能给 AI</th><th>怎么做</th></tr>
+      <tr><td><strong>业务 / 产品代码</strong></td><td>✅ 可以（日常开发）</td><td>走公司批准的接入方式（私有部署 / 内网中转 / 可信云），别用来源不明的免费服务</td></tr>
+      <tr><td><strong>敏感数据</strong>（密钥 / 凭据 / <code>.env</code> / 用户隐私 / 财务）</td><td>❌ 绝不</td><td>写进 settings.json 的 <code>permissions.deny</code>（<code>.env*</code> / <code>*.key</code> / 凭据文件），权限层硬拦；日志 / 报错先脱敏再贴给 AI</td></tr>
+      <tr><td><strong>不确定的</strong></td><td>⚠️ 先问</td><td>拿不准能不能给，先问数据 / 安全负责人；<strong>默认按敏感处理</strong></td></tr>
+    </table>
+    <div class="tip"><strong>三条落地铁律</strong>：① <strong>接入方式走公司批准的</strong>（见 <a href="stage2.html">阶段 2 落地前置</a>的中转 / 私有部署），不用来路不明的第三方；② <strong>敏感文件进 deny 名单 + 权限硬拦</strong>，不只靠提示词（提示词会被绕过，权限不会）；③ <strong>报错 / 日志贴 AI 前先脱敏</strong>（抹掉密钥 / IP / 用户数据）。<strong>数据边界是转型的底线，不是可选项</strong>。</div>
 
     <h2>7. 常见坑 + 落地清单</h2>
     <div class="warn"><strong>三个坑</strong>：①<strong>无量化目标</strong>（"尽力提效"）→ 无法持续推进投入；②<strong>无路线图全员裸奔</strong>（各搞各的）→ 规范混乱、重复造轮；③<strong>忽视风险预案</strong>（不设审核小组）→ AI 产出质量不可控。</div>

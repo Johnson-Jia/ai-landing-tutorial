@@ -11,10 +11,12 @@
 4. 渲染       PPT 类 → ppt-master 生成原生可编辑 PPTX；文档类 → 直接用 / 转 PDF
 ```
 
+> 📖 **新手手把手**（数据从哪来 / 怎么填占位 / 选哪个 AI / ppt-master 渲染 / 完整演练）见[《汇报材料 AI 生成指南》](../../assets/ref/汇报材料-AI生成指南.html) 第二~六节。
+
 ## 5 类模板
 | 模板 | 用途 | 输出格式 |
 |---|---|---|
-| [01-战略汇报PPT](./01-战略汇报PPT.prompt.md) | 向老板汇报进展 / 要资源 | **可编辑 PPTX** |
+| [01-战略汇报PPT](./01-战略汇报PPT.prompt.md) | 向上汇报进展 / 争取资源 | **可编辑 PPTX** |
 | [02-转型计划书](./02-转型计划书.prompt.md) | 立项审批 | 文档 |
 | [03-周报](./03-周报.prompt.md) | 关键节点跟踪 | 文档 |
 | [04-阶段总结报告](./04-阶段总结报告.prompt.md) | 结项 / 晋升述职 | 文档 |
@@ -35,10 +37,9 @@ report-templates（Prompt 包）→ AI 生成汇报内容（MD）
                               原生可编辑 PPTX（DrawingML 形状/文本框）
 ```
 
-### 为什么是 ppt-master（根本原因）
-**Marp / Slidev 导出的 PPTX 是图片式（不可编辑）；ppt-master 生成的是原生 DrawingML（可编辑）。** 这是选它的根本原因：
+### ppt-master 生成原生可编辑 PPT
+**ppt-master 生成原生 DrawingML（可编辑），不是图片式 PPT。**
 
-- **Marp / Slidev**：把每页幻灯片渲染成图片再塞进 PPTX → 在 PowerPoint 里无法改任何元素（文字、形状、图表都是图）
 - **ppt-master**：基于 `python-pptx` 生成原生 PowerPoint 的 DrawingML 结构 → 每个**形状、文本框、图表、动画都是独立可编辑元素**，PowerPoint 里能改每一个细节，不是图片
 
 ### 安装 ppt-master

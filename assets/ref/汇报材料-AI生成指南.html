@@ -8,8 +8,8 @@
 </head>
 <body>
 <header class="topbar"><div class="wrap topbar-inner">
-  <a class="brand" href="../index.html"><span class="brand-mark">⚡</span><span>AI 战略转型方法论</span></a>
-  <nav class="topnav"><a href="../index.html">首页</a><a href="../stage0.html">总纲</a><a href="../appendix.html">附录</a></nav>
+  <a class="brand" href="../../index.html"><span class="brand-mark">⚡</span><span>AI 战略转型方法论</span></a>
+  <nav class="topnav"><a href="../../index.html">首页</a><a href="../../pages/stage0.html">总纲</a><a href="../../pages/appendix.html">附录</a></nav>
 </div></header>
 <main class="wrap" style="max-width:940px;padding:32px 24px 64px">
   <h1>汇报材料 AI 生成指南</h1>
@@ -20,35 +20,72 @@
   <h2>一、为什么：汇报是真痛点</h2>
   <p>AI 转型最大的阻力，往往不是技术，而是：</p>
   <ul>
-    <li><strong>向上</strong>：怎么向老板证明「值得投」、怎么汇报进展、怎么要资源？</li>
+    <li><strong>向上</strong>：怎么向上级说明转型价值、怎么汇报进展、怎么争取资源？</li>
     <li><strong>向下</strong>：怎么给各级人员讲清楚「该做什么」？</li>
     <li><strong>横向</strong>：怎么让各部门协同、怎么交接？</li>
   </ul>
   <p>这些汇报/沟通材料，占管理者大量精力。本模块把这些材料的生成<strong>交给 AI</strong>——你只需准备数据，AI 按模板生成。</p>
 
-  <h2>二、工作流：数据 → Prompt → AI → 输出 → 渲染</h2>
+  <h2>二、新手怎么用：5 步手把手</h2>
+  <p>整体流程一句话：<strong>数据 → Prompt → AI → Markdown → 渲染</strong>。下面把每一步拆开，照着做就能出你的第一份汇报。</p>
   <table>
     <tr><th>步骤</th><th>动作</th><th>产出</th></tr>
-    <tr><td>① 准备数据</td><td>整理你的真实数据（AI 占比、产出、Bug、进展...）</td><td>数据清单</td></tr>
-    <tr><td>② 复制 Prompt</td><td>打开对应 <code>.prompt.md</code>，复制 Prompt，填入数据</td><td>填好数据的 Prompt</td></tr>
-    <tr><td>③ 发给 AI</td><td>任意 AI（Claude / ChatGPT / GLM）执行</td><td>汇报内容（Markdown）</td></tr>
-    <tr><td>④ 渲染</td><td>PPT 类 → ppt-master 生成原生可编辑 PPTX；文档类 → 直接用 / 转 PDF</td><td>最终汇报材料</td></tr>
+    <tr><td>① 准备数据</td><td>从 JIRA / Git / 研发系统捞你的真实数据</td><td>数据清单</td></tr>
+    <tr><td>② 复制 Prompt</td><td>打开 <code>.prompt.md</code>，复制 Prompt 段</td><td>原始 Prompt</td></tr>
+    <tr><td>③ 填占位</td><td>把 <code>[方括号]</code> 替换成你的数据</td><td>填好的 Prompt</td></tr>
+    <tr><td>④ 发给 AI</td><td>粘贴到任意 AI（Claude / ChatGPT / GLM）</td><td>汇报内容（Markdown）</td></tr>
+    <tr><td>⑤ 渲染</td><td>PPT 类 → ppt-master / 公司模板；文档类 → 直接用</td><td>最终汇报材料</td></tr>
   </table>
+
+  <h3>Step 1 · 数据从哪来</h3>
+  <p>prompt 里要的数据，企业自己都有，从这几个地方捞：</p>
+  <table>
+    <tr><th>要的数据</th><th>去哪找</th></tr>
+    <tr><td>现状痛点（交付周期 / 积压需求）</td><td>JIRA / 研发管理系统 / 项目周报</td></tr>
+    <tr><td>重复劳动占比</td><td>Git 提交统计 / 代码类型估摸</td></tr>
+    <tr><td>Bug 率 / 质量数据</td><td>Bug 跟踪系统（JIRA / 禅道）</td></tr>
+    <tr><td>转型目标</td><td>与上级/组织对齐的 OKR / 自己拟定</td></tr>
+    <tr><td>行业参考</td><td>公开报告（如 GitHub 开发者效率研究），<strong>必须记出处</strong></td></tr>
+  </table>
+  <div class="tip">不用精确，有量级就行（如「交付周期约 4 周」）。暂时没有的数据，填「待统计」或删掉那行——<strong>别编</strong>。</div>
+
+  <h3>Step 2 · 复制 prompt</h3>
+  <p>打开对应的 <code>.prompt.md</code>（如 <code>01-战略汇报PPT.prompt.md</code>），找到 <code>## Prompt</code> 那节，复制 <code>```</code> 三个反引号<strong>里面</strong>的整段（从「你是一位…」到「请直接输出…」）。</p>
+
+  <h3>Step 3 · 填占位</h3>
+  <p>把 prompt 里所有 <code>[方括号占位]</code> 替换成你的真实数据：</p>
+  <pre><code>- 现状痛点（启动版用）：[填企业自己的真实数据]
+↓ 改成
+- 现状痛点（启动版用）：需求交付周期 28 天，重复代码约 40%，Bug 占比 22%</code></pre>
+  <p>填不出的占位可以删那行或写「暂无」。<strong>启动版（阶段 1）不要填 +104% 这种还没跑出来的验证数据</strong>。</p>
+
+  <h3>Step 4 · 发给 AI</h3>
+  <table>
+    <tr><th>AI</th><th>适合</th><th>怎么用</th></tr>
+    <tr><td>Claude（claude.ai）/ ChatGPT</td><td>复杂汇报（计划书 / 总结 / 战略 PPT）</td><td>新建对话，粘贴填好的 prompt，回车</td></tr>
+    <tr><td>Kimi / 通义 / GLM</td><td>国内可直接用，免费够用</td><td>同上</td></tr>
+    <tr><td>Claude Code（终端）</td><td>想顺手生成可编辑 PPT</td><td>粘贴 prompt 生成内容，再直接接 ppt-master</td></tr>
+  </table>
+  <p>一轮不满意，就追问「把第二节的表格再细化」「目标再加一条」之类，多轮调到满意。</p>
+
+  <h3>Step 5 · 拿到 Markdown → 渲染</h3>
+  <p>AI 输出的是 Markdown 文本。文档类（计划书 / 周报 / 总结 / 度量报告）直接复制到飞书 / Word / Typora 用，或转 PDF；PPT 类（战略汇报）见<a href="#ppt-render">第四节</a>渲染成 PPT。</p>
 
   <h2>三、5 类汇报 Prompt</h2>
   <p>完整 Prompt 包在 <code>demos/report-templates/</code>（可单独交付）：</p>
   <table>
     <tr><th>模板</th><th>用途</th><th>输出</th></tr>
-    <tr><td><a href="../../demos/report-templates/01-战略汇报PPT.prompt.md">01 战略汇报 PPT</a></td><td>向老板汇报进展 / 要资源</td><td><strong>可编辑 PPTX</strong></td></tr>
+    <tr><td><a href="../../demos/report-templates/01-战略汇报PPT.prompt.md">01 战略汇报 PPT</a></td><td>要资源 / 汇报进展（<strong>启动版</strong>无验证数据 · <strong>成果版</strong>有验证数据）</td><td><strong>可编辑 PPTX</strong></td></tr>
     <tr><td><a href="../../demos/report-templates/02-转型计划书.prompt.md">02 转型计划书</a></td><td>立项审批</td><td>文档</td></tr>
     <tr><td><a href="../../demos/report-templates/03-周报.prompt.md">03 周报</a></td><td>关键节点跟踪</td><td>文档</td></tr>
     <tr><td><a href="../../demos/report-templates/04-阶段总结报告.prompt.md">04 阶段总结报告</a></td><td>结项 / 晋升述职</td><td>文档</td></tr>
     <tr><td><a href="../../demos/report-templates/05-效果度量报告.prompt.md">05 效果度量报告</a></td><td>数据证明提效（接 ai-metrics）</td><td>文档</td></tr>
   </table>
   <div class="tip"><strong>每个 Prompt 模板的结构</strong>：用途（何时用）→ 你要准备的数据（输入清单）→ Prompt（复制给 AI 的完整指令）→ 输出示例（脱敏样例）→ 渲染说明。<strong>读者拿 Prompt + 自己数据，照做即生成</strong>。</div>
+  <div class="tip"><strong>每个模板都配了完整示例</strong>：01 战略汇报 PPT 的实际效果见<a href="#ppt-render">第六节 PPT 效果展示</a>；02-05 各有一份完整示例 md（在对应 prompt 的「输出示例」节有链接，如<a href="../../demos/report-templates/04-阶段总结报告-示例.md">阶段总结示例</a>），新手可对照参考。<strong>注意示例的数据阶段</strong>：02 立项用目标值（无验证数据）、03 周报用推进数据、04/05 用 stage5 验证后的成果数据。</div>
 
-  <h2>四、PPT 渲染：ppt-master（开源）</h2>
-  <p>战略汇报 PPT 用 <a href="https://github.com/hugohe3/ppt-master" target="_blank">ppt-master</a>（GitHub 开源，MIT，1.6万 stars）——把 AI 生成的汇报内容（Markdown）生成**原生可编辑的 PPTX**，不用手画。</p>
+  <h2 id="ppt-render">四、PPT 渲染：ppt-master（原生可编辑 PPTX）</h2>
+  <p>用 <a href="https://github.com/hugohe3/ppt-master" target="_blank">ppt-master</a>（GitHub 开源，MIT）——把 AI 生成的汇报内容（Markdown）生成<strong>原生可编辑的 PPTX</strong>，不用手画。在 Claude Code 里通过 <code>@hugohe3/ppt-master</code> 引用即可。</p>
 <pre><code class="language-bash"># 安装 ppt-master
 git clone https://github.com/hugohe3/ppt-master.git
 cd ppt-master
@@ -58,29 +95,69 @@ pip install -r requirements.txt
 # 1. 用本模块 Prompt 生成汇报内容（Markdown）
 # 2. Claude Code 里 @hugohe3/ppt-master，说「用这份战略汇报内容生成 PPT」
 # 3. AI 按 SKILL.md 工作流，生成原生可编辑 .pptx</code></pre>
-  <div class="tip"><strong>为什么是 ppt-master（根本原因）</strong>：Marp / Slidev 导出 PPTX 是<strong>图片式</strong>（每页渲染成图，PowerPoint 里无法改任何元素）；ppt-master 基于 <code>python-pptx</code> 生成原生 <strong>DrawingML</strong>（形状/文本框/图表/动画都是<strong>独立可编辑元素</strong>，PowerPoint 里能改每个细节，不是图片）。<strong>更多示例</strong>见 ppt-master 的 <a href="https://github.com/hugohe3/ppt-master" target="_blank"><code>examples/</code></a> 目录（20+ 精美可编辑 deck）。</div>
+  <div class="tip"><strong>ppt-master 的特点</strong>：基于 <code>python-pptx</code> 生成原生 <strong>DrawingML</strong>——形状 / 文本框 / 图表 / 动画都是<strong>独立可编辑元素</strong>，PowerPoint 里能改每个细节，不是图片式。<strong>更多示例</strong>见 ppt-master 的 <a href="https://github.com/hugohe3/ppt-master" target="_blank"><code>examples/</code></a> 目录（20+ 精美可编辑 deck）。</div>
 
-  <h2>五、示例：战略汇报 PPT（关键数据）</h2>
-  <p>战略汇报 PPT 的示例输出（基于教程公开脱敏数据），用 ppt-master 生成原生可编辑 PPTX 后包含：</p>
+  <h2>五、示例：战略汇报 PPT（启动版 vs 成果版）</h2>
+  <div class="warn"><strong>先分清你在哪个阶段</strong>：同一份 PPT，<strong>启动版（阶段 1 · 立项要资源）</strong>还没有验证数据，靠「现状痛点 + 目标 + 试点计划」立论；<strong>成果版（阶段 5 · 推广汇报）</strong>才有实测数据。<strong>启动版不要写 +104% 这种验证成果——你还没跑出来，写了当场穿帮。</strong></div>
+  <p><strong>启动版示例（阶段 1，全程无验证数据）</strong>，用 ppt-master 生成原生可编辑 PPTX 后包含：</p>
   <ul>
-    <li><strong>封面</strong>：AI 战略转型汇报</li>
-    <li><strong>转型目标</strong>：人均产出 +50%、AI 占比 ≥70%、周期 -30%（表格）</li>
-    <li><strong>阶段性成果</strong>：人均产出 <strong>+104%</strong>、AI 占比 <strong>76.6%</strong>、Bug <strong>-16.4pp</strong>（关键数字高亮）</li>
+    <li><strong>封面</strong>：AI 战略转型汇报（立项）</li>
+    <li><strong>现状痛点</strong>：交付周期、重复劳动占比、Bug 率（企业自己的真实数据）</li>
+    <li><strong>转型目标</strong>：人均产出 +50%、AI 占比 ≥70%、周期 -30%（表格，标「目标值」）</li>
+    <li><strong>验证路径</strong>：先 1-2 组试点 3 个月 → 度量验证 → 再推广</li>
     <li><strong>资源请求</strong>：工具预算 / 培训 / 人力 / 考核</li>
+  </ul>
+  <p><strong>成果版示例（阶段 5，跑完度量才有）</strong>：</p>
+  <ul>
+    <li><strong>转型目标 vs 实测达成</strong>：人均产出 <strong>+104%</strong>、AI 占比 <strong>76.6%</strong>、Bug <strong>-16.4pp</strong>（关键数字高亮，标注口径 +「相关性≠因果」）</li>
   </ul>
   <p>完整 deck 示例见 ppt-master 的 <a href="https://github.com/hugohe3/ppt-master" target="_blank"><code>examples/</code> 目录</a>（20+ 精美可编辑 deck，PowerPoint 里每个元素可改）。</p>
 
-  <h2>六、与其他模块的衔接</h2>
+  <h2>六、PPT 效果展示：ppt-master 实际生成</h2>
+  <p>下面是 ppt-master 用<strong>同一份战略汇报内容</strong>（成果版）实际生成的 PPT——全部<strong>原生可编辑</strong>（文字是文本框，PowerPoint 里可直接改字；不是图片式）。</p>
+
+  <h3>同一份内容，5 种风格（换主题即可，内容不动）</h3>
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin:16px 0">
+    <figure style="margin:0"><img src="../images/ppt-examples/cover-report.svg" alt="report 风格封面" style="width:100%;border-radius:6px;border:1px solid var(--border)"><figcaption style="font-size:12px;color:var(--muted);margin-top:4px;text-align:center">report（商务）</figcaption></figure>
+    <figure style="margin:0"><img src="../images/ppt-examples/cover-swiss.svg" alt="swiss 风格封面" style="width:100%;border-radius:6px;border:1px solid var(--border)"><figcaption style="font-size:12px;color:var(--muted);margin-top:4px;text-align:center">swiss（瑞士网格）</figcaption></figure>
+    <figure style="margin:0"><img src="../images/ppt-examples/cover-rounded.svg" alt="rounded 风格封面" style="width:100%;border-radius:6px;border:1px solid var(--border)"><figcaption style="font-size:12px;color:var(--muted);margin-top:4px;text-align:center">rounded（圆角）</figcaption></figure>
+    <figure style="margin:0"><img src="../images/ppt-examples/cover-darktech.svg" alt="darktech 风格封面" style="width:100%;border-radius:6px;border:1px solid var(--border)"><figcaption style="font-size:12px;color:var(--muted);margin-top:4px;text-align:center">darktech（暗色科技）</figcaption></figure>
+    <figure style="margin:0"><img src="../images/ppt-examples/cover-glass.svg" alt="glass 风格封面" style="width:100%;border-radius:6px;border:1px solid var(--border)"><figcaption style="font-size:12px;color:var(--muted);margin-top:4px;text-align:center">glass（玻璃拟态）</figcaption></figure>
+  </div>
+
+  <h3>darktech 风格内页（原生可编辑，文字可直接改）</h3>
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:12px;margin:16px 0">
+    <figure style="margin:0"><img src="../images/ppt-examples/darktech-goals.svg" alt="转型目标页" style="width:100%;border-radius:6px;border:1px solid var(--border)"><figcaption style="font-size:12px;color:var(--muted);margin-top:4px;text-align:center">转型目标</figcaption></figure>
+    <figure style="margin:0"><img src="../images/ppt-examples/darktech-results.svg" alt="阶段成果页" style="width:100%;border-radius:6px;border:1px solid var(--border)"><figcaption style="font-size:12px;color:var(--muted);margin-top:4px;text-align:center">阶段成果（+104% / 76.6% / −16.4pp）</figcaption></figure>
+    <figure style="margin:0"><img src="../images/ppt-examples/darktech-approval.svg" alt="请求批准页" style="width:100%;border-radius:6px;border:1px solid var(--border)"><figcaption style="font-size:12px;color:var(--muted);margin-top:4px;text-align:center">请求批准</figcaption></figure>
+  </div>
+  <div class="tip">以上是 <strong>stage5 成果汇报</strong>的示例（含 +104% 等验证数据）。想验证可编辑性？下载 <a href="../../demos/report-templates/strategy-report-darktech.pptx">战略汇报·成果版（darktech 风格 .pptx）</a>，用 PowerPoint 打开，每个文字都能直接改。<strong>stage1 启动版</strong>没有这些数据，ppt-master 同样能生成——内容换成现状痛点 + 目标 + 试点计划即可，5 种风格任选。</div>
+
+  <h2>七、完整演练：一份假数据从头走一遍</h2>
+  <p>假设你是某公司研发组长，要立项 AI 转型。照下面 7 步走，出你的第一份战略汇报：</p>
+  <div class="tip">📝 <strong>演练背景</strong>：80 人研发团队，需求交付周期 28 天，重复代码约 40%，Bug 占比 22%，无 AI 基础设施。</div>
+  <ol>
+    <li><strong>选模板</strong>：立项要资源 → 用 <a href="../../demos/report-templates/01-战略汇报PPT.prompt.md">01 战略汇报 PPT · 启动版</a></li>
+    <li><strong>捞数据</strong>（JIRA / 禅道 / Git）：交付周期 28 天、Bug 22%、重复代码 40%；目标定 人均 +50% / AI 占比 ≥70%</li>
+    <li><strong>复制 prompt</strong>：打开 01，复制 <code>## Prompt</code> 段</li>
+    <li><strong>填占位</strong>：[现状痛点] 换成上面的数据；[汇报场景] 填「启动版」；[行业参考] 填一条带出处的公开研究</li>
+    <li><strong>发给 AI</strong>：粘贴到 Claude，得到《AI 战略转型汇报》Markdown（大致就是 01 里「启动版示例」的样子）</li>
+    <li><strong>渲染 PPT</strong>：存成 <code>.md</code>，在 Claude Code 里 <code>@hugohe3/ppt-master</code>，生成原生可编辑 PPTX</li>
+    <li><strong>拿去汇报</strong>：讲清 现状 → 目标 → 试点计划 → 资源需求；3 个月后用真实数据回来做<a href="../../demos/report-templates/05-效果度量报告.prompt.md">成果版</a></li>
+  </ol>
+  <div class="key-conclusion"><p><strong>看懂了吗</strong>：你不需要会写 prompt、不需要会画画、不需要 +104% 这种别人家的数据——<strong>只要会捞自己公司的数据 + 复制粘贴</strong>，AI 帮你生成内容，工具帮你渲染 PPT。这就是「Prompt 包」的价值。</p></div>
+
+  <h2>八、与其他模块的衔接</h2>
   <ul>
-    <li><strong>战略目标数据</strong>来自 <a href="../stage1.html">阶段 1 战略启动</a></li>
-    <li><strong>度量数据</strong>（AI 占比/产出/Bug）来自 <a href="../stage5.html">阶段 5 推广度量</a> + <a href="AI自动化测试-方法论与实践.html">ai-metrics demo</a></li>
-    <li><strong>转型方法论</strong>（6 阶段）贯穿 <a href="../stage0.html">总纲</a> ~ <a href="../stage6.html">阶段 6</a></li>
+    <li><strong>战略目标数据</strong>来自 <a href="../../pages/stage1.html">阶段 1 战略启动</a></li>
+    <li><strong>度量数据</strong>（AI 占比/产出/Bug）来自 <a href="../../pages/stage5.html">阶段 5 推广度量</a> + <a href="../../demos/ai-metrics/">ai-metrics demo</a></li>
+    <li><strong>转型方法论</strong>（6 阶段）贯穿 <a href="../../pages/stage0.html">总纲</a> ~ <a href="../../pages/stage6.html">阶段 6</a></li>
   </ul>
   <div class="key-conclusion" style="margin-top:20px"><p><strong>关键</strong>：本模块交付的是「<strong>Prompt 包</strong>」（内容资产，可单独卖），不是工具。读者用任意 AI + Prompt → 生成，工具（ppt-master）只是可选渲染层。<strong>这是教程最大卖点之一</strong>——别人卖方法论，你卖「拿着就能生成汇报的 Prompt 包」。</p></div>
 
   <div class="pager">
-    <a href="../stage6.html">← 阶段6 沉淀复用</a>
-    <a href="../appendix.html">附录 →</a>
+    <a href="../../pages/stage6.html">← 阶段6 沉淀复用</a>
+    <a href="../../pages/appendix.html">附录 →</a>
   </div>
 </main>
 <footer class="foot"><div class="wrap"><p>企业级 AI 战略转型方法论教程 · 作者 Johnson</p></div></footer>

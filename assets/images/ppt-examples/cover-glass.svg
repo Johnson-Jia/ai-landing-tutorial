@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 720" width="1280" height="720">
+  <defs>
+    <radialGradient id="orbP" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#4F6EFA" stop-opacity="0.38" /><stop offset="100%" stop-color="#4F6EFA" stop-opacity="0" /></radialGradient>
+    <radialGradient id="orbA" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#06B6D4" stop-opacity="0.34" /><stop offset="100%" stop-color="#06B6D4" stop-opacity="0" /></radialGradient>
+    <radialGradient id="orbV" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#8B5CF6" stop-opacity="0.32" /><stop offset="100%" stop-color="#8B5CF6" stop-opacity="0" /></radialGradient>
+    <filter id="softShadow" x="-15%" y="-15%" width="130%" height="130%"><feGaussianBlur in="SourceAlpha" stdDeviation="10" /><feOffset dx="0" dy="6" result="ob" /><feFlood flood-color="#4F6EFA" flood-opacity="0.12" result="sc" /><feComposite in="sc" in2="ob" operator="in" result="sh" /><feMerge><feMergeNode in="sh" /><feMergeNode in="SourceGraphic" /></feMerge></filter>
+  </defs>
+  <rect width="1280" height="720" fill="#EEF2FF" />
+  <circle cx="180" cy="120" r="220" fill="url(#orbP)" />
+  <circle cx="1100" cy="640" r="260" fill="url(#orbA)" />
+  <circle cx="980" cy="60" r="170" fill="url(#orbV)" />
+  <g id="cover-header">
+    <text x="64" y="72" font-family="'Segoe UI','Microsoft YaHei','PingFang SC',sans-serif" font-size="18" font-weight="700" fill="#06B6D4" letter-spacing="4">AI 战略 · 转型汇报 · 2026</text>
+    <line x1="64" y1="92" x2="780" y2="92" stroke="#4F6EFA" stroke-width="2" />
+  </g>
+  <g id="cover-title">
+    <text x="64" y="232" font-family="'Segoe UI','Microsoft YaHei','PingFang SC',sans-serif" font-size="84" font-weight="bold" fill="#4F6EFA">AI 战略</text>
+    <text x="64" y="328" font-family="'Segoe UI','Microsoft YaHei','PingFang SC',sans-serif" font-size="84" font-weight="bold" fill="#4F6EFA">转型汇报</text>
+    <text x="64" y="388" font-family="'Segoe UI','Microsoft YaHei','PingFang SC',sans-serif" font-size="32" font-weight="600" fill="#475569">从试点到全员推广的进展与成果</text>
+  </g>
+  <g id="cover-hero">
+    <path fill="#FFFFFF" fill-opacity="0.55" stroke="#FFFFFF" stroke-opacity="0.9" stroke-width="1.5" filter="url(#softShadow)" d="M856,130 H1188 A20,20 0 0 1 1208,150 V490 A20,20 0 0 1 1188,510 H856 A20,20 0 0 1 836,490 V150 A20,20 0 0 1 856,130 Z" />
+    <text x="866" y="182" font-family="'Segoe UI','Microsoft YaHei','PingFang SC',sans-serif" font-size="18" font-weight="700" fill="#06B6D4" letter-spacing="3">已验证成果</text>
+    <text x="866" y="300" font-family="Consolas, 'Courier New', monospace" font-size="64" font-weight="bold" fill="#06B6D4">+104%</text>
+    <text x="866" y="344" font-family="'Segoe UI','Microsoft YaHei','PingFang SC',sans-serif" font-size="32" font-weight="700" fill="#1E293B">人均代码产出</text>
+    <text x="866" y="380" font-family="'Segoe UI','Microsoft YaHei','PingFang SC',sans-serif" font-size="18" fill="#475569">开发人数 −9% 反而翻倍</text>
+    <text x="866" y="408" font-family="'Segoe UI','Microsoft YaHei','PingFang SC',sans-serif" font-size="18" fill="#94A3B8">3 个月 · 206 个仓库同比</text>
+  </g>
+  <g id="cover-cta">
+    <text x="64" y="582" font-family="'Segoe UI','Microsoft YaHei','PingFang SC',sans-serif" font-size="30" font-weight="700" fill="#4F6EFA">建议批准：从试点扩展到全员推广</text>
+  </g>
+  <g id="cover-footer">
+    <text x="64" y="688" font-family="'Segoe UI','Microsoft YaHei','PingFang SC',sans-serif" font-size="16" fill="#94A3B8">致管理层 · 2026.07</text>
+    <text x="1216" y="688" text-anchor="end" font-family="'Segoe UI','Microsoft YaHei','PingFang SC',sans-serif" font-size="16" fill="#94A3B8">交付能力翻倍 · 成本下降 · 能力升级</text>
+  </g>
+</svg>

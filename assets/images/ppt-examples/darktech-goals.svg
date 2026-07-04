@@ -1,0 +1,67 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 720" width="1280" height="720">
+  <defs>
+    <radialGradient id="bgGlow" cx="50%" cy="0%" r="50%">
+      <stop offset="0%" stop-color="#4A90E2" stop-opacity="0.10" />
+      <stop offset="100%" stop-color="#4A90E2" stop-opacity="0" />
+    </radialGradient>
+  </defs>
+  <rect width="1280" height="720" fill="#0B1220" />
+  <rect width="1280" height="720" fill="url(#bgGlow)" />
+  <path d="M80 0V720 M160 0V720 M240 0V720 M320 0V720 M400 0V720 M480 0V720 M560 0V720 M640 0V720 M720 0V720 M800 0V720 M880 0V720 M960 0V720 M1040 0V720 M1120 0V720 M1200 0V720 M0 80H1280 M0 160H1280 M0 240H1280 M0 320H1280 M0 400H1280 M0 480H1280 M0 560H1280 M0 640H1280" fill="none" stroke="#1A2A44" stroke-width="0.5" />
+
+  <g id="p04-header">
+    <text x="64" y="56" font-family="'Segoe UI','Microsoft YaHei','PingFang SC',sans-serif" font-size="18" font-weight="700" fill="#00E5FF" letter-spacing="3">转型目标 · TARGETS</text>
+    <text x="64" y="102" font-family="'Segoe UI','Microsoft YaHei','PingFang SC',sans-serif" font-size="42" font-weight="bold" fill="#E8F0FB">四项可量化承诺：让转型可度量</text>
+    <line x1="64" y1="126" x2="1216" y2="126" stroke="#4A90E2" stroke-width="2" />
+    <text x="64" y="180" font-family="'Segoe UI','Microsoft YaHei','PingFang SC',sans-serif" font-size="30" font-weight="500" fill="#E8F0FB">用四项硬指标锁定转型成果，让"转型"<tspan fill="#00E5FF" font-weight="bold">可度量、可考核</tspan>。</text>
+  </g>
+
+  <g id="p04-kpi-1">
+    <path fill="#1B2A45" stroke="#243755" stroke-width="1" d="M68,220 H620 A4,4 0 0 1 624,224 V411 A4,4 0 0 1 620,415 H68 A4,4 0 0 1 64,411 V224 A4,4 0 0 1 68,220 Z" />
+    <rect x="64" y="220" width="4" height="195" fill="#4A90E2" />
+    
+  <g transform="translate(92, 248) scale(1.66667)" fill="#00E5FF">
+    <path d="M17 3.34a10 10 0 1 1 -14.995 8.984l-.005 -.324l.005 -.324a10 10 0 0 1 14.995 -8.336zm-.293 3.953a1 1 0 0 0 -1.414 0l-2.59 2.59l-.083 .094l-.068 .1a2.001 2.001 0 0 0 -2.547 1.774l-.005 .149l.005 .15a2 2 0 1 0 3.917 -.701a.968 .968 0 0 0 .195 -.152l2.59 -2.59l.083 -.094a1 1 0 0 0 -.083 -1.32zm-4.707 -1.293a6 6 0 0 0 -6 6a1 1 0 0 0 2 0a4 4 0 0 1 4 -4a1 1 0 0 0 0 -2z" />
+  </g>
+    <text x="148" y="278" font-family="'Segoe UI','Microsoft YaHei','PingFang SC',sans-serif" font-size="26" font-weight="700" fill="#E8F0FB">人均代码产出</text>
+    <text x="92" y="372" font-family="Consolas, 'Courier New', monospace" font-size="64" font-weight="bold" fill="#4A90E2">+50%</text>
+    <text x="280" y="372" font-family="'Segoe UI','Microsoft YaHei','PingFang SC',sans-serif" font-size="20" fill="#A8BCD4">同比提升</text>
+  </g>
+  <g id="p04-kpi-2">
+    <path fill="#1B2A45" stroke="#243755" stroke-width="1" d="M660,220 H1212 A4,4 0 0 1 1216,224 V411 A4,4 0 0 1 1212,415 H660 A4,4 0 0 1 656,411 V224 A4,4 0 0 1 660,220 Z" />
+    <rect x="656" y="220" width="4" height="195" fill="#4A90E2" />
+    
+  <g transform="translate(684, 248) scale(1.66667)" fill="#00E5FF">
+    <path d="M18 3a3 3 0 0 1 3 3v12a3 3 0 0 1 -3 3h-12a3 3 0 0 1 -3 -3v-12a3 3 0 0 1 3 -3h12zm-2.293 6.293a1 1 0 0 0 -1.414 0l-2.293 2.292l-1.293 -1.292a1 1 0 0 0 -1.414 0l-3 3a1 1 0 0 0 0 1.414l.094 .083a1 1 0 0 0 1.32 -.083l2.293 -2.292l1.293 1.292l.094 .083a1 1 0 0 0 1.32 -.083l2.293 -2.292l1.293 1.292a1 1 0 0 0 1.414 -1.414l-2 -2z" />
+  </g>
+    <text x="740" y="278" font-family="'Segoe UI','Microsoft YaHei','PingFang SC',sans-serif" font-size="26" font-weight="700" fill="#E8F0FB">AI 代码占比</text>
+    <text x="684" y="372" font-family="Consolas, 'Courier New', monospace" font-size="64" font-weight="bold" fill="#4A90E2">≥70%</text>
+    <text x="872" y="372" font-family="'Segoe UI','Microsoft YaHei','PingFang SC',sans-serif" font-size="20" fill="#A8BCD4">目标占比</text>
+  </g>
+  <g id="p04-kpi-3">
+    <path fill="#1B2A45" stroke="#243755" stroke-width="1" d="M68,435 H620 A4,4 0 0 1 624,439 V626 A4,4 0 0 1 620,630 H68 A4,4 0 0 1 64,626 V439 A4,4 0 0 1 68,435 Z" />
+    <rect x="64" y="435" width="4" height="195" fill="#4A90E2" />
+    
+  <g transform="translate(92, 463) scale(1.66667)" fill="#00E5FF">
+    <path d="M17 3.34a10 10 0 1 1 -14.995 8.984l-.005 -.324l.005 -.324a10 10 0 0 1 14.995 -8.336zm-5 2.66a1 1 0 0 0 -.993 .883l-.007 .117v5l.009 .131a1 1 0 0 0 .197 .477l.087 .1l3 3l.094 .082a1 1 0 0 0 1.226 0l.094 -.083l.083 -.094a1 1 0 0 0 0 -1.226l-.083 -.094l-2.707 -2.708v-4.585l-.007 -.117a1 1 0 0 0 -.993 -.883z" />
+  </g>
+    <text x="148" y="493" font-family="'Segoe UI','Microsoft YaHei','PingFang SC',sans-serif" font-size="26" font-weight="700" fill="#E8F0FB">交付周期</text>
+    <text x="92" y="587" font-family="Consolas, 'Courier New', monospace" font-size="64" font-weight="bold" fill="#4A90E2">−30%</text>
+    <text x="280" y="587" font-family="'Segoe UI','Microsoft YaHei','PingFang SC',sans-serif" font-size="20" fill="#A8BCD4">周期缩短</text>
+  </g>
+  <g id="p04-kpi-4">
+    <path fill="#1B2A45" stroke="#243755" stroke-width="1" d="M660,435 H1212 A4,4 0 0 1 1216,439 V626 A4,4 0 0 1 1212,630 H660 A4,4 0 0 1 656,626 V439 A4,4 0 0 1 660,435 Z" />
+    <rect x="656" y="435" width="4" height="195" fill="#4A90E2" />
+    
+  <g transform="translate(684, 463) scale(1.66667)" fill="#00E5FF">
+    <path d="M11.884 2.007l.114 -.007l.118 .007l.059 .008l.061 .013l.111 .034a.993 .993 0 0 1 .217 .112l.104 .082l.255 .218a11 11 0 0 0 7.189 2.537l.342 -.01a1 1 0 0 1 1.005 .717a13 13 0 0 1 -9.208 16.25a1 1 0 0 1 -.502 0a13 13 0 0 1 -9.209 -16.25a1 1 0 0 1 1.005 -.717a11 11 0 0 0 7.531 -2.527l.263 -.225l.096 -.075a.993 .993 0 0 1 .217 -.112l.112 -.034a.97 .97 0 0 1 .119 -.021z" />
+  </g>
+    <text x="740" y="493" font-family="'Segoe UI','Microsoft YaHei','PingFang SC',sans-serif" font-size="26" font-weight="700" fill="#E8F0FB">Bug 占比</text>
+    <text x="684" y="587" font-family="'Segoe UI','Microsoft YaHei','PingFang SC',sans-serif" font-size="64" font-weight="bold" fill="#4A90E2">下降</text>
+    <text x="872" y="587" font-family="'Segoe UI','Microsoft YaHei','PingFang SC',sans-serif" font-size="20" fill="#A8BCD4">质量提升</text>
+  </g>
+  <g id="p04-footer">
+    <text x="64" y="688" font-family="'Segoe UI','Microsoft YaHei','PingFang SC',sans-serif" font-size="16" fill="#6B83A1">四项指标纳入考核，绑定落地</text>
+    <text x="1216" y="688" text-anchor="end" font-family="'Segoe UI','Microsoft YaHei','PingFang SC',sans-serif" font-size="16" fill="#6B83A1">04 / 10</text>
+  </g>
+</svg>

@@ -19,3 +19,6 @@ __pycache__/
 .DS_Store
 Thumbs.db
 .idea/
+
+# 内部工作文档（核验报告/规划/spec，不随公开仓库分发）
+docs/

@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 720" width="1280" height="720">
+  <defs>
+    <radialGradient id="bgGlow" cx="82%" cy="14%" r="55%">
+      <stop offset="0%" stop-color="#00E5FF" stop-opacity="0.10"/>
+      <stop offset="100%" stop-color="#00E5FF" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="accGlow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="5" result="b"/>
+      <feFlood flood-color="#00E5FF" flood-opacity="0.55" result="c"/>
+      <feComposite in="c" in2="b" operator="in" result="g"/>
+      <feMerge><feMergeNode in="g"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+  <rect width="1280" height="720" fill="#0B1220"/>
+  <rect width="1280" height="720" fill="url(#bgGlow)"/>
+  <path d="M80 0V720 M160 0V720 M240 0V720 M320 0V720 M400 0V720 M480 0V720 M560 0V720 M640 0V720 M720 0V720 M800 0V720 M880 0V720 M960 0V720 M1040 0V720 M1120 0V720 M1200 0V720 M0 80H1280 M0 160H1280 M0 240H1280 M0 320H1280 M0 400H1280 M0 480H1280 M0 560H1280 M0 640H1280" fill="none" stroke="#1A2A44" stroke-width="0.5"/>
+
+  <g id="cover-header">
+    <text x="64" y="72" font-family="'Segoe UI','Microsoft YaHei','PingFang SC',sans-serif" font-size="18" font-weight="700" fill="#4A90E2" letter-spacing="4">AI 战略 · 转型汇报 · 2026</text>
+    <line x1="64" y1="92" x2="1216" y2="92" stroke="#4A90E2" stroke-width="2"/>
+  </g>
+  <g id="cover-title">
+    <text x="64" y="232" font-family="'Segoe UI','Microsoft YaHei','PingFang SC',sans-serif" font-size="84" font-weight="bold" fill="#E8F0FB">AI 战略</text>
+    <text x="64" y="328" font-family="'Segoe UI','Microsoft YaHei','PingFang SC',sans-serif" font-size="84" font-weight="bold" fill="#E8F0FB">转型汇报</text>
+    <text x="64" y="388" font-family="'Segoe UI','Microsoft YaHei','PingFang SC',sans-serif" font-size="32" font-weight="600" fill="#A8BCD4">从试点到全员推广的进展与成果</text>
+  </g>
+  <g id="cover-hero">
+    <line x1="860" y1="140" x2="860" y2="500" stroke="#243755" stroke-width="1"/>
+    <text x="890" y="180" font-family="'Segoe UI','Microsoft YaHei','PingFang SC',sans-serif" font-size="18" font-weight="700" fill="#00E5FF" letter-spacing="3">已验证成果</text>
+    <text x="890" y="300" font-family="Consolas, 'Courier New', monospace" font-size="64" font-weight="bold" fill="#00E5FF" filter="url(#accGlow)">+104%</text>
+    <text x="890" y="344" font-family="'Segoe UI','Microsoft YaHei','PingFang SC',sans-serif" font-size="32" font-weight="700" fill="#E8F0FB">人均代码产出</text>
+    <text x="890" y="380" font-family="'Segoe UI','Microsoft YaHei','PingFang SC',sans-serif" font-size="18" fill="#A8BCD4">开发人数 −9% 反而翻倍</text>
+    <text x="890" y="408" font-family="'Segoe UI','Microsoft YaHei','PingFang SC',sans-serif" font-size="18" fill="#6B83A1">3 个月 · 206 个仓库同比</text>
+  </g>
+  <g id="cover-cta">
+    <line x1="64" y1="556" x2="1216" y2="556" stroke="#243755" stroke-width="1"/>
+    <text x="64" y="622" font-family="'Segoe UI','Microsoft YaHei','PingFang SC',sans-serif" font-size="30" font-weight="700" fill="#4A90E2">建议批准：从试点扩展到全员推广</text>
+  </g>
+  <g id="cover-footer">
+    <text x="64" y="688" font-family="'Segoe UI','Microsoft YaHei','PingFang SC',sans-serif" font-size="16" fill="#6B83A1">致管理层 · 2026.07</text>
+    <text x="1216" y="688" text-anchor="end" font-family="'Segoe UI','Microsoft YaHei','PingFang SC',sans-serif" font-size="16" fill="#6B83A1">交付能力翻倍 · 成本下降 · 能力升级</text>
+  </g>
+</svg>

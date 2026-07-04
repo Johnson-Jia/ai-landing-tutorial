@@ -1,0 +1,21 @@
+{
+  "_comment": "常用 SQL 查询模板（示例）。按业务模块维护，命中 triggers 关键词即直接用模板 SQL，未命中再走 schema 构造。module 字段按业务模块分类。",
+  "queries": [
+    {
+      "name": "按业务编号查实体信息",
+      "module": "通用业务模块",
+      "triggers": ["业务编号", "实体信息", "查编号"],
+      "sql": "SELECT * FROM t_business_entity WHERE entity_code = '{entity_code}' AND corp_code = '{corp_code}' LIMIT 100",
+      "params": ["entity_code"],
+      "param_hint": "业务实体编号"
+    },
+    {
+      "name": "按用户标识查操作记录",
+      "module": "用户行为模块",
+      "triggers": ["操作记录", "用户行为", "查记录"],
+      "sql": "SELECT id, user_id, action, created_at FROM t_user_action WHERE user_id = '{user_id}' AND corp_code = '{corp_code}' ORDER BY created_at DESC LIMIT 200",
+      "params": ["user_id"],
+      "param_hint": "用户标识"
+    }
+  ]
+}

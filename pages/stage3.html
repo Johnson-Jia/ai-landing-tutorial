@@ -4,13 +4,13 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>阶段3 · 基础设施 · AI 战略转型方法论</title>
-<link rel="stylesheet" href="assets/css/style.css">
+<link rel="stylesheet" href="../assets/css/style.css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/styles/atom-one-dark.min.css">
 </head>
 <body>
 <header class="topbar"><div class="wrap topbar-inner">
-  <a class="brand" href="index.html"><span class="brand-mark">⚡</span><span>AI 战略转型方法论</span></a>
-  <nav class="topnav"><a href="index.html">首页</a><a href="stage0.html">总纲</a><a href="appendix.html">附录</a></nav>
+  <a class="brand" href="../index.html"><span class="brand-mark">⚡</span><span>AI 战略转型方法论</span></a>
+  <nav class="topnav"><a href="../index.html">首页</a><a href="stage0.html">总纲</a><a href="appendix.html">附录</a></nav>
 </div></header>
 <div class="chapter">
   <aside class="side">
@@ -22,7 +22,7 @@
     <a href="stage4.html">阶段4 闭环试点</a>
     <a href="stage5.html">阶段5 推广度量</a>
     <a href="stage6.html">阶段6 沉淀复用</a>
-    <h4>其他</h4><a href="index.html">首页</a><a href="appendix.html">附录</a>
+    <h4>其他</h4><a href="../index.html">首页</a><a href="appendix.html">附录</a>
   </aside>
   <main class="content">
     <h1>阶段 3 · 基础设施（可跳过）</h1>
@@ -33,11 +33,12 @@
     <div class="warn"><strong>跳过前提（重要）</strong>：本阶段是<strong>知识基础设施</strong>，专为"代码量大、项目多、业务复杂"的团队设计。如果你的情况是：①代码库不大（单仓库、几万行内）；②项目少（没有多仓库微服务）；③业务知识不算复杂——<strong>请直接跳过本阶段</strong>，用 CLAUDE.md + grep + 良好代码组织就够，强行建基础设施是过度工程。本阶段适合：多仓库微服务、百万行级代码、复杂业务知识库、跨团队协作的大型组织。</div>
 
     <div style="margin:18px 0;padding:14px 18px;background:#f0f7ff;border:1px solid #bcd9ff;border-radius:10px">
-      <div style="font-weight:700;color:#1057cb;font-size:14px;margin-bottom:8px">🧰 工具速查 <span style="font-weight:400;color:#64748b;font-size:12px">（不想读全文？直接用这些）</span></div>
+      <div style="font-weight:700;color:#1057cb;font-size:14px;margin-bottom:8px">🧰 本阶段速查 <span style="font-weight:400;color:#64748b;font-size:12px">（做什么 · 产出什么 · 用什么）</span></div>
       <ul style="margin:0;padding-left:22px;font-size:14px;line-height:1.9;color:#334155">
-        <li><strong>代码知识图谱</strong>：<a href="https://github.com/DeusData/codebase-memory-mcp" target="_blank">codebase-memory-mcp</a>（主推） / <a href="https://github.com/AsyncFuncAI/deepwiki-open" target="_blank">deepwiki-open</a> / <a href="https://github.com/sourcebot-dev/sourcebot" target="_blank">sourcebot</a> / <a href="https://github.com/abhigyanpatwari/GitNexus" target="_blank">GitNexus</a></li>
-        <li><strong>Skill 共享平台</strong>：<a href="https://github.com/iflytek/skillhub" target="_blank">iflytek/skillhub</a>（自托管私有 Skill 注册中心）</li>
-        <li><strong>深度文档</strong>：<a href="assets/ref/代码知识图谱-架构深度解析.html">《代码知识图谱：架构深度解析》</a></li>
+        <li><strong>🎯 做什么</strong>：业务知识 RAG + 代码知识图谱 + Skill 仓库 + MCP 网关（大代码库 / 复杂业务才需要，小团队跳过）</li>
+        <li><strong>📦 产出与汇报</strong>：<a href="../assets/ref/汇报材料-AI生成指南.html">周报</a>（基建进展）+ 基础设施交接说明</li>
+        <li><strong>🔧 工具</strong>：<a href="https://github.com/DeusData/codebase-memory-mcp" target="_blank">codebase-memory-mcp</a>（代码图谱，主推）/ <a href="https://github.com/iflytek/skillhub" target="_blank">skillhub</a>（Skill 仓库）/ <a href="../assets/ref/代码知识图谱-架构深度解析.html">《代码知识图谱深度解析》</a></li>
+        <li><strong>👥 角色手册</strong>：<a href="../assets/ref/角色操作手册.html">开发手册</a>（基建主力：RAG / 图谱 / Skill）</li>
       </ul>
     </div>
 
@@ -54,7 +55,7 @@ expr = 'corp_code in ["{0}", "default"] and resource_type in ["knowledge","cours
 all_docs = client.similar_search(body.current_question, 5, expr)  # default = 全租户共享</code></pre>
 
     <h2>2. 代码知识图谱（开源推荐：codebase-memory-mcp）</h2>
-    <div class="tip"><strong>🎯 实践建议</strong>：直接使用开源项目 <a href="https://github.com/DeusData/codebase-memory-mcp" target="_blank"><strong>codebase-memory-mcp</strong></a>（Tree-sitter → 知识图谱 → MCP 工具，158 语言，开箱即用）。本节讲透设计原理帮你理解"为什么这么设计、怎么用好"；想深入架构或自研可看 <a href="assets/ref/代码知识图谱-架构深度解析.html" target="_blank">《代码知识图谱：架构深度解析》</a>。</div>
+    <div class="tip"><strong>🎯 实践建议</strong>：直接使用开源项目 <a href="https://github.com/DeusData/codebase-memory-mcp" target="_blank"><strong>codebase-memory-mcp</strong></a>（Tree-sitter → 知识图谱 → MCP 工具，158 语言，开箱即用）。本节讲透设计原理帮你理解"为什么这么设计、怎么用好"；想深入架构或自研可看 <a href="../assets/ref/代码知识图谱-架构深度解析.html" target="_blank">《代码知识图谱：架构深度解析》</a>。</div>
 
     <h3>2.1 为什么用知识图谱，不用 RAG</h3>
     <p>AI 改代码常因"看不见全貌"酿成事故。传统 Graph RAG 让 LLM 发 4+ 次查询才拼出完整上下文；代码知识图谱在<strong>索引期</strong>就把关系预算好，<strong>一次调用拿全</strong>。三大价值：① <strong>可靠</strong>——LLM 漏不掉上下文（工具响应已塞满）；② <strong>省 token</strong>——不用 10 次查询去理解一个函数；③ <strong>解放小模型</strong>——工具做了重活，降低对顶级模型的依赖（企业成本杀手锏）。</p>
@@ -93,7 +94,7 @@ const server = new Server(
       <tr><td><strong>查询类</strong></td><td>cypher / cross_repo_search</td><td>自由 Cypher 图查询 / 跨仓库文本搜索（补图谱盲区）</td></tr>
     </table>
     <p>每个工具响应末尾自动追加 <strong>"Next 提示"</strong>（如 context 之后提示跑 impact），对抗"LLM 调一次工具就停"，形成<strong>自引导工作流</strong>。</p>
-    <div class="danger"><strong>两条铁律</strong>（写进 instructions）：① <strong>NEVER</strong> edit code without first running <code>impact</code>（改任何符号前必跑影响分析）；② <strong>NEVER</strong> commit without running <code>detect_changes</code>（提交前必跑变更映射）。</div>
+    <div class="danger"><strong>两条铁律（有代码图谱时，写进 instructions）</strong>：① <strong>NEVER</strong> edit code without first running <code>impact</code>（改任何符号前必跑影响分析）；② <strong>NEVER</strong> commit without running <code>detect_changes</code>（提交前必跑变更映射）。<br>跳过本阶段（无图谱）的团队，用 grep + 人审 + <code>git diff</code> 替代，能力降级但闭环能跑（见阶段 4 工作流说明）。</div>
     <div class="tip"><strong>指令工程实测</strong>：instructions 控制在 ~80 行（超 120 行依从度衰减）；用 RFC 2119 措辞（MUST/NEVER）；关键工作流<strong>内联</strong>（skill 文件被忽略率 56%，所以不能依赖 skill）。</div>
 
     <h3>2.5 企业级建设方案（上百项目团队）</h3>

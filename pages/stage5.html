@@ -4,13 +4,13 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>阶段5 · 推广与度量 · AI 战略转型方法论</title>
-<link rel="stylesheet" href="assets/css/style.css">
+<link rel="stylesheet" href="../assets/css/style.css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/styles/atom-one-dark.min.css">
 </head>
 <body>
 <header class="topbar"><div class="wrap topbar-inner">
-  <a class="brand" href="index.html"><span class="brand-mark">⚡</span><span>AI 战略转型方法论</span></a>
-  <nav class="topnav"><a href="index.html">首页</a><a href="stage0.html">总纲</a><a href="appendix.html">附录</a></nav>
+  <a class="brand" href="../index.html"><span class="brand-mark">⚡</span><span>AI 战略转型方法论</span></a>
+  <nav class="topnav"><a href="../index.html">首页</a><a href="stage0.html">总纲</a><a href="appendix.html">附录</a></nav>
 </div></header>
 <div class="chapter">
   <aside class="side">
@@ -22,7 +22,7 @@
     <a href="stage4.html">阶段4 闭环试点</a>
     <a href="stage5.html" class="cur">阶段5 推广度量</a>
     <a href="stage6.html">阶段6 沉淀复用</a>
-    <h4>其他</h4><a href="index.html">首页</a><a href="appendix.html">附录</a>
+    <h4>其他</h4><a href="../index.html">首页</a><a href="appendix.html">附录</a>
   </aside>
   <main class="content">
     <h1>阶段 5 · 推广与度量</h1>
@@ -31,10 +31,12 @@
     <div class="key-conclusion"><p><strong>多 Agent 并行把单点提效放大为大规模，效果度量用数据证伪</strong>。推广靠各组落地真实场景 + 提炼共性方法论；度量靠 AI 代码占比（Co-authored-by + 风格学反伪造）。<strong>没有度量的转型是玄学，推广不动的转型是孤岛。</strong></p></div>
 
     <div style="margin:18px 0;padding:14px 18px;background:#f0f7ff;border:1px solid #bcd9ff;border-radius:10px">
-      <div style="font-weight:700;color:#1057cb;font-size:14px;margin-bottom:8px">🧰 工具与 Demo 速查 <span style="font-weight:400;color:#64748b;font-size:12px">（不想读全文？直接用这些）</span></div>
+      <div style="font-weight:700;color:#1057cb;font-size:14px;margin-bottom:8px">🧰 本阶段速查 <span style="font-weight:400;color:#64748b;font-size:12px">（做什么 · 产出什么 · 用什么）</span></div>
       <ul style="margin:0;padding-left:22px;font-size:14px;line-height:1.9;color:#334155">
-        <li><strong>可运行 Demo</strong>：<a href="demos/ai-metrics/">demos/ai-metrics</a>（AI 代码占比度量 + 提效同比，含三层 AI 识别算法 + Excel 模板，<code>python main.py</code> 即跑）</li>
-        <li><strong>汇报材料</strong>：<a href="assets/ref/汇报材料-AI生成指南.html">效果度量报告 prompt</a>（接 ai-metrics 数据，AI 一键生成度量汇报）</li>
+        <li><strong>🎯 做什么</strong>：多 Agent 并行推广 + AI 代码占比度量（用数据证伪）</li>
+        <li><strong>📦 产出与汇报</strong>：<a href="../assets/ref/汇报材料-AI生成指南.html">效果度量报告</a>（接 ai-metrics 数据）+ <a href="../assets/ref/汇报材料-AI生成指南.html">阶段总结报告</a>（阶段结项）+ <a href="../assets/ref/汇报材料-AI生成指南.html">战略汇报 PPT · 成果版</a>（用验证数据要继续投入）</li>
+        <li><strong>🔧 工具/Demo</strong>：<a href="../demos/ai-metrics/">demos/ai-metrics</a>（三层 AI 识别 + Excel 模板，<code>python main.py</code> 即跑）</li>
+        <li><strong>👥 角色手册</strong>：<a href="../assets/ref/角色操作手册.html">组长</a>（带推广 + 数据汇报）+ <a href="../assets/ref/角色操作手册.html">测试</a>（AI 占比度量）+ <a href="../assets/ref/角色操作手册.html">开发</a>（多 Agent 重构）</li>
       </ul>
     </div>
 
@@ -43,9 +45,9 @@
 
     <h2>2. 多 Agent 并行编排（规模放大器）</h2>
     <ul>
-      <li><strong>face-agent-teams</strong>（时光易培组）：6 步流程 + 4 种策略 + 项目注册表跨项目复用 + 5 个人机确认点 + 质量验收打回闭环。</li>
+      <li><strong>face-agent-teams</strong>（某业务组）：6 步流程 + 4 种策略 + 项目注册表跨项目复用 + 5 个人机确认点 + 质量验收打回闭环。</li>
       <li><strong>psmux 多端并行</strong>：一个终端驱动多个 Agent 并行开发不同端（曾梳理小程序项目，发现端点冗余）。</li>
-      <li><strong>code-review 多 Agent</strong>（时光易培组）：Haiku 资格检查 + 5 个 Sonnet 并行专项审查 + 独立 Haiku 打置信度分（阈值 80 才发评论）。</li>
+      <li><strong>code-review 多 Agent</strong>（某业务组）：Haiku 资格检查 + 5 个 Sonnet 并行专项审查 + 独立 Haiku 打置信度分（阈值 80 才发评论）。</li>
     </ul>
     <div class="warn"><strong>踩坑共识</strong>：Windows 上同时跑 5 个 Agent 易 fork 失败（内存不足），建议 2-3 个；子 Agent 的 model 只支持 sonnet/opus/haiku；SendMessage 必须带 summary 参数。</div>
 
@@ -65,7 +67,7 @@
       </li>
       <li><strong>数据底座</strong>：RAG 向量库（业务数据）+ 代码知识图谱（代码结构），见阶段3。</li>
     </ul>
-    <div class="warn"><strong>定位</strong>：这是"AI 主导重复工作、人聚焦核心决策"的终局形态。但<strong>必须先跑通阶段 0-5</strong>（思想、培训、基础设施、闭环试点、度量），有了数据和规范底座再演进，否则就是空中楼阁。人机边界：人定义需求 + 审核决策，AI 执行全流程。</div>
+    <div class="warn"><strong>定位</strong>：这是"AI 主导重复工作、人聚焦核心决策"的终局形态。但<strong>必须先跑通阶段 0-5</strong>（思想、战略、培训、基础设施、闭环试点、度量），有了数据和规范底座再演进，否则就是空中楼阁。人机边界：人定义需求 + 审核决策，AI 执行全流程。</div>
 
     <h2>3. 效果度量：AI 代码占比</h2>
     <p>自研 Go 工具，通过 Git 提交元数据识别 AI 代码。<strong>最可靠信号是 Co-authored-by trailer</strong>（AI 工具默认埋点），再加<strong>风格学第二道防线</strong>防伪造：</p>
@@ -86,23 +88,25 @@ func ConfidenceFromSimilarity(s float64) float64 {
       <tr><td>简单接口（CRUD）</td><td>80%</td><td>10%</td><td><strong>90%</strong></td></tr>
       <tr><td>复杂业务逻辑</td><td>50%</td><td>20%</td><td>70%</td></tr>
       <tr><td>Bug 修复 / 代码优化</td><td>30%</td><td>40%</td><td>70%</td></tr>
-      <tr><td><strong>平均（整体开发环节）</strong></td><td>53.3%</td><td>23.3%</td><td><strong>76.6%</strong></td></tr>
+      <tr><td><strong>平均（整体开发环节）</strong></td><td>53.3%</td><td>23.3%</td><td><strong>约 75%</strong>（视业务结构浮动）</td></tr>
     </table>
-    <p style="font-size:13px;color:var(--text-soft)">事前估算的 <strong>76.6%</strong> 与下方 §4 事后统计的 <strong>76.6%</strong> 互相印证——估算给目标，统计给真相，两者都用才完整。</p>
+    <p style="font-size:13px;color:var(--text-soft)">估算目标约 75%（视业务结构在 70-80% 浮动）；下方 §4 实测 76.6%，落在估算区间内——估算给方向，统计给真相，两者独立。</p>
 
-    <h2>4. 各组推广 + 量化效果（经原文核验）</h2>
-    <p>13 个组各自落地真实场景，跑出的量化效果（均已用本地原文核验，可放心引用）：</p>
+    <h2>4. 各组推广 + 量化效果</h2>
+    <p>13 个组各自落地真实场景，量化效果如下：</p>
     <table>
-      <tr><th>维度</th><th>效果</th><th>来源组</th></tr>
-      <tr><td>人均代码产出</td><td><strong>+104%</strong>（开发人数 -9% 反而翻倍）</td><td>全团队</td></tr>
-      <tr><td>Bug 占比</td><td><strong>-16.4 个百分点</strong>（38.5%→22.1%）</td><td>全团队</td></tr>
-      <tr><td>AI 代码占比</td><td><strong>76.6%</strong>（简单 CRUD ~90%）</td><td>全团队</td></tr>
-      <tr><td>测试用例生成</td><td><strong>5-10 倍</strong>（4-8h→10-30min）</td><td>测试组</td></tr>
-      <tr><td>查询性能</td><td>1000 用户 50s→2.5s（DB N×9→9 次）</td><td>时光易培组</td></tr>
-      <tr><td>Token 消耗</td><td>-40%（caveman）</td><td>大数据组</td></tr>
-      <tr><td>大规模重构</td><td>12 Controller / 211 API / ~15000 行，110/110</td><td>时光易培组</td></tr>
-      <tr><td>bug 排查</td><td>累计 144/179（80.4%）</td><td>AI 架构组</td></tr>
+      <tr><th>维度</th><th>效果</th><th>来源</th></tr>
+      <tr><td>人均代码产出</td><td><strong>+104%</strong>（同期人数 -9%）</td><td>全团队·事后统计</td></tr>
+      <tr><td>Bug 占比</td><td><strong>-16.4 个百分点</strong>（38.5%→22.1%）</td><td>全团队·事后统计</td></tr>
+      <tr><td>AI 代码占比</td><td><strong>76.6%</strong>（简单 CRUD ~90%）</td><td>全团队·事后统计</td></tr>
+      <tr><td>测试用例生成</td><td><strong>5-10 倍</strong>（4-8h→10-30min）</td><td>测试组·案例</td></tr>
+      <tr><td>查询性能</td><td>页面预览 44s→22s</td><td>某业务组·案例</td></tr>
+      <tr><td>词元消耗</td><td>-40%（案例值），基准均值 65%（caveman）</td><td>大数据组·案例</td></tr>
+      <tr><td>大规模重构</td><td>12 Controller / 211 API / ~15000 行，110/110</td><td>某业务组·案例</td></tr>
+      <tr><td>bug 排查</td><td>累计 144/179（80.4%）</td><td>某架构团队·内部缺陷库统计（案例待脱敏）</td></tr>
     </table>
+    <p style="font-size:13px;color:var(--text-soft)">注：「事后统计」是转型跑完后用度量工具算出来的，<strong>推进过程中看不到</strong>——别拿它当中间指标卡进度；「案例」是各组真实分享的场景。所有数字都是转型前后的对比，提效和 AI 转型同期发生，但不能 100% 都归功于 AI（需求、人员变动也有影响）——量级足以说明 AI 转型和显著提效强相关。</p>
+    <div class="tip"><strong>度量是逐步建的，不是部署工具就出数据</strong>：真实团队先有「业务 / 模块覆盖率」→ 再有「bug 排查覆盖率」→ 最后才有「AI 代码占比」。<strong>别指望一上来就跑出 76.6%</strong>——先建可量化的业务指标，度量体系随转型成熟分阶段落地。</div>
     <div class="tip"><strong>💡 思考一下</strong>：如果你是 Leader，看到 AI 代码占比从 0% 涨到 76.6%，你会做什么决策？加投入、扩团队、还是换方向？</div>
 
     <h2>5. 角色视角 + 常见坑 + 清单</h2>
@@ -111,7 +115,7 @@ func ConfidenceFromSimilarity(s float64) float64 {
       <div class="role role-dev"><span class="role-tag">开发者</span><p>用多 Agent 并行做大规模重构；接受 code-review 多 Agent 审查。</p></div>
       <div class="role role-pm"><span class="role-tag">PM</span><p>看度量数据判断哪些模块提效明显，反推资源分配。</p></div>
     </div>
-    <div class="warn"><strong>坑</strong>：①盲目上多 Agent（Windows fork 失败、token 线性增长）；②只看产出不看质量（Bug 率要一起度量）；③度量工具不防伪造（Co-authored-by 会被误标，需风格学兜底）。</div>
+    <div class="warn"><strong>坑</strong>：①盲目上多 Agent（Windows fork 失败、词元线性增长）；②只看产出不看质量（Bug 率要一起度量）；③度量工具不防伪造（Co-authored-by 会被误标，需风格学兜底）。</div>
     <div class="checklist">
       <div class="checklist-title">📋 阶段5 落地清单</div>
       <ul>

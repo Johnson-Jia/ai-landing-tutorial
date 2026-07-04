@@ -4,13 +4,13 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>阶段4 · 流程闭环与试点 · AI 战略转型方法论</title>
-<link rel="stylesheet" href="assets/css/style.css">
+<link rel="stylesheet" href="../assets/css/style.css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/styles/atom-one-dark.min.css">
 </head>
 <body>
 <header class="topbar"><div class="wrap topbar-inner">
-  <a class="brand" href="index.html"><span class="brand-mark">⚡</span><span>AI 战略转型方法论</span></a>
-  <nav class="topnav"><a href="index.html">首页</a><a href="stage0.html">总纲</a><a href="appendix.html">附录</a></nav>
+  <a class="brand" href="../index.html"><span class="brand-mark">⚡</span><span>AI 战略转型方法论</span></a>
+  <nav class="topnav"><a href="../index.html">首页</a><a href="stage0.html">总纲</a><a href="appendix.html">附录</a></nav>
 </div></header>
 <div class="chapter">
   <aside class="side">
@@ -22,7 +22,7 @@
     <a href="stage4.html" class="cur">阶段4 闭环试点</a>
     <a href="stage5.html">阶段5 推广度量</a>
     <a href="stage6.html">阶段6 沉淀复用</a>
-    <h4>其他</h4><a href="index.html">首页</a><a href="appendix.html">附录</a>
+    <h4>其他</h4><a href="../index.html">首页</a><a href="appendix.html">附录</a>
   </aside>
   <main class="content">
     <h1>阶段 4 · 流程闭环与试点</h1>
@@ -31,17 +31,29 @@
     <div class="key-conclusion"><p>用 <strong>OpenSpec（规范管理 WHAT/WHY）+ Superpowers（执行 HOW）</strong>串成六阶段闭环，配合 SDD（spec/plan/tasks 三产物）把"发现需求偏差"的成本从<strong>改代码</strong>左移到<strong>改 Markdown</strong>。关键：<strong>tasks 清单让 Claude 中途退出后仍可断点续传</strong>，子代理分工让探索/实现/审查各司其职。</p></div>
 
     <div style="margin:18px 0;padding:14px 18px;background:#f0f7ff;border:1px solid #bcd9ff;border-radius:10px">
-      <div style="font-weight:700;color:#1057cb;font-size:14px;margin-bottom:8px">🧰 工具与 Demo 速查 <span style="font-weight:400;color:#64748b;font-size:12px">（不想读全文？直接用这些）</span></div>
+      <div style="font-weight:700;color:#1057cb;font-size:14px;margin-bottom:8px">🧰 本阶段速查 <span style="font-weight:400;color:#64748b;font-size:12px">（做什么 · 产出什么 · 用什么）</span></div>
       <ul style="margin:0;padding-left:22px;font-size:14px;line-height:1.9;color:#334155">
-        <li><strong>规范驱动框架</strong>：<a href="https://openspec.dev" target="_blank">OpenSpec</a>（规范管理）+ <a href="https://github.com/obra/superpowers" target="_blank">Superpowers</a>（执行）</li>
-        <li><strong>可运行 Demo</strong>：<a href="demos/ai-test-frame/">demos/ai-test-frame</a>（AI 自动化测试框架，<code>python main.py</code> 即跑）</li>
-        <li><strong>测试方法论文档</strong>：<a href="assets/ref/AI自动化测试-方法论与实践.html">《AI 自动化测试：方法论与实践》</a></li>
-        <li><strong>角色手册</strong>：<a href="assets/ref/角色操作手册.html">开发 / 测试 / 组长 / 产品</a>（各级人员操作手册）</li>
+        <li><strong>🎯 做什么</strong>：OpenSpec + Superpowers 串六阶段闭环 + AI 自动化测试 + 防偷改护栏</li>
+        <li><strong>📦 产出与汇报</strong>：<a href="../assets/ref/汇报材料-AI生成指南.html">周报</a>（试点数据）+ 测试资产交接（录制转生成规范沉淀成 Skill）</li>
+        <li><strong>🔧 工具/Demo</strong>：<a href="https://openspec.dev" target="_blank">OpenSpec</a>（规范管理）+ <a href="https://github.com/obra/superpowers" target="_blank">Superpowers</a>（执行）/ <a href="../demos/ai-test-frame/">demos/ai-test-frame</a>（<code>python main.py</code> 即跑）</li>
+        <li><strong>📖 测试方法论</strong>：<a href="../assets/ref/AI自动化测试-方法论与实践.html">《AI 自动化测试：方法论与实践》</a></li>
+        <li><strong>👥 角色手册</strong>：<a href="../assets/ref/角色操作手册.html">开发 + 测试手册</a>（闭环主力 + 质量把关）</li>
       </ul>
     </div>
 
     <h2>1. 为什么：单点用 AI 易，闭环难</h2>
     <p>每个人都能让 AI 写一段代码，但串成端到端流水线会撞上三堵墙：①<strong>AI 初始分析不准</strong>（理解偏了）；②<strong>上下文断</strong>（会话中断，前面全丢）；③<strong>需求偏差晚发现</strong>（改完代码才发现理解错，返工贵）。闭环流程就是拆这三堵墙。</p>
+
+    <h3>1.1 试点设计：选谁、多大、跑多久算成功</h3>
+    <p>闭环不是上来就全员跑，先选对试点团队、定清成功标准：</p>
+    <table>
+      <tr><th>维度</th><th>怎么定</th></tr>
+      <tr><td><strong>选谁</strong></td><td>意愿强的团队 + 业务典型的项目；别选最忙的（没空配合）、别选最边缘的（结果没说服力）</td></tr>
+      <tr><td><strong>多大</strong></td><td>1-2 个团队（每组 3-8 人）+ 1-2 个真实需求，跑 4-8 周</td></tr>
+      <tr><td><strong>成功标准</strong></td><td>① AI 代码占比达标（如 ≥60%）；② 产出提升（同比）；③ 质量不降（Bug 率不升）；④ 团队愿意继续用</td></tr>
+      <tr><td><strong>失败止损</strong></td><td>4-8 周无明显改善就复盘（见阶段 1 §4.3 失败预案），不硬推</td></tr>
+    </table>
+    <div class="tip"><strong>试点的目的不是「证明能行」，而是「拿数据说话」</strong>——成功有数据推广、失败有原因可查，<strong>试点本身就是阶段 1「可止损」的落地</strong>。</div>
 
     <h2>2. SDD 规范驱动：把纠错左移</h2>
     <p>SDD（Spec-Driven Development）把开发拆成三层产物：</p>
@@ -52,8 +64,25 @@
     </ul>
     <div class="tip"><strong>核心价值是"左移"</strong>：把"发现需求理解偏差"从<em>改代码</em>（昂贵）左移到<em>改 Markdown</em>（便宜一个数量级）。AI 初始理解往往不准，但改 spec 比改代码快得多。<strong>tasks 清单还带来断点续传</strong>——Claude 中途退出后，重进项目指定 change 目录，看 tasks 的 <code>[ ]</code>→<code>[x]</code> 就知道做到哪了。</div>
 
+    <h3>2.1 OpenSpec 操作速查</h3>
+    <p>SDD 用 <strong>OpenSpec</strong> 落地。三个核心概念先分清：</p>
+    <table>
+      <tr><th>概念</th><th>性质</th><th>位置</th></tr>
+      <tr><td><strong>Spec</strong>（规格）</td><td>稳定、跨变更共享</td><td><code>openspec/specs/</code></td></tr>
+      <tr><td><strong>Change</strong>（变更）</td><td>一次性、做完归档</td><td><code>openspec/changes/&lt;name&gt;/</code></td></tr>
+      <tr><td><strong>Archive</strong>（归档）</td><td>变更完成后存档</td><td><code>openspec/changes/archive/</code></td></tr>
+    </table>
+    <p>四条命令覆盖全流程：</p>
+    <pre><code class="language-bash">/opsx:explore   # 探索需求、调查代码库
+/opsx:propose   # 生成 proposal.md / design.md / specs/ / tasks.md
+/opsx:apply     # 按 tasks 执行（或交给 Superpowers）
+/opsx:archive   # 验证通过后归档变更</code></pre>
+    <p>每次对话 OpenSpec 会自动读 <code>openspec/specs/</code> 下所有 spec.md 并应用到生成代码——所以 specs/ 要精简（只放稳定的全局规范），一次性变更放 changes/。</p>
+    <div class="tip"><strong>tasks 状态机</strong>（断点续传的关键）：<code>[ ]</code> 待办 → <code>[in_progress]</code> 进行 → <code>[x]</code> 完成 → <code>[deleted]</code> / <code>[blocked]</code>。<a href="../demos/claude-skills/skills/devflow/">devflow</a> 的恢复判定正是扫 tasks 的 <code>[x]</code> 标记判断从哪续。</div>
+
     <h2>3. 六阶段工作流（OpenSpec + Superpowers）</h2>
-    <p>团队工作流编排 OpenSpec（规范）+ Superpowers（执行）+ 代码图谱（定位）：</p>
+    <p>团队工作流编排 OpenSpec（规范）+ Superpowers（执行）+ 代码图谱（定位）。</p>
+    <p style="font-size:13px;color:var(--text-soft)"><em>注：下面的 Stage 1-6 是 OpenSpec 工作流的内部阶段，不是教程的 6 个实施阶段（stage1-6）——同名但不同概念。</em></p>
 <pre><code class="language-markdown">Stage 1 需求探索    → superpowers:brainstorming      （用户可纠正方向）
 Stage 2 规范生成    → openspec-propose               （产 proposal/design/tasks/spec）
 Stage 3 计划拆分    → superpowers:writing-plans      （+ 代码图谱 impact/locate）
@@ -61,6 +90,16 @@ Stage 4 TDD+审查    → subagent-driven-development    （RED→GREEN→REFACT
 Stage 5 验证        → verification-before-completion （+ detect_changes）
 Stage 6 归档        → openspec-archive</code></pre>
     <p>每阶段只读当前 Stage 文件（渐进式披露）。<strong>探索阶段主动找死代码和 bug</strong>——"跳过探索直接动手 = 重写 bug"。</p>
+
+    <div class="warn"><strong>跳过了阶段 3（无代码图谱）怎么办</strong>：上面「+ 代码图谱 impact/locate/detect_changes」是<strong>有图谱时</strong>的增强，不是闭环的硬前提。小团队跳过 stage3 时用替代：<strong>impact</strong>（改前评估影响）→ 改前 grep + 人脑梳理上下游；<strong>locate</strong>（定位文件）→ grep / 项目结构；<strong>detect_changes</strong>（提交前验证）→ <code>git diff</code> + 人审 + 测试。能力降级（靠人补），但闭环仍能跑——等代码量大到人脑兜不住，再回来建图谱（阶段 3）。</div>
+
+    <div class="tip"><strong>这套工作流的 skill 落地</strong>：<a href="../demos/claude-skills/skills/devflow/">devflow</a>（<code>demos/claude-skills</code>）把上面 6 阶段串成一条命令——自己不实现任何逻辑，只编排 OpenSpec + Superpowers，还带「断点续传」（中断后查文件状态自动恢复到正确阶段）和「规则覆盖」（<code>rules/</code> 改写底层 skill 的默认出口）。想看一个完整的多阶段 skill 怎么写，直接读它的 <code>SKILL.md</code> + <code>stages/</code>。</div>
+
+    <div class="tip"><strong>工具演进：随能力做减法</strong>。OpenSpec + Superpowers 不必一直一起用，随你驾驭 AI 的能力提升逐步精简：<br>
+    • <strong>入门期</strong>：OpenSpec + Superpowers 结合——前者把需求拆成规范（防 AI 跑偏），后者按规范执行，新手靠框架兜底；<br>
+    • <strong>熟练期</strong>：只用 Superpowers——你已能把需求讲清（规范思维内化），只剩执行交框架；<br>
+    • <strong>精通期</strong>：直接用 Claude Code 裸交互——精准下达指令、自己掌控流程，不再依赖框架。<br>
+    <strong>但注意</strong>：这是个人能力的演进。<strong>团队协作、规范沉淀、新人上手</strong>场景下，框架仍有价值——它让能力可复制、流程可复现，不止约束个人。所以「精通后裸用」是个人上限，不是团队标准。</div>
 
     <h2>4. 子代理分工：各司其职</h2>
     <p>不同子代理扮演不同角色，避免"一个代理又探索又写又审"的混乱：</p>
@@ -86,23 +125,25 @@ Stage 6 归档        → openspec-archive</code></pre>
     </ul>
     <div class="warn"><strong>TDD 防幻觉铁律</strong>：<strong>不要让 Claude 同时写代码和测试</strong>——它会写出"验证错误逻辑"的测试，全绿但全错。正确做法：测试先行、独立验证。</div>
 
-    <h2>6. 真实案例：两个端到端闭环</h2>
+    <h2>6. 真实案例：从单点修复到大规模迁移</h2>
     <p><strong>案例 A：form 编辑器数据丢失修复</strong>（团队工作流全流程）。用户一句话需求 → 2 个 Explore 子代理调查 → 用户<strong>两次纠正方向</strong>（①根因定位错；②方案漏 25+ 插件）→ 提 3 方案 → 最终 Vue2 provide/inject：</p>
     <ul>
       <li>方案演进：v1（prop 开关 2 文件，覆盖不全）→ v2（prop 开关 25+ 文件，改动大）→ v3（provide/inject 2 文件，自动覆盖 ✅）</li>
       <li><strong>最终只改 2 个文件约 10 行</strong>（editorPanel.vue +5 行 + form.vue +4 行改 2 行），覆盖全部 25+ 插件。</li>
     </ul>
     <p><strong>案例 B：系统设置 API 拆分</strong>（OpenSpec 全流程）。单一 saveSystemSetting 拆成 6 个独立模块，产出 proposal/design/tasks/API.md + 6 个 spec.md，<strong>7 个关键技术决策</strong>记录在 design.md（MdlBuilder 条件更新/独立 DTO/@Transactional/旧值先查记日志等）。</p>
-    <div class="tip"><strong>启示</strong>：案例 A 的方案演进最能体现价值——AI 前两版是机械式的（漏/笨），是<strong>用户对业务的理解</strong>（provide/inject 透传）找到了最优解。<strong>用户引导是核心，AI 是执行者</strong>。案例 B 的"决策记录+风险权衡"结构可作重大技术决策模板。</div>
+    <p><strong>案例 C：个人中心前后端分离重构</strong>（大规模迁移）。某业务组用 OpenSpec + Superpowers + tasks 断点续传，把个人中心从前后端耦合重构为分离架构：<strong>12 个 Controller / 211 个 API / 约 15000 行 / 110 个任务全部完成</strong>。关键是 tasks 清单支撑了跨周断点续传——中途退出重进，看 <code>[x]</code> 标记接着干。</p>
+    <p><strong>案例 D：前端 AI 陪练对话生成</strong>（前端复杂集成）。某前端团队用 AI 生成对话交互模块，<strong>8 人日（5 开发 + 3 修复）/ 生成 5289 行</strong>，含 React×Vue SDK Monkey Patch、SSE 拦截器等复杂集成——证明 AI 不只能写 CRUD，前端复杂场景也能落地，关键在「给足上下文 + 分步验证」。</p>
+    <div class="tip"><strong>启示</strong>：案例 A 的方案演进最能体现价值——AI 前两版是机械式的（漏/笨），是<strong>用户对业务的理解</strong>（provide/inject 透传）找到了最优解。<strong>用户引导是核心，AI 是执行者</strong>。案例 B 的"决策记录+风险权衡"结构可作重大技术决策模板。案例 C/D 证明闭环能撑住<strong>大规模迁移和前端复杂集成</strong>，不只是小修小补。</div>
 
     <h2>7. 测试侧闭环：AI 自动化测试</h2>
     <p>§6 两个案例是<strong>开发侧闭环</strong>（需求→代码）。测试侧也有一个成熟的 AI 闭环：<strong>录制 → AI 转换 → 人审 → 数据驱动执行</strong>。两者互补——开发闭环产出功能代码，测试闭环产出测试资产，合起来才是端到端。</p>
     <figure style="margin:18px 0;text-align:center">
-      <img src="assets/images/diagrams/ai-test-workflow.svg" alt="AI 自动化测试四段式工作流：录制→AI转换→人审→数据驱动执行" style="max-width:100%;border-radius:8px">
+      <img src="../assets/images/diagrams/ai-test-workflow.svg" alt="AI 自动化测试四段式工作流：录制→AI转换→人审→数据驱动执行" style="max-width:100%;border-radius:8px">
     </figure>
     <p>核心定位：<strong>AI 只生成不执行</strong>——AI 在第二段（编码期）把 Playwright 录制脚本转成标准测试类，运行期是确定性的数据驱动框架（零 AI）。这个边界规避了 LLM 幻觉导致的"虚假通过"（把失败说成通过）。最值得复用的方法论是<strong>"规范即 Prompt"</strong>：把测试类编写规范沉淀成一个 Claude Code Skill（8 条硬规范 + 3 套模板），AI 在规范框框里稳定产出。</p>
     <div class="tip"><strong>与 §5 的呼应</strong>：§5 讲"防 AI 偷改测试"（保护测试不被 AI 改坏）；本节讲"用 AI 生成测试"（让 AI 帮你写测试）。这是测试与 AI 关系的两个面——前者防风险，后者要提效，缺一不可。</div>
-    <p style="margin-top:14px">📖 完整方法论（四段式详解、规范即 Prompt 的 8 规范 3 模板、元数据驱动编辑器、动态数据 + 软断言、录制转换 7 大避坑、已实现 vs 规划的诚实边界）见 <a href="assets/ref/AI自动化测试-方法论与实践.html" target="_blank">《AI 自动化测试：方法论与实践》</a>。</p>
+    <p style="margin-top:14px">📖 完整方法论（四段式详解、规范即 Prompt 的 8 规范 3 模板、元数据驱动编辑器、动态数据 + 软断言、录制转换 7 大避坑、已实现 vs 规划的诚实边界）见 <a href="../assets/ref/AI自动化测试-方法论与实践.html" target="_blank">《AI 自动化测试：方法论与实践》</a>。</p>
 
     <h2>8. 角色视角 + 常见坑 + 清单</h2>
     <div class="roles">
@@ -119,7 +160,7 @@ Stage 6 归档        → openspec-archive</code></pre>
         <li>子代理分工明确（探索/实现/规格审查/质量审查）</li>
         <li>防偷改测试三层到位（提示词 + 权限 deny + git diff）</li>
         <li>tasks 清单支持断点续传（Claude 中断后可续）</li>
-        <li>测试侧闭环已纳入：AI 生成测试资产 + 框架确定性执行（见 <a href="assets/ref/AI自动化测试-方法论与实践.html" target="_blank">专题</a>）</li>
+        <li>测试侧闭环已纳入：AI 生成测试资产 + 框架确定性执行（见 <a href="../assets/ref/AI自动化测试-方法论与实践.html" target="_blank">专题</a>）</li>
       </ul>
     </div>
     <div class="pager"><a href="stage3.html">← 阶段3 基础设施</a><a href="stage5.html">阶段5 推广度量 →</a></div>
