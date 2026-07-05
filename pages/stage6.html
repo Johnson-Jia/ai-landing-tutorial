@@ -96,7 +96,17 @@ catch (Exception e) { log.error("任务失败", e); XxlJobHelper.handleFail(e.ge
       <li><strong>业务知识库/RAG 调研</strong>：四方案对比验证（GraphRAG/LightRAG/Hyper-Extract/RagFlow）。</li>
     </ol>
 
-    <h2>5. 角色视角 + 常见坑 + 清单</h2>
+    <h2>5. 沉淀复用案例：从推广到资产</h2>
+    <p>13 组推广跑通后，<strong>能力沉淀</strong>是阶段 6 的落脚点。以下是推广中真实沉淀下来的几类资产（均来自实践，非举例虚构）：</p>
+    <ul>
+      <li><strong>工具型 Skill</strong>：SQL 查询、CRUD 生成等高频开发动作封装成 Skill（如本教程 <a href="../demos/claude-skills/skills/sql-query/">sql-query</a> / <a href="../demos/claude-skills/skills/crud-gen/">crud-gen</a>），新人调用即用，不必重复摸索。</li>
+      <li><strong>编排型 Skill</strong>：把 OpenSpec + Superpowers 串成 6 阶段流水线（<a href="../demos/claude-skills/skills/devflow/">devflow</a>），"规范驱动开发"从口号变成团队默认工作流。</li>
+      <li><strong>避坑资产</strong>：生产 bug 复盘沉淀成规则（如 §3.2 的"静默吞异常"写进 rules/，AI 自动加载），同类问题不再重犯。</li>
+      <li><strong>录制 + AI 生成范式</strong>：测试 / 前端 / 运维"人做一遍、AI 看会、批量复制"——测试用例生成从 4-8h 降到 10-30min。</li>
+    </ul>
+    <p>这些资产让<strong>个体的"会用"变成组织的"默认能力"</strong>——人把经验沉淀成 Skill / 规则，AI 把这些经验批量放大、跨人复用。这正是总纲"人 + AI，人是根本"的落地。</p>
+
+    <h2>6. 角色视角 + 常见坑 + 清单</h2>
     <div class="roles">
       <div class="role role-leader"><span class="role-tag">Leader</span><p>把个体经验沉淀为组织资产定成机制（Skill 仓库/避坑库/周报），纳入考核。</p></div>
       <div class="role role-dev"><span class="role-tag">开发者</span><p>主动把自己的高频操作做成 Skill 共享；踩坑后写进避坑库；用自我改进循环。</p></div>

@@ -4,7 +4,7 @@
 
 <div align="center">
 
-![阶段](https://img.shields.io/badge/转型阶段-7个-blue) ![Demo](https://img.shields.io/badge/可运行Demo-5个-green) ![Skill](https://img.shields.io/badge/Claude_Skill-4个+-9cf) ![规范](https://img.shields.io/badge/团队规范-12份-orange) ![人均产出](https://img.shields.io/badge/人均产出-+104%25-brightgreen) ![AI占比](https://img.shields.io/badge/AI代码占比-76.6%25-blue) ![License](https://img.shields.io/badge/license-MIT-green)
+![阶段](https://img.shields.io/badge/转型阶段-7个-blue) ![Demo](https://img.shields.io/badge/Demo资产-5个-green) ![Skill](https://img.shields.io/badge/Claude_Skill-4个+-9cf) ![规范](https://img.shields.io/badge/团队规范-12份-orange) ![人均产出](https://img.shields.io/badge/人均产出-+104%25-brightgreen) ![AI占比](https://img.shields.io/badge/AI代码占比-76.6%25-blue) ![License](https://img.shields.io/badge/license-MIT-green)
 
 </div>
 
@@ -22,7 +22,7 @@ flowchart LR
     S5 --> S6["阶段6<br/>沉淀复用<br/>Skill仓库"]
 ```
 
-不只是讲道理——配套 **5 个可运行 demo**（AI 自动化测试框架、AI 代码度量、汇报材料 Prompt 包、角色操作手册、Claude Code skill 仓库），拿来就能跑、照着就能做。
+不只是讲道理——配套 **5 个 demo 与资产包**：2 个可直接运行（AI 自动化测试框架、AI 代码度量），3 个拿来即用的资产（汇报材料 Prompt 包、角色操作手册、Claude Code skill 仓库）。
 
 ## 为什么做
 
@@ -70,7 +70,7 @@ ai-landing-tutorial/
 │   └── appendix.html       # 附录（术语表 / 源码索引 / 技术栈）
 ├── assets/
 │   ├── css/                # 样式
-│   ├── images/             # 图片（含 PPT 效果展示）
+│   ├── images/             # 图片（PPT 效果 / 二维码 / 图表）
 │   └── ref/                # 深度参考文档（7 篇）
 └── demos/                  # 可运行 demo + 资产包
     ├── ai-test-frame/      # AI 自动化测试框架（python main.py 即跑）
