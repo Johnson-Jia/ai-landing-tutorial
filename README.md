@@ -4,7 +4,7 @@
 
 <div align="center">
 
-![阶段](https://img.shields.io/badge/转型阶段-7个-blue) ![Demo](https://img.shields.io/badge/Demo资产-5个-green) ![Skill](https://img.shields.io/badge/Claude_Skill-4个+-9cf) ![规范](https://img.shields.io/badge/团队规范-12份-orange) ![人均产出](https://img.shields.io/badge/人均产出-+104%25-brightgreen) ![AI占比](https://img.shields.io/badge/AI代码占比-76.6%25-blue) ![License](https://img.shields.io/badge/license-MIT-green)
+![阶段](https://img.shields.io/badge/转型阶段-7个-blue) ![Demo](https://img.shields.io/badge/Demo资产-5个-green) ![Skill](https://img.shields.io/badge/Claude_Skill-4个+-9cf) ![规范](https://img.shields.io/badge/团队规范-13份-orange) ![人均产出](https://img.shields.io/badge/人均产出-+104%25-brightgreen) ![AI占比](https://img.shields.io/badge/AI代码占比-76.6%25-blue) ![License](https://img.shields.io/badge/license-MIT-green)
 
 </div>
 
