@@ -1,0 +1,26 @@
+{
+  "version": 1,
+  "projects": [
+    {
+      "name": "app-backend",
+      "path": ".",
+      "role": "当前项目",
+      "description": "后端主服务(Java)",
+      "type": "java"
+    },
+    {
+      "name": "app-sibling",
+      "path": "../app-sibling",
+      "role": "关联服务",
+      "description": "通过 XxxService 对接,共享用户体系",
+      "type": "java"
+    },
+    {
+      "name": "app-mobile",
+      "path": "../app-mobile",
+      "role": "移动端",
+      "description": "移动端前端(Node)",
+      "type": "node"
+    }
+  ]
+}

@@ -1,0 +1,42 @@
+{
+  "_comment_top": "agent-teams 配置样例(复制到 .claude/settings.json)。实际使用时删掉所有 _comment_* 字段、替换为你的真实值。",
+
+  "_comment_permissions": "权限层:deny 优先于 allow。多 Agent 并行时务必把敏感文件(.env/凭据/测试)写进 deny 硬拦——并行 Agent 容易误操作,不能只靠 prompt 限定路径。agent-teams 不擅自 commit/push,故 push 也拦。",
+  "permissions": {
+    "allow": [
+      "Bash(git diff:*)",
+      "Bash(git status:*)",
+      "Bash(git log:*)",
+      "Bash(ls:*)",
+      "Read(**)",
+      "Write(src/**)",
+      "Edit(src/**)"
+    ],
+    "deny": [
+      "Bash(rm -rf*)",
+      "Bash(git push*)",
+      "Write(.env*)",
+      "Write(**/*.key)",
+      "Write(**/secrets/**)",
+      "Write(test/**)",
+      "Edit(test/**)"
+    ]
+  },
+
+  "_comment_env": "Swarm 协作模式开关:设 1 启用 TeamCreate/SendMessage/TeamDelete 双向通信;保持 0 或不设则自动回退标准并行(单向)。",
+  "env": {
+    "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "0"
+  },
+
+  "_comment_hooks": "可选:UserPromptSubmit 时评估是否该触发 agent-teams(如检测多 agent 关键词)。your-hook.sh 需自行实现,本 demo 不含脚本。",
+  "hooks": {
+    "UserPromptSubmit": [
+      {
+        "matcher": "*",
+        "hooks": [
+          { "type": "command", "command": ".claude/hooks/your-hook.sh", "timeout": 30 }
+        ]
+      }
+    ]
+  }
+}
