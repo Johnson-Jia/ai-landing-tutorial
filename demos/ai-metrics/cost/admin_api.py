@@ -15,8 +15,11 @@ def load_usage(sample_path: str | None = None) -> dict:
     if key:
         try:
             return _fetch_from_admin_api(key)
-        except Exception:
-            pass  # 降级到 sample
+        except NotImplementedError:
+            # 占位实现:明示用户当前用的是 sample,而非真 API
+            print("[cost] Admin API 未接入(占位),用 sample 演示归因流程")
+        except Exception as e:  # 其他异常仍降级,但提示
+            print(f"[cost] Admin API 调用失败({e!r}),降级用 sample")
     if sample_path and Path(sample_path).exists():
         return json.loads(Path(sample_path).read_text(encoding="utf-8"))
     # 最兜底:内置极小 sample

@@ -7,15 +7,18 @@ from __future__ import annotations
 import re
 
 
-# 正则元字符存在 → expected 当作 pattern;否则当字面量。
-_REGEX_META = re.compile(r"[.+*?\[\](){}|^$\\-]")
-
-
-def code_grade(response: str, expected: str, ignore_case: bool = False, strip: bool = True) -> bool:
+def code_grade(
+    response: str,
+    expected: str,
+    ignore_case: bool = False,
+    strip: bool = True,
+    regex: bool = False,
+) -> bool:
     """code-grading:精确匹配或正则匹配。最快最可靠。
 
-    expected 含正则元字符(. * \\d 等) → 按 regex fullmatch;
-    否则 → 字面精确匹配。
+    默认 regex=False:字面量精确匹配(response == expected),含 ``.``/``-`` 的
+    字面量(如 ``v1.2``/``2026-07-12``/IP)也按字面比较,避免启发式歧义。
+    regex=True:expected 当作 pattern,按 :func:`re.fullmatch` 判定。
     """
     r = response
     e = expected
@@ -23,7 +26,7 @@ def code_grade(response: str, expected: str, ignore_case: bool = False, strip: b
         r, e = r.strip(), e.strip()
     if ignore_case:
         r, e = r.lower(), e.lower()
-    if _REGEX_META.search(e):
+    if regex:
         return re.fullmatch(e, r, re.IGNORECASE if ignore_case else 0) is not None
     return r == e
 
