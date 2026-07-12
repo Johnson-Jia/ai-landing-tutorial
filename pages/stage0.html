@@ -127,8 +127,8 @@ return 最终答案</code></pre>
     </ul>
     <div class="tip"><strong>一句话总结</strong>：像给<strong>聪明的实习生</strong>下指令——给够上下文、说清目标、定好流程、要求验证。模型越强，越需要你定义清楚"做什么、为什么、怎么算对"。</div>
 
-    <h3 id="claude-features">3.6 Claude 特有能力速通（区别于通用 LLM）</h3>
-    <p>上面 5 条原理适用于所有大模型。但<strong>Claude 还有几个独家能力</strong>，是它在企业场景拉开差距的关键。先在此建立印象，后续阶段会反复用到：</p>
+    <h3 id="claude-features">3.6 现代大模型进阶能力速通（以 Claude 为例）</h3>
+    <p>上面 5 条原理适用于所有大模型。此外，<strong>现代大模型（Claude / GPT / Gemini 等）还有几个进阶能力</strong>，是企业场景拉开效率差距的关键（各模型实现略有差异，<strong>本教程以 Claude Code 为主线，故以 Claude 为例</strong>）。先在此建立印象，后续阶段会反复用到：</p>
     <ul>
       <li><strong>① Extended Thinking（深度思考）</strong>：回答前先"思考"——分步推理过程可见、可管理。有 <em>budget</em>（思考 token 预算，最小 1024），复杂推理/多步规划任务开启；安全场景下部分推理被 <code>redacted_thinking</code> 加密但上下文仍连贯。与 temperature/top_p 不兼容（思考模式更偏确定性）。<span style="color:var(--muted);font-size:13px">用法：复杂任务才开，简单问答反而浪费。<br><strong>注</strong>：4.6+ 模型推荐 adaptive thinking，<code>budget_tokens</code> 最小 1024 是旧模型机制（4.7 / 4.8 / Fable 5 已移除），新模型按 adaptive 自动分配即可。</span></li>
       <li><strong>② Prompt Caching（上下文缓存）</strong>：把固定的大段上下文（system prompt / 知识库 / 长文档）缓存，命中时输入成本仅 <strong>0.1x（90% 折扣）</strong>、写入 1.25x，多轮对话近 100% input 从缓存读。用 <code>cache_control: ephemeral</code> 标记缓存点。<span style="color:var(--muted);font-size:13px">用法：固定 prompt + 多轮对话场景必开。<a href="stage2.html#claude-code">→ stage2 settings.json</a> 那里的长 system prompt 就隐含用了缓存能力。</span></li>
