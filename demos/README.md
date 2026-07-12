@@ -7,7 +7,8 @@
 | Demo | 对应教程 | 说明 | 运行 |
 |---|---|---|---|
 | [ai-test-frame](./ai-test-frame/) | [《AI 自动化测试：方法论与实践》](../assets/ref/AI自动化测试-方法论与实践.html) §8 | 最小可运行的 AI 自动化测试框架（数据驱动 + 注册中心 + 软断言 + 录制转生成思想） | `cd ai-test-frame && python main.py` |
-| [ai-metrics](./ai-metrics/) | [阶段 5 · 推广与度量](../pages/stage5.html) | AI 代码占比度量（三层识别算法 + 风格学反伪造）+ 提效同比（Excel 模板） | `cd ai-metrics && python main.py` |
+| [rag-service](./rag-service/) | [阶段 3 · 基础设施](../pages/stage3.html) §2 | AI RAG 端到端 demo：zvec 三级递进（naive→rerank→rerank-multi）+ 自动化评估（answer/relevance/groundedness） | `cd rag-service && python main.py` |
+| [ai-metrics](./ai-metrics/) | [阶段 5 · 推广与度量](../pages/stage5.html) | AI 代码占比度量，已升级**四维度**（`--dim code/quality/cost/agent`：代码三层识别 + 风格学反伪造 + 提效同比 Excel 模板） | `cd ai-metrics && python main.py` |
 | [report-templates](./report-templates/) | [《汇报材料 AI 生成指南》](../assets/ref/汇报材料-AI生成指南.html) | 5 类汇报 prompt 模板包（PPT/计划书/周报/总结/度量）+ ppt-master 渲染可编辑 PPT | 复制 prompt 填数据 → AI 生成 |
 | [role-handbooks](./role-handbooks/) | [《角色操作手册》](../assets/ref/角色操作手册.html) | 4 份角色手册（开发/测试/组长/产品），各含定位+任务+怎么做+工具+清单+坑 | 各级人员拿自己那份照做 |
 | [claude-skills](./claude-skills/) | [阶段 4 闭环](../pages/stage4.html) / [阶段 6 沉淀](../pages/stage6.html) | Claude Code skill 集合（团队 Skill 仓库）：devflow 编排型 skill（OpenSpec+Superpowers 6 阶段）+ 统一管理规范 | 复制 skills/ + rules/ 到 .claude/ |

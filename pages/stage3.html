@@ -63,6 +63,8 @@ with concurrent.futures.ThreadPoolExecutor() as executor:
 expr = 'corp_code in ["{0}", "default"] and resource_type in ["knowledge","course"]'.format(body.corp_code)
 all_docs = client.similar_search(body.current_question, 5, expr)  # default = 全租户共享</code></pre>
 
+    <div class="tip"><strong>📂 配套端到端 demo</strong>：理论落地可运行——见 <a href="../demos/rag-service/"><strong>demos/rag-service</strong></a>：zvec 三级递进（naive → rerank → rerank-multi）的检索质量阶梯 + 自动化评估（answer / relevance / groundedness 三指标），跑 <code>python main.py</code> 看完整 RAG 闭环。上面企业级方案（向量库抽象 + 两阶段检索 + 多租户）是它的生产强化版。</div>
+
     <h2>3. 代码知识图谱（开源推荐：codebase-memory-mcp）</h2>
     <div class="tip"><strong>🎯 实践建议</strong>：直接使用开源项目 <a href="https://github.com/DeusData/codebase-memory-mcp" target="_blank"><strong>codebase-memory-mcp</strong></a>（Tree-sitter → 知识图谱 → MCP 工具，158 语言，开箱即用）。本节讲透设计原理帮你理解"为什么这么设计、怎么用好"；想深入架构或自研可看 <a href="../assets/ref/代码知识图谱-架构深度解析.html" target="_blank">《代码知识图谱：架构深度解析》</a>。</div>
 

@@ -51,6 +51,7 @@
       <li><strong>code-review 多 Agent</strong>（某业务组）：Haiku 资格检查 + 5 个 Sonnet 并行专项审查 + 独立 Haiku 打置信度分（阈值 80 才发评论）。</li>
     </ul>
     <div class="warn"><strong>踩坑共识</strong>：Windows 上同时跑 5 个 Agent 易 fork 失败（内存不足），建议 2-3 个；子 Agent 的 model 只支持 sonnet/opus/haiku；SendMessage 必须带 summary 参数。</div>
+    <div class="tip"><strong>📂 编排决策方法论 + 五种模式</strong>：选哪种多 Agent 拓扑？见 <a href="../demos/agent-teams/reference/orchestration-patterns.md"><strong>orchestration-patterns.md</strong></a>（<code>demos/agent-teams/reference/</code>）——按任务复杂度 / Agent 数 / 人机确认频率给出五种模式 + 决策树；另有 <a href="../demos/agent-teams/examples/swarm-example.md">swarm-example</a>（Swarm 全自动并行）与 <a href="../demos/agent-teams/examples/code-review-example.md">code-review-example</a>（Haiku 资格检查 + 多 Sonnet 并行 + 置信度打分）两个完整范例。</div>
 
     <h3>2.1 远期演进：全流程 Agent 微服务闭环（成熟期目标）</h3>
     <p>多 Agent 并行是<strong>"横向放大"</strong>（同时干多个任务）；更远的终局是<strong>"纵向贯通"</strong>——把"非技术人员提需求 → AI 全流程执行 → 部署上线"串成一条 Agent 微服务流水线。这是成熟期愿景，不是起步就建：</p>
@@ -82,6 +83,8 @@ func ConfidenceFromSimilarity(s float64) float64 {
     if c := 1.0 - s; c &lt; 0.1 { return 0.1 } else { return c }
 }</code></pre>
     <p><strong>双口径</strong>：提交占比 + 行数占比（后者更真实）。支持按作者/模块/周下钻趋势。</p>
+
+    <div class="tip"><strong>📂 配套四维度度量 demo（已升级）</strong>：本节"AI 代码占比"是 code 维度；度量工具已升级为<strong>四维度</strong>——<code>--dim code/quality/cost/agent</code>（代码占比 / 质量缺陷 / 成本词元 / Agent 协作），一次性覆盖"提效是否真实、是否以质量换速度"。见 <a href="../demos/ai-metrics/"><strong>demos/ai-metrics</strong></a>（<code>python main.py</code> 即跑，自带 Excel 模板）。</div>
 
     <div class="tip" style="margin-top:14px"><strong>📐 事前估算法：设定目标占比（配合事后统计）</strong>。上面是"事后用 git 统计真实占比"；推广前还需"事前按场景估算目标占比"——用于设预期、定考核、对齐资源。公式：AI 占比 =（AI 生成核心代码量 + AI 辅助优化代码量）÷ 总代码量 × 100%，按开发场景分类测算取平均：</div>
     <table>
