@@ -1,0 +1,7 @@
+{
+  "workspaces": [
+    {"id": "ws1", "name": "交易平台", "input_tokens": 1200000, "cache_read": 980000, "output_tokens": 240000, "cost_usd": 186.50},
+    {"id": "ws2", "name": "数据中台", "input_tokens": 800000, "cache_read": 510000, "output_tokens": 160000, "cost_usd": 142.30},
+    {"id": "ws3", "name": "基础架构", "input_tokens": 430000, "cache_read": 210000, "output_tokens": 90000, "cost_usd": 68.90}
+  ]
+}
