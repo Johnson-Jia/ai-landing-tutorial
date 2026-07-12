@@ -1,0 +1,4 @@
+__pycache__/
+*.pyc
+workspace/zvec_db/
+.venv/
