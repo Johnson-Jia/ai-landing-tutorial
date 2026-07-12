@@ -74,7 +74,7 @@ ai-landing-tutorial/
 │   └── ref/                # 深度参考文档（7 篇）
 └── demos/                  # 可运行 demo + 资产包
     ├── ai-test-frame/      # AI 自动化测试框架（python main.py 即跑）
-    ├── ai-metrics/         # AI 代码占比度量（三层识别算法 + Excel 模板）
+    ├── ai-metrics/         # 四维度度量（代码占比 + 质量 + 成本 + Agent 效能，--dim 切换）
     ├── report-templates/   # 5 类汇报 Prompt 包 + ppt-master 渲染 PPT
     ├── role-handbooks/     # 4 份角色手册（开发 / 测试 / 组长 / 产品）
     ├── claude-skills/      # Claude Code skill + 团队规范仓库
@@ -88,9 +88,10 @@ ai-landing-tutorial/
 2. **按阶段走**：stage0 总纲（思想 + 原理）→ stage1 战略启动 → ... → stage6 沉淀复用
 3. **按角色拿手册**：开发 / 测试 / 组长 / 产品，各读各的（`demos/role-handbooks/`），不用通读全教程
 4. **边做边用 demo**：
-   - 度量 AI 效果 → `demos/ai-metrics`
+   - 度量 AI 效果 → `demos/ai-metrics`（`--dim code/quality/cost/agent` 四维度）
    - 写汇报材料 → `demos/report-templates`
    - 做自动化测试 → `demos/ai-test-frame`
+   - 跑 RAG 端到端 → `demos/rag-service`（zvec 三级递进 + 评估）
    - 沉淀团队规范 / skill → `demos/claude-skills`
    - 多 Agent 并行编排 → `demos/agent-teams`
 
