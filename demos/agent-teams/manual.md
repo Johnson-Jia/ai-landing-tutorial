@@ -225,7 +225,15 @@
 
 见 [`examples/blueprint-example.md`](../examples/blueprint-example.md)——用户认证功能(注册 + 登录 + JWT),展示了从 [1/6] 到 [6/6] 的完整对话,含 Agent 失败重试。
 
-### 示例 2:跨项目协作(注册表驱动)
+### 示例 2:Swarm 协作(完整生命周期)
+
+见 [`examples/swarm-example.md`](../examples/swarm-example.md)——运营后台模块(CRUD + 报表 + 导出 + 前后端联调),展示 `TeamCreate` → Leader 分派 → Member 互发消息协调 → 动态追加任务 → 异常自主处理 → `TeamDelete` 全过程,含「标准并行 vs Swarm 在每个关键时刻的差异对照」。
+
+### 示例 3:code-review-team 分级审查
+
+见 [`examples/code-review-example.md`](../examples/code-review-example.md)——对 32 文件 PR 的分级审查,展示 **Haiku 资格审查(过滤 20 个低风险文件)→ 3 个 Sonnet 并行深审(安全/性能/可维护性)→ Haiku 聚合 + 置信度过滤 → 红/黄/绿分级报告**,含成本/质量权衡分析。这是 Coordinator Pattern(贵模型规划 + 便宜模型执行)的最小落地。
+
+### 示例 4:跨项目协作(注册表驱动)
 
 ```
 用户: /agent-teams 给订单系统加售后通知功能,要改后端和移动端
@@ -258,7 +266,9 @@ Claude: [4/6] 执行 — #1 先行 → #2,#3 并行
       [6/6] 执行报告: 成功 3/3
 ```
 
-### 示例 3:Swarm 协作
+### 示例 5:Swarm 协作(速览)
+
+> 完整 Swarm 对话样例见 [`examples/swarm-example.md`](../examples/swarm-example.md)。下面是简版速览。
 
 ```
 用户: /agent-teams 多 agent 团队开发后台管理模块,含 CRUD、报表、数据导出,前后端要联调
@@ -291,7 +301,7 @@ Claude: [4/6] Swarm 执行
 
 > Swarm 的优势:Leader 发现联调需求后动态追加任务,**无需中断等你决策**。
 
-### 示例 4:Agent 执行失败
+### 示例 6:Agent 执行失败
 
 ```
 Claude: [4/6] 并行执行
@@ -350,6 +360,21 @@ Claude: 🚀 backend 重试中...
 | 注册表路径不可达 | 跳过该项目并警告,不影响其他 |
 | Swarm 不可用 | 自动回退标准 Agent 调度 |
 | Swarm Member 无响应 | Leader 等待 → SendMessage 确认 → 升级主会话 |
+
+---
+
+## 九、更多参考
+
+| 想了解 | 读哪个文件 |
+|---|---|
+| 标准并行完整对话(含失败重试) | [`examples/blueprint-example.md`](../examples/blueprint-example.md) |
+| Swarm 协作完整生命周期 | [`examples/swarm-example.md`](../examples/swarm-example.md) |
+| code-review-team 分级审查(Haiku 资格审 + Sonnet 深审) | [`examples/code-review-example.md`](../examples/code-review-example.md) |
+| 4 策略对照 / Swarm 工作流 / devflow 集成细节 | [`reference/orchestration.md`](../reference/orchestration.md) |
+| 五编排模式 + Coordinator Pattern + 数量指南 + 与四策略映射 | [`reference/orchestration-patterns.md`](../reference/orchestration-patterns.md) |
+| 4 团队模板 + 模型/subagent_type 速查 + 注册表 schema | [`reference/team-and-registry.md`](../reference/team-and-registry.md) |
+
+> **何时升级到多 Agent / 用几个 subagent / Swarm 何时才回本**——这些编排原理问题,答案在 [`reference/orchestration-patterns.md`](../reference/orchestration-patterns.md)。
 
 ---
 

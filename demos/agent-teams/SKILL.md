@@ -166,13 +166,15 @@ devflow 模式额外:
            → 否 → 标准并行(默认)
 ```
 
-读者可对话指定("用标准并行" / "策略2")跳过自动选择。**4 策略对照、Swarm 工作流细节见 `reference/orchestration.md`**。
+读者可对话指定("用标准并行" / "策略2")跳过自动选择。**4 策略对照、Swarm 工作流细节见 `reference/orchestration.md`;五模式方法论 + Coordinator Pattern + 数量指南见 `reference/orchestration-patterns.md`**。
 
 ## 团队模板与模型速查
 
 4 个模板(full-stack-team / code-review-team / refactor-team / cross-project-fullstack)、模型(opus/sonnet/haiku)、subagent_type(general-purpose/Explore/Plan/code-reviewer):**见 `reference/team-and-registry.md`**。
 
 > 团队自定义 subagent_type(如前端专项)需团队预置;不存在时回退 `general-purpose`。
+>
+> 完整对话样例:标准并行见 `examples/blueprint-example.md`、Swarm 协作见 `examples/swarm-example.md`、code-review-team(Haiku 资格审 + Sonnet 深审)见 `examples/code-review-example.md`。
 
 ## 项目注册表
 
@@ -204,6 +206,17 @@ devflow 模式额外:
 | 跨项目文件误操作 | prompt 限定路径 + 事后 git diff 检查 |
 | 注册表路径不可达 | 跳过该项目并警告 |
 | Swarm 不可用 | 自动回退标准 Agent 调度 |
+
+## 更多样例与模式参考
+
+| 文件 | 内容 | 何时读 |
+|---|---|---|
+| `examples/blueprint-example.md` | 标准并行完整流程(用户认证,含失败重试) | 想看标准并行走法 |
+| `examples/swarm-example.md` | Swarm 协作完整生命周期(运营模块,含动态追加任务 / Member 互发消息) | 想看 Swarm 双向协调 |
+| `examples/code-review-example.md` | code-review-team 分级审查(Haiku 资格审 + 多 Sonnet 并行深审 + 置信度过滤) | 想看 Coordinator Pattern 落地 |
+| `reference/orchestration.md` | 4 策略对照 / Swarm 工作流 / devflow 集成 | 选策略、用 Swarm、接 devflow 时 |
+| `reference/orchestration-patterns.md` | 五编排模式 + Coordinator Pattern + 数量指南 + 与四策略映射 | 理解编排原理、决定用不用多 Agent 时 |
+| `reference/team-and-registry.md` | 4 模板 + 模型/subagent_type 速查 + 注册表 schema | [2/6] 组团队时 |
 
 ---
 
