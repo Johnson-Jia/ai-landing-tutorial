@@ -32,6 +32,12 @@ def apply(text: str) -> str:
 
 
 def main(argv: list[str] | None = None) -> int:
+    # Windows GBK 终端中文乱码预防
+    try:
+        sys.stdout.reconfigure(encoding="utf-8")
+    except Exception:
+        pass
+
     import argparse
     from pathlib import Path
 
