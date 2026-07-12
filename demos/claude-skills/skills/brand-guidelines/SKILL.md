@@ -50,3 +50,4 @@ python3 ~/.claude/skills/brand-guidelines/scripts/apply_brand.py <产物文件>
 - **校验器即规范**:规范不只写在 SKILL.md,还落在 `validate_brand.py` 的白名单里——规范与校验一体,不会"文档说一套、代码做一套"。
 - **可接入 CI**:`validate_brand.py` 退出码反映合规性,可作 pre-commit / CI 门禁。
 - **企业规范 Agent 化范式**:把色卡/字体换成任何企业规范(文档模板/接口约定/命名规则),同一模式复用。
+- **HEX 覆盖范围**:当前 `validate_brand.py` 只校验 6 位 hex(`#RRGGBB`);3 位简写(`#FFF`)、8 位带 alpha(`#RRGGBBAA`)、`rgb()`/`rgba()` 未覆盖。实际项目若用到这些写法,按需扩展 `HEX_RE`(保持白名单统一大小写折叠即可)。

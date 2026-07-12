@@ -23,3 +23,17 @@ def test_issue_has_advice():
     issues = analyze(explain)
     assert len(issues) == 1
     assert "索引" in issues[0].advice or "index" in issues[0].advice.lower()
+
+
+def test_nested_loop_rows1_not_flagged():
+    # rows=1 的 Nested Loop 是驱动表单行,O(n²) 风险极小,应被过滤
+    explain = "Nested Loop  (cost=0.00..5.00 rows=1)"
+    assert analyze(explain) == []
+
+
+def test_seq_scan_high_cost_no_double_count():
+    # 同一行 Seq Scan + cost>10000 只报 1 个问题(同根因去重)
+    explain = "Seq Scan on orders  (cost=0.00..50000.00 rows=1000000)"
+    issues = analyze(explain)
+    assert len(issues) == 1
+    assert issues[0].kind == "seq_scan"

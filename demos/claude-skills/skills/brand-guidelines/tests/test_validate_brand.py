@@ -14,9 +14,18 @@ def test_off_brand_color_is_flagged():
 
 
 def test_off_brand_font_is_flagged():
-    text = '<div style="font-family:Comic Sans MS">违规字体</div>'
+    # 真实 CSS 常用引号包裹含空格的字体名
+    text = "<div style=\"font-family:'Comic Sans MS'\">违规字体</div>"
     violations = validate(text)
     assert any("Comic Sans MS" in v for v in violations)
+
+
+def test_quoted_font_extracted():
+    # 引号包裹的字体名应被正确提取(不被吞成空)
+    text = "<div style=\"font-family:'PingFang SC'\">合规</div>"
+    assert validate(text) == []  # PingFang SC 在白名单
+    text2 = "<div style=\"font-family:'Comic Sans MS'\">违规</div>"
+    assert any("Comic Sans MS" in v for v in validate(text2))
 
 
 def test_brand_colors_whitelist_includes_primary():

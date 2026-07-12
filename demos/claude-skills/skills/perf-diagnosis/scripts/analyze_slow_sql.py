@@ -19,20 +19,35 @@ class Issue:
 
 
 def analyze(explain: str) -> list[Issue]:
-    """解析 EXPLAIN 文本,返回问题清单。"""
+    """解析 EXPLAIN 文本,返回问题清单。
+
+    同一行根因只报一次:Seq Scan / Nested Loop 已覆盖的问题,不再额外报 high_cost
+    (避免同一节点双计)。结果按 (kind, detail) 去重。
+    """
     issues: list[Issue] = []
+    seen: set[tuple[str, str]] = set()
+
+    def _add(issue: Issue) -> None:
+        key = (issue.kind, issue.detail)
+        if key not in seen:
+            seen.add(key)
+            issues.append(issue)
 
     for line in explain.splitlines():
+        line_is_seq_or_loop = False
         if "Seq Scan" in line:
-            issues.append(
+            line_is_seq_or_loop = True
+            _add(
                 Issue(
                     kind="seq_scan",
                     detail=line.strip(),
                     advice="全表扫描:考虑在 WHERE/JOIN 列上加索引,或检查是否有索引未被命中(统计信息过期可 ANALYZE)。",
                 )
             )
-        if "Nested Loop" in line and "rows=1 " not in line:
-            issues.append(
+        # rows=1 的 Nested Loop 是驱动表单行,O(n²) 风险极小,跳过(用 \b 边界匹配)
+        if "Nested Loop" in line and not re.search(r"rows=1\b", line):
+            line_is_seq_or_loop = True
+            _add(
                 Issue(
                     kind="nested_loop",
                     detail=line.strip(),
@@ -42,8 +57,9 @@ def analyze(explain: str) -> list[Issue]:
         cost_match = COST_RE.search(line)
         if cost_match:
             total = float(cost_match.group(2))
-            if total > HIGH_COST_THRESHOLD:
-                issues.append(
+            # 若该行已被 seq_scan/nested_loop 报过,不再重复报 high_cost(同根因去重)
+            if total > HIGH_COST_THRESHOLD and not line_is_seq_or_loop:
+                _add(
                     Issue(
                         kind="high_cost",
                         detail=line.strip(),

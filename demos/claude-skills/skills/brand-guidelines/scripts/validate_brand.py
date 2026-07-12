@@ -11,7 +11,12 @@ BRAND_COLORS = {"#1A56DB", "#16A34A", "#F59E0B", "#0F172A", "#FFFFFF"}
 BRAND_FONTS = {"PingFang SC", "Inter", "SF Mono", "Microsoft YaHei"}
 
 HEX_RE = re.compile(r"#[0-9A-Fa-f]{6}\b")
-FONT_RE = re.compile(r"font-family\s*:\s*([^;\"'\n]+)", re.IGNORECASE)
+# 支持可选引号('PingFang SC' / "Comic Sans MS" / Inter),非贪婪匹配到
+# 结束符:; 换行 " '(style 属性闭合或下一个声明) 之一
+FONT_RE = re.compile(
+    r"font-family\s*:\s*['\"]?\s*([^;\"'\n]+?)\s*['\"]?(?=[;\"'\n]|$)",
+    re.IGNORECASE,
+)
 
 
 def validate(text: str) -> list[str]:
