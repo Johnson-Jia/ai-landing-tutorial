@@ -1,0 +1,7 @@
+[
+  {"question": "企业怎么推进 AI 提效转型", "relevant_ids": ["ai-transformation"], "answer": ""},
+  {"question": "RAG 的检索重排是怎么做的", "relevant_ids": ["rag-basics"], "answer": ""},
+  {"question": "团队代码提交规范是什么", "relevant_ids": ["team-conventions"], "answer": ""},
+  {"question": "向量检索和全文检索有什么区别", "relevant_ids": ["rag-basics"], "answer": ""},
+  {"question": "AI 转型后人均产出变化", "relevant_ids": ["ai-transformation"], "answer": ""}
+]

@@ -2,3 +2,8 @@ __pycache__/
 *.pyc
 workspace/zvec_db/
 .venv/
+
+# sample 演示数据需要入库(根 .gitignore 忽略整个 demos/*/workspace/)
+!workspace/
+!workspace/**
+workspace/zvec_db/
