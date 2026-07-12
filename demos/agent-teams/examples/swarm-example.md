@@ -1,5 +1,7 @@
 # 团队蓝图示例:Swarm 协作(多轮动态协调)
 
+> ⚠️ **概念性声明**:本样例的 `TeamCreate` / `SendMessage` / `TeamDelete` 等工具名为**概念示意**,用于展示协作模式与交互节奏;实际 API 签名、工具名、参数以 [Claude Code Agent Teams 官方文档](https://docs.claude.com/en/docs/claude-code/agent-teams) 为准(实验功能,可能调整)。
+
 > 场景:开发一个后台运营模块(CRUD + 报表 + 数据导出),前后端要联调、需求会在过程中微调。Swarm 可用(`CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1`)。展示完整生命周期:`TeamCreate` → 分派 → 协调 → 验收 → `TeamDelete`。
 >
 > **为什么用 Swarm 而不是标准并行**:任务不能一轮写死——前端要等后端接口稳定才能联调,联调中又可能暴露接口缺口,需要 Leader 在运行时动态追加任务、协调多角色,而不是中断等用户决策。

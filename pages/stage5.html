@@ -51,7 +51,7 @@
       <li><strong>code-review 多 Agent</strong>（某业务组）：Haiku 资格检查 + 5 个 Sonnet 并行专项审查 + 独立 Haiku 打置信度分（阈值 80 才发评论）。</li>
     </ul>
     <div class="warn"><strong>踩坑共识</strong>：Windows 上同时跑 5 个 Agent 易 fork 失败（内存不足），建议 2-3 个；子 Agent 的 model 只支持 sonnet/opus/haiku；SendMessage 必须带 summary 参数。</div>
-    <div class="tip"><strong>📂 编排决策方法论 + 五种模式</strong>：选哪种多 Agent 拓扑？见 <a href="../demos/agent-teams/reference/orchestration-patterns.md"><strong>orchestration-patterns.md</strong></a>（<code>demos/agent-teams/reference/</code>）——按任务复杂度 / Agent 数 / 人机确认频率给出五种模式 + 决策树；另有 <a href="../demos/agent-teams/examples/swarm-example.md">swarm-example</a>（Swarm 全自动并行）与 <a href="../demos/agent-teams/examples/code-review-example.md">code-review-example</a>（Haiku 资格检查 + 多 Sonnet 并行 + 置信度打分）两个完整范例。</div>
+    <div class="tip"><strong>📂 编排决策方法论 + Anthropic 五模式 + cookbooks 补充</strong>：选哪种多 Agent 拓扑？见 <a href="../demos/agent-teams/reference/orchestration-patterns.md"><strong>orchestration-patterns.md</strong></a>（<code>demos/agent-teams/reference/</code>）——按任务复杂度 / Agent 数 / 人机确认频率给出 Anthropic 官方五模式（Prompt Chaining / Routing / Parallelization / Orchestrator-Workers / Evaluator-Optimizer）+ cookbooks 补充（Async Multi-Agent）+ 决策树；另有 <a href="../demos/agent-teams/examples/swarm-example.md">swarm-example</a>（Swarm 全自动并行）与 <a href="../demos/agent-teams/examples/code-review-example.md">code-review-example</a>（Haiku 资格检查 + 多 Sonnet 并行 + 置信度打分）两个完整范例。</div>
 
     <h3>2.1 远期演进：全流程 Agent 微服务闭环（成熟期目标）</h3>
     <p>多 Agent 并行是<strong>"横向放大"</strong>（同时干多个任务）；更远的终局是<strong>"纵向贯通"</strong>——把"非技术人员提需求 → AI 全流程执行 → 部署上线"串成一条 Agent 微服务流水线。这是成熟期愿景，不是起步就建：</p>

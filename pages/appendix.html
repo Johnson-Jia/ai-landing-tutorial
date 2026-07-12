@@ -57,10 +57,10 @@
       <li><strong>AI 代码占比工具</strong>（阶段5）：Go，Co-authored-by + 风格学反伪造。</li>
       <li><strong>PPT 生成服务</strong>（AI 应用扩展）：Dify 编排 + FastAPI 渲染。</li>
       <li><strong>AI 自动化测试框架</strong>（测试）：Playwright + 数据驱动 + 录制转 AI 生成。详见 <a href="../assets/ref/AI自动化测试-方法论与实践.html">《AI 自动化测试：方法论与实践》</a>。</li>
-      <li><strong>AI RAG 端到端 demo</strong>（阶段3·业务知识 RAG）：zvec 三级递进（naive→rerank→rerank-multi）+ 自动化评估（answer/relevance/groundedness），见 <a href="../demos/rag-service/">demos/rag-service</a>。</li>
+      <li><strong>AI RAG 端到端 demo</strong>（阶段3·业务知识 RAG）：zvec 三级递进（<strong>L1 纯向量 → L2 +FTS 混合（RRF 融合）→ L3 +CrossEncoder 重排</strong>）+ 自动化评估（<strong>recall@k / MRR</strong>，faithfulness 留接口），见 <a href="../demos/rag-service/">demos/rag-service</a>。</li>
       <li><strong>AI 代码度量四维度升级</strong>（阶段5）：在原 code 维度（Co-authored-by + 风格学反伪造）基础上新增 quality / cost / agent 三维度（<code>--dim code/quality/cost/agent</code>），见 <a href="../demos/ai-metrics/">demos/ai-metrics</a>。</li>
       <li><strong>Skill 范式新增三例</strong>（阶段6·沉淀复用）：<a href="../demos/claude-skills/skills/brand-guidelines/">brand-guidelines</a>（规范型：设计 Token / 平台规范，让 AI 输出符合团队设计规范）/ <a href="../demos/claude-skills/skills/perf-diagnosis/">perf-diagnosis</a>（诊断分析型：只读性能诊断不改代码）/ <a href="../demos/claude-skills/skills/session-memory/">session-memory</a>（记忆型：跨会话持久化，按项目隔离）。</li>
-      <li><strong>多 Agent 编排方法论与范例</strong>（阶段5·推广）：编排决策方法论 + 五种模式（orchestration-patterns.md）/ Swarm 与 code-review 两个完整 example，见 <a href="../demos/agent-teams/reference/orchestration-patterns.md">orchestration-patterns</a>、<a href="../demos/agent-teams/examples/swarm-example.md">swarm-example</a>、<a href="../demos/agent-teams/examples/code-review-example.md">code-review-example</a>。</li>
+      <li><strong>多 Agent 编排方法论与范例</strong>（阶段5·推广）：编排决策方法论 + Anthropic 五模式 + cookbooks 补充（orchestration-patterns.md）/ Swarm 与 code-review 两个完整 example，见 <a href="../demos/agent-teams/reference/orchestration-patterns.md">orchestration-patterns</a>、<a href="../demos/agent-teams/examples/swarm-example.md">swarm-example</a>、<a href="../demos/agent-teams/examples/code-review-example.md">code-review-example</a>。</li>
     </ul>
 
     <h2 id="stack">C. 技术栈全景</h2>

@@ -4,14 +4,15 @@
 
 | 维度 | 命令 | 解决什么 |
 |---|---|---|
-| ① AI 代码占比 | `python main.py` / `--dim code` | 真实识别 AI 代码（三层算法 + 风格学反伪造）|
-| ② 提效同比 | `python main.py`（含） | 需求/Bug/人均同比 |
-| ③ 输出质量 | `python main.py --dim quality` | code-grading + LLM-as-judge 评估 AI 输出 |
-| ④ API 成本 | `python main.py --dim cost` | FinOps：按 workspace 归因 + 缓存效率 + chargeback |
-| ⑤ Agent 效能 | `python main.py --dim agent` | 任务成功率/token 归因/工具反向评估 |
+| ① code（AI 代码占比 + 提效同比）| `python main.py` / `--dim code` | 真实识别 AI 代码（三层算法 + 风格学反伪造）+ 需求/Bug/人均同比 |
+| ② quality（输出质量）| `python main.py --dim quality` | code-grading + LLM-as-judge 评估 AI 输出 |
+| ③ cost（API 成本）| `python main.py --dim cost` | FinOps：按 workspace 归因 + 缓存效率 + chargeback |
+| ④ agent（Agent 效能）| `python main.py --dim agent` | 任务成功率/token 归因/工具反向评估 |
 | 全部 | `python main.py --dim all` | 一次跑四维度 |
 
-> 默认 `python main.py` = 原 ①② 两维度（**向后兼容**，老用户无感）。
+> 默认 `python main.py` = 维度 ①（AI 代码占比 + 提效同比，**向后兼容**，老用户无感）。
+>
+> 下文「核心一 / 核心二」分别讲维度 ① 的两块（AI 代码占比算法、提效同比模板），「核心三/四/五」对应维度 ②/③/④。
 
 ## 环境准备（先看完再跑）
 

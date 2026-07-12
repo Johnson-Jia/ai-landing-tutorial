@@ -12,6 +12,7 @@
 | [report-templates](./report-templates/) | [《汇报材料 AI 生成指南》](../assets/ref/汇报材料-AI生成指南.html) | 5 类汇报 prompt 模板包（PPT/计划书/周报/总结/度量）+ ppt-master 渲染可编辑 PPT | 复制 prompt 填数据 → AI 生成 |
 | [role-handbooks](./role-handbooks/) | [《角色操作手册》](../assets/ref/角色操作手册.html) | 4 份角色手册（开发/测试/组长/产品），各含定位+任务+怎么做+工具+清单+坑 | 各级人员拿自己那份照做 |
 | [claude-skills](./claude-skills/) | [阶段 4 闭环](../pages/stage4.html) / [阶段 6 沉淀](../pages/stage6.html) | Claude Code skill 集合（团队 Skill 仓库）：devflow 编排型 skill（OpenSpec+Superpowers 6 阶段）+ 统一管理规范 | 复制 skills/ + rules/ 到 .claude/ |
+| [agent-teams](./agent-teams/) | [阶段 5 推广](../pages/stage5.html) | 多 Agent 并行编排 skill：6 步流程（检测→蓝图→确认→并行→验收→交付）拉起团队做完复杂任务，含 Anthropic 五模式 + cookbooks 补充、Swarm/code-review 两个 example | `/agent-teams <任务>` 或对话触发 |
 | [handover-templates](./handover-templates/) | [阶段 4 闭环](../pages/stage4.html) / [阶段 5 推广](../pages/stage5.html) | 团队交接协作模板：开发↔测试 / 前后端 / 跨部门（产品↔研发见产品手册） | 按场景挑模板落进工作流 |
 | [review-checklists](./review-checklists/) | [阶段 4 闭环](../pages/stage4.html) / [阶段 5 推广](../pages/stage5.html) | 落地验收清单（试点 / 推广）+ 代码审查 checklist（给人看） | 试点结项 / 合并 AI 产出前核对 |
 

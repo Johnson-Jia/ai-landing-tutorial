@@ -166,7 +166,7 @@ devflow 模式额外:
            → 否 → 标准并行(默认)
 ```
 
-读者可对话指定("用标准并行" / "策略2")跳过自动选择。**4 策略对照、Swarm 工作流细节见 `reference/orchestration.md`;五模式方法论 + Coordinator Pattern + 数量指南见 `reference/orchestration-patterns.md`**。
+读者可对话指定("用标准并行" / "策略2")跳过自动选择。**4 策略对照、Swarm 工作流细节见 `reference/orchestration.md`;Anthropic 五模式 + cookbooks 补充(Async Multi-Agent) + Coordinator Pattern + 数量指南见 `reference/orchestration-patterns.md`**。
 
 ## 团队模板与模型速查
 
@@ -215,7 +215,7 @@ devflow 模式额外:
 | `examples/swarm-example.md` | Swarm 协作完整生命周期(运营模块,含动态追加任务 / Member 互发消息) | 想看 Swarm 双向协调 |
 | `examples/code-review-example.md` | code-review-team 分级审查(Haiku 资格审 + 多 Sonnet 并行深审 + 置信度过滤) | 想看 Coordinator Pattern 落地 |
 | `reference/orchestration.md` | 4 策略对照 / Swarm 工作流 / devflow 集成 | 选策略、用 Swarm、接 devflow 时 |
-| `reference/orchestration-patterns.md` | 五编排模式 + Coordinator Pattern + 数量指南 + 与四策略映射 | 理解编排原理、决定用不用多 Agent 时 |
+| `reference/orchestration-patterns.md` | Anthropic 五模式 + cookbooks 补充(Async Multi-Agent) + Coordinator Pattern + 数量指南 + 与四策略映射 | 理解编排原理、决定用不用多 Agent 时 |
 | `reference/team-and-registry.md` | 4 模板 + 模型/subagent_type 速查 + 注册表 schema | [2/6] 组团队时 |
 
 ---

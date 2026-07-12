@@ -1,6 +1,6 @@
 # Agent Teams 操作手册
 
-> 版本 2.1 · 适用:Claude Code CLI / Desktop / IDE · 作者:Johnson
+> 版本 2.2 · 适用:Claude Code CLI / Desktop / IDE · 作者:Johnson
 
 一条命令拉起一个多 Agent 团队,把复杂任务自动拆成 6 步跑完。本手册给你(读者)通读用;AI 运行时读的是同目录的 `SKILL.md`,细节按需读 `reference/`。
 
@@ -371,11 +371,11 @@ Claude: 🚀 backend 重试中...
 | Swarm 协作完整生命周期 | [`examples/swarm-example.md`](../examples/swarm-example.md) |
 | code-review-team 分级审查(Haiku 资格审 + Sonnet 深审) | [`examples/code-review-example.md`](../examples/code-review-example.md) |
 | 4 策略对照 / Swarm 工作流 / devflow 集成细节 | [`reference/orchestration.md`](../reference/orchestration.md) |
-| 五编排模式 + Coordinator Pattern + 数量指南 + 与四策略映射 | [`reference/orchestration-patterns.md`](../reference/orchestration-patterns.md) |
+| Anthropic 五模式 + cookbooks 补充(Async Multi-Agent) + Coordinator Pattern + 数量指南 + 与四策略映射 | [`reference/orchestration-patterns.md`](../reference/orchestration-patterns.md) |
 | 4 团队模板 + 模型/subagent_type 速查 + 注册表 schema | [`reference/team-and-registry.md`](../reference/team-and-registry.md) |
 
 > **何时升级到多 Agent / 用几个 subagent / Swarm 何时才回本**——这些编排原理问题,答案在 [`reference/orchestration-patterns.md`](../reference/orchestration-patterns.md)。
 
 ---
 
-*手册 v2.1 · 配套:`SKILL.md`(AI 入口)· `reference/`(细节)· `examples/`(样例)*
+*手册 v2.2 · 配套:`SKILL.md`(AI 入口)· `reference/`(细节)· `examples/`(样例)*

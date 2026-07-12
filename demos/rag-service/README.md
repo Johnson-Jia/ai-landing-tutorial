@@ -11,8 +11,8 @@
 | 级别 | 策略 | 对应 cookbooks | 解决什么 |
 |---|---|---|---|
 | L1 | 纯向量 | baseline RAG | 语义相似 |
-| L2 | +FTS 混合(RRF 融合) | +BM25 | 关键词召回补充 |
-| L3 | +CrossEncoder 重排 | +rerank | 精排,降 47% 检索失败率 |
+| L2 | +FTS 混合(RRF 融合) | +BM25 | 关键词召回补充（对应官方 context+BM25 的 **49%** 降幅：5.7%→2.9%）|
+| L3 | +CrossEncoder 重排 | +rerank | 精排，叠加后累计降 **67%** 检索失败率（官方：context+BM25 降 49%、再 +rerank 降 67%，5.7%→1.9%）|
 
 ## 快速开始
 

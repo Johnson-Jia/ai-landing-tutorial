@@ -1,12 +1,14 @@
 # 多 Agent 编排模式方法论(reference)
 
-> 本文件按需读取:理解「为什么要这么编排 / 何时用多 Agent / 用几个 subagent / 与本 skill 四策略的关系」时加载。内容源自 Anthropic cookbooks 的 `patterns/agents/` 与 `managed_agents/CMA_plan_big_execute_small`、`research_lead_agent.md`,经整理对应到 agent-teams skill。
+> 本文件按需读取:理解「为什么要这么编排 / 何时用多 Agent / 用几个 subagent / 与本 skill 四策略的关系」时加载。**官方五模式**(Prompt Chaining / Routing / Parallelization / Orchestrator-Workers / Evaluator-Optimizer)源自 [Anthropic Building Effective Agents](https://www.anthropic.com/engineering/building-effective-agents);**Async Multi-Agent / Coordinator Pattern / 数量指南**源自 anthropic-cookbook 的 `patterns/agents/`、`managed_agents/CMA_plan_big_execute_small`、`research_lead_agent.md`。经整理对应到 agent-teams skill。
 >
 > 配套:`reference/orchestration.md`(本 skill 的 4 策略与 Swarm 工作流)、`reference/team-and-registry.md`(模板与模型速查)。
 
-## 一、五种编排模式
+## 一、Anthropic 五模式 + cookbooks 补充模式
 
-> 选型原则:**先看任务能不能用更简单的模式解决**。Prompt Chaining < Routing < Orchestrator-Workers < Evaluator-Optimizer < Async Multi-Agent,复杂度与成本递增。能用流水线就别上多 Agent。
+> **来源区分**:① **Anthropic 官方五模式**(出自 [Building Effective Agents](https://www.anthropic.com/engineering/building-effective-agents)):Prompt Chaining / Routing / Parallelization / Orchestrator-Workers / Evaluator-Optimizer——这是权威的"何时用哪种编排"框架。② **cookbooks 补充模式**(非官方五模式之一,出自 anthropic-cookbook 的 `patterns/agents/` 等示例):Async Multi-Agent——对等通信 / 动态 spawn 的更复杂协作,实务中常用但不在官方五模式枚举内。本文件按官方五模式为主、cookbooks 补充模式为辅,共 6 个。
+>
+> 选型原则:**先看任务能不能用更简单的模式解决**。Prompt Chaining < Routing < Parallelization < Orchestrator-Workers < Evaluator-Optimizer,复杂度与成本递增。能用流水线就别上多 Agent。
 
 ### 1. Prompt Chaining(顺序流水线)
 
@@ -46,7 +48,32 @@
 
 **何时不用**:分类边界模糊、或各类处理高度重叠(这时合并成一个 prompt 反而更好)。
 
-### 3. Orchestrator-Workers(编排者 + 工作者)
+### 3. Parallelization(并行化)
+
+> **Anthropic 官方五模式之一**。
+
+**定义**:同一 prompt 对**多个输入**并行跑(Sectioning),或**多个不同 prompt** 对同一输入并行跑(Voting),然后聚合。两种变体:
+- **Sectioning**:把输入切片成多份,同 prompt 并发处理(如多方干系人分析,每方一段)
+- **Voting**:多个 prompt 各自评一遍同一输入,投票/取众数(如多评审员独立打分后聚合)
+
+**示意**:
+```
+Sectioning(同 prompt × 多输入):       Voting(多 prompt × 同输入):
+  ┌→ prompt A(输入 1)┐                   ┌→ prompt 甲 → 评 1┐
+  ├→ prompt A(输入 2)┼→ 聚合             ├→ prompt 乙 → 评 2┼→ 投票/聚合
+  └→ prompt A(输入 3)┘                   └→ prompt 丙 → 评 3┘
+```
+
+**何时用**:
+- 子任务**相互独立、可同时跑**,且整体时间 = max(子任务) 而非 sum
+- 拆分方式**预先知道**(不用看输入才决定拆几个)
+- 想要**多视角/多评审员**降低单次判断的方差
+
+**典型场景**:多方干系人影响分析(同 prompt 跑产品方/技术方/运营方视角)、多评审员独立打分后投票、长文档按章节并行摘要(再合并)。
+
+**与 Orchestrator-Workers 的区别**:Parallelization 的并行度与子任务**预先固定**(已知拆几个、各自跑什么);Orchestrator-Workers 的子任务**运行时才由 orchestrator 决定**拆几个。
+
+### 4. Orchestrator-Workers(编排者 + 工作者)
 
 **定义**:Orchestrator 在**运行时**动态决定拆成哪些子任务,然后并行派给 worker,最后汇总。
 
@@ -67,7 +94,7 @@
 
 **与 Prompt Chaining 的区别**:Chaining 的步骤是**预先固定的顺序**;Orchestrator-Workers 的子任务是**运行时动态生成**的并行集合。
 
-### 4. Evaluator-Optimizer(生成-评估循环)
+### 5. Evaluator-Optimizer(生成-评估循环)
 
 **定义**:Generator 出初版 → Evaluator 按标准打分 → 不达标则带反馈回 Generator → 循环直到 PASS 或达轮数上限。
 
@@ -89,7 +116,9 @@
 
 **何时不用**:没有客观评价标准(纯主观偏好,循环无意义)、或单次生成已足够好(白白多花 token)。
 
-### 5. Async Multi-Agent(异步多 Agent 协作)
+### 6. Async Multi-Agent(异步多 Agent 协作)
+
+> ⚠️ **cookbooks 补充模式,非 Anthropic 官方五模式之一**——出自 anthropic-cookbook 的 `patterns/agents/` 等示例。官方五模式(Prompt Chaining / Routing / Parallelization / Orchestrator-Workers / Evaluator-Optimizer)更基础,Async Multi-Agent 在其之上更复杂、实务中也常用,但不在官方枚举内。
 
 **定义**:多个对等 Agent(peer-to-peer)协作,或一个 lead Agent 动态 spawn 子 agent。通信方式两种:
 - **对等 peer**:固定 N 个 agent,各自有角色,互相通信
@@ -114,15 +143,16 @@
 
 ---
 
-### 五模式速查对照
+### 模式速查对照(Anthropic 五模式 + cookbooks 补充)
 
-| 模式 | 拓扑 | 子任务预定义? | 通信 | 典型场景 |
-|---|---|---|---|---|
-| Prompt Chaining | 线性 | ✅ 固定顺序 | 单向(前→后) | ETL、流水线 |
-| Routing | 分叉 | ✅ 固定分支 | 单向(分类→分支) | 客服分流 |
-| Orchestrator-Workers | 一对多一 | ❌ 运行时拆 | 双向(派/收) | 动态拆分并行 |
-| Evaluator-Optimizer | 循环 | ✅ 固定两角色 | 双向(反馈) | 质量迭代 |
-| Async Multi-Agent | 网状 | ❌ 动态 | 多向(peer/spawn) | 多角色协作 |
+| # | 模式 | 来源 | 拓扑 | 子任务预定义? | 通信 | 典型场景 |
+|---|---|---|---|---|---|---|
+| 1 | Prompt Chaining | 官方 | 线性 | ✅ 固定顺序 | 单向(前→后) | ETL、流水线 |
+| 2 | Routing | 官方 | 分叉 | ✅ 固定分支 | 单向(分类→分支) | 客服分流 |
+| 3 | Parallelization | 官方 | 扇出→聚合 | ✅ 固定并发度 | 单向(派/收) | 多视角/多评审 |
+| 4 | Orchestrator-Workers | 官方 | 一对多一 | ❌ 运行时拆 | 双向(派/收) | 动态拆分并行 |
+| 5 | Evaluator-Optimizer | 官方 | 循环 | ✅ 固定两角色 | 双向(反馈) | 质量迭代 |
+| 6 | Async Multi-Agent | cookbooks 补充 | 网状 | ❌ 动态 | 多向(peer/spawn) | 多角色协作 |
 
 ---
 
@@ -244,6 +274,7 @@ lead agent 根据查询类型选不同 spawn 策略:
 |---|---|
 | Prompt Chaining | [1/6]→[2/6]→...→[6/6] 本身就是固定顺序的 6 步流水线(skill 内部用代码串联,非 LLM 串联) |
 | Routing | 没有显式策略,但 [2/6] 选模板时("这是审查任务 → code-review-team")是一种轻量 routing |
+| Parallelization | [4/6] 无依赖的子任务并发派多个 Agent(同 prompt × 多子任务),即 Sectioning 变体;多 reviewer 并行审不同维度近 Voting |
 | Evaluator-Optimizer | [5/6] 质量验收不通过 → 打回 Agent 重做(最多 2 轮),是 Evaluator-Optimizer 的有限轮实现 |
 | Coordinator Pattern | code-review-team 的 screener/grader(haiku)+ reviewer(sonnet)分工;Leader 用 opus、Member 用 sonnet/haiku 的模型分层 |
 
@@ -265,4 +296,4 @@ lead agent 根据查询类型选不同 spawn 策略:
 
 ---
 
-*本文件由 SKILL.md / manual.md 按需加载,不预读。模式源自 Anthropic cookbooks,经整理对应到本 skill。*
+*本文件由 SKILL.md / manual.md 按需加载,不预读。官方五模式源自 [Anthropic Building Effective Agents](https://www.anthropic.com/engineering/building-effective-agents),Async Multi-Agent / Coordinator Pattern 源自 anthropic-cookbook,经整理对应到本 skill。*

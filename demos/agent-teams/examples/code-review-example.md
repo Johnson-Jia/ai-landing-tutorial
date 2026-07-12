@@ -1,5 +1,7 @@
 # 团队蓝图示例:code-review-team(分级代码审查)
 
+> ⚠️ **概念性声明**:本样例的 `TeamCreate` / `SendMessage` / `TeamDelete` / `TaskCreate` 等工具名为**概念示意**,用于展示协作模式与分工节奏;实际 API 签名、工具名、参数以 [Claude Code Agent Teams 官方文档](https://docs.claude.com/en/docs/claude-code/agent-teams) 为准(实验功能,可能调整)。
+
 > 场景:对一个有 30+ 改动的 PR 做大规模代码审查。展示**两段式成本/质量权衡**:Haiku 做资格审查(快速过滤无关文件),多个 Sonnet 并行做深度专项审查(安全/性能/可维护性),Haiku 再做置信度聚合,输出红/黄/绿分级报告。
 >
 > **为什么 Haiku 资格审 + Sonnet 深审**:30 个文件若全用 Sonnet 审,token 成本高且大量时间花在无关紧要的文件(配置、文档、自动生成代码)上。先用便宜的 Haiku 快速过一遍,**只把值得深审的文件交给 Sonnet**——实测能把 Sonnet 的 token 大头砍到 1/3 左右,而质量损失极小(漏审的都是低风险文件)。

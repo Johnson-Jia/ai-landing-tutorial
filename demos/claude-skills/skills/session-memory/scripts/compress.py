@@ -1,6 +1,6 @@
 """会话记忆压缩:把长对话结构化压缩成 SESSION_MEMORY,保留关键信息。
 
-结构(优先级从高到低):用户纠正 > 错误与修正 > 活跃工作 > 已完成 > 待办 > 关键引用。
+结构(顺序即优先级):用户意图 > 用户纠正 > 错误与修正 > 活跃工作 > 已完成 > 待办 > 关键引用。
 思路源自 Anthropic cookbooks session_memory_compaction(中文重写)。
 
 无 ANTHROPIC_API_KEY 时只生成压缩 prompt(供 AI/人执行);有 key 时可调 LLM 真压缩。"""
@@ -8,7 +8,7 @@ from __future__ import annotations
 
 import sys
 
-# 结构章节(顺序=优先级:用户纠正最重要,放最前)
+# 结构章节(顺序即优先级,与下方一致:用户意图 > 用户纠正 > 错误与修正 > ...)
 SESSION_SECTIONS = [
     "用户意图",
     "用户纠正",

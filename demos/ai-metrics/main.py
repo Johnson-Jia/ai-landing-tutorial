@@ -59,7 +59,9 @@ def run_quality_dim():
     # demo：用 expected 本身作 response（模拟"完美回答"），展示评估流程
     responses = [c["expected"] for c in cases]
     stats = evaluate(responses, cases)
-    print(f"=== 输出质量评估 ===\n  样本 {stats['total']}，通过 {stats['passed']}，通过率 {stats['pass_rate']:.1%}")
+    print("=== 输出质量评估 ===")
+    print("  (演示:用 expected 模拟完美输出,真实接入请替换为模型响应)")
+    print(f"  样本 {stats['total']}，通过 {stats['passed']}，通过率 {stats['pass_rate']:.1%}")
 
 
 def run_cost_dim():
