@@ -1,0 +1,6 @@
+[
+  {"input": "法国首都?", "expected": "Paris", "criteria": ""},
+  {"input": "2+2=?", "expected": "4", "criteria": ""},
+  {"input": "水的化学式", "expected": "H2O", "criteria": ""},
+  {"input": "地球绕太阳一圈多久?", "expected": "一年", "criteria": ""}
+]
