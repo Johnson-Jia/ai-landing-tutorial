@@ -21,7 +21,7 @@ EVALSET = WORKSPACE / "evalset.json"
 DB_DIR = WORKSPACE / "zvec_db"
 VECTORS = WORKSPACE / "vectors.json"
 DIM = 1024
-TOPK = 10
+TOPK = 3  # 全库仅 7 chunks;@10 召回恒 100% 无区分度,@3 才能拉开三级差距
 
 
 def main(use_contextual=True, use_rerank_model=True):
@@ -67,7 +67,7 @@ def main(use_contextual=True, use_rerank_model=True):
 
     # 3. 打印对比表
     print("\n" + "=" * 60)
-    print(f"{'检索策略':<16}{'recall@10':>12}{'MRR':>10}")
+    print(f"{'检索策略':<16}{'recall@3':>12}{'MRR':>10}")
     print("-" * 60)
     for name in levels:
         r = sum(agg[name]["recall"]) / len(agg[name]["recall"])

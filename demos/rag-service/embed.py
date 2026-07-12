@@ -1,12 +1,15 @@
 """统一 embedding 封装:三层降级,对外只暴露 embed(text)->list[float]。
 
 降级优先级:
-1. 在线(DashScope/Anthropic key)→ QwenDenseEmbedding(zvec 扩展)
+1. 在线(DashScope key)→ QwenDenseEmbedding(zvec 扩展)
 2. 本地 sentence_transformers(BAAI/bge-m3 等)
 3. sample 预计算 JSON(workspace/vectors.json)
 4. 哈希兜底(确定性、无依赖、语义无关——仅用于演示检索流程跑通)
 
 教学含义:生产用 1/2;课堂教学或 CI 用 3/4。
+
+注:在线分支只认 DASHSCOPE_API_KEY(Qwen/DashScope 鉴权);ANTHROPIC_API_KEY
+无法鉴权 DashScope,曾导致 401 被静默吞、backend 误标 "online" 实际走 hash。
 """
 from __future__ import annotations
 
@@ -32,9 +35,9 @@ class Embedder:
         self._impl = None
         self._sample: dict[str, list[float]] = {}
 
-        # 1. 在线
+        # 1. 在线(仅认 DashScope key;Anthropic key 无法鉴权 DashScope/Qwen)
         if allow_online:
-            key = os.environ.get("DASHSCOPE_API_KEY") or os.environ.get("ANTHROPIC_API_KEY")
+            key = os.environ.get("DASHSCOPE_API_KEY")
             if key:
                 try:
                     # 签名参照 zvec.extension.qwen_embedding_function 文档:
@@ -82,9 +85,9 @@ class Embedder:
         """确定性哈希到单位向量。语义无关,仅供流程演示。"""
         digest = hashlib.sha256(text.encode("utf-8")).digest()
         repeats = (self.dim // 32) + 1
-        buf = (digest * repeats)[: self.dim * 4]
+        # digest 是 bytes(uint8 每元素 1 字节),只需切到 dim 长度;原 dim*4 是死切片
+        buf = (digest * repeats)[: self.dim]
         v = np.frombuffer(buf, dtype=np.uint8).astype(np.float32)
-        v = v[: self.dim]
         norm = np.linalg.norm(v)
         return (v / (norm + 1e-9)).tolist()
 

@@ -69,7 +69,8 @@ def retrieve_l3_rerank(
             reranker=reranker,
         )
     except Exception:
-        # 模型下载失败/无网络 → 回退 L2
+        # 模型下载失败/无网络 → 回退 L2(打印提示,避免静默降级被误以为真三级)
+        print("[L3] CrossEncoder 不可用(sentence_transformers 未装或模型下载失败),回退 L2")
         return retrieve_l2_hybrid(coll, query_text, query_vec, topk=topk)
 
 
