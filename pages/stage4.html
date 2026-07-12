@@ -143,7 +143,7 @@ Stage 6 归档        → openspec-archive</code></pre>
     <figure style="margin:18px 0;text-align:center">
       <img src="../assets/images/diagrams/ai-test-workflow.svg" alt="AI 自动化测试四段式工作流：录制→AI转换→人审→数据驱动执行" style="max-width:100%;border-radius:8px">
     </figure>
-    <p>核心定位：<strong>AI 只生成不执行</strong>——AI 在第二段（编码期）把 Playwright 录制脚本转成标准测试类，运行期是确定性的数据驱动框架（零 AI）。这个边界规避了 LLM 幻觉导致的"虚假通过"（把失败说成通过）。最值得复用的方法论是<strong>"规范即 Prompt"</strong>：把测试类编写规范沉淀成一个 Claude Code Skill（8 条硬规范 + 3 套模板），AI 在规范框框里稳定产出。</p>
+    <p>核心定位：<strong>AI 只生成不执行</strong>——AI 在第二段（编码期）把 Playwright 录制脚本转成标准测试类，运行期是确定性的数据驱动框架（零 AI）。这个边界规避了 LLM 幻觉导致的"虚假通过"（把失败说成通过）。很值得复用的方法论是<strong>"规范即 Prompt"</strong>：把测试类编写规范沉淀成一个 Claude Code Skill（8 条硬规范 + 3 套模板），AI 在规范框框里稳定产出。</p>
     <div class="tip"><strong>与 §5 的呼应</strong>：§5 讲"防 AI 偷改测试"（保护测试不被 AI 改坏）；本节讲"用 AI 生成测试"（让 AI 帮你写测试）。这是测试与 AI 关系的两个面——前者防风险，后者要提效，缺一不可。</div>
     <p style="margin-top:14px">📖 完整方法论（四段式详解、规范即 Prompt 的 8 规范 3 模板、元数据驱动编辑器、动态数据 + 软断言、录制转换 7 大避坑、已实现 vs 规划的诚实边界）见 <a href="../assets/ref/AI自动化测试-方法论与实践.html" target="_blank">《AI 自动化测试：方法论与实践》</a>。</p>
 

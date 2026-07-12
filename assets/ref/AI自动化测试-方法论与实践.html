@@ -199,7 +199,7 @@ else:
   </table>
 
   <h3>6.2 录制转测试类 · 7 大避坑</h3>
-  <p>录制生成的脚本是"原始素材"，<strong>直接运行几乎必然出错</strong>。实战中最常见的 7 个坑：</p>
+  <p>录制生成的脚本是"原始素材"，<strong>直接运行通常会出错</strong>。实战中最常见的 7 个坑：</p>
   <table>
     <tr><th>坑</th><th>表现</th><th>应对</th></tr>
     <tr><td>① iframe 多层嵌套</td><td>元素在 iframe 内，录制只记最外层 → "元素不存在"</td><td>始终用 <code>self._get_main_iframe()</code>，嵌套用 <code>content_frame</code> 逐层进</td></tr>
