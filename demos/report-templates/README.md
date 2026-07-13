@@ -23,7 +23,7 @@
    - Bug 率：**22%**（目标是降到 10% 以内）
    - 再补几个角色、阶段名，让它读起来像真项目
 3. **粘到免费 AI**：复制整段 Prompt，贴进下面任一个**免费** AI 对话框 → 回车：
-   - [**Kimi**（月之暗面）](https://kimi.com) · [**通义千问**（阿里 DashScope）](https://dashscope.console.aliyun.com)
+   - [**智谱清言**（智谱）](https://chatglm.cn) · [**豆包**（字节）](https://www.doubao.com)
 4. **30 秒出活**：AI 直接吐出一份 Markdown 格式的战略汇报，结构齐全（背景 / 目标 / 现状 / 行动 / 预期收益）——这就是最终产物了。
 
 > 跑通这一遍，你就知道整套流程是怎么回事。**PPT 渲染（ppt-master）是可选的进阶**，那是后面把 Markdown 变成可编辑 PPTX 的事，先拿 Markdown 看效果、确认内容，再考虑要不要渲染成 PPT。
