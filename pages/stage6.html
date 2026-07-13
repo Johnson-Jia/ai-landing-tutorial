@@ -107,6 +107,34 @@ catch (Exception e) { log.error("任务失败", e); XxlJobHelper.handleFail(e.ge
     </ul>
     <p>这些资产让<strong>个体的"会用"变成组织的"默认能力"</strong>——人把经验沉淀成 Skill / 规则，AI 把这些经验批量放大、跨人复用。这正是总纲"人 + AI，人是根本"的落地。</p>
 
+    <h2>沉淀不是终点——防退化机制</h2>
+    <p>沉淀下来的 Skill / CLAUDE.md / 避坑库，<strong>不是一劳永逸的资产</strong>。转型推完 6 个月后，常见的退化是：Skill 写了没人调用、CLAUDE.md 失修不再反映现状、AI 占比从高点回落、新人上手周期变长、规范执行走样。<strong>沉淀不维护，等于没沉淀。</strong>本节给一份季度健康检查清单，把"防退化"做成可追踪的动作。</p>
+
+    <div class="tip"><strong>为什么单独拎出来</strong>：转型的"热情期"（前 3-6 个月）大家主动用，但热情衰退后，没有治理机制的团队会快速回到老习惯。<strong>沉淀是高峰期的产物，防退化是平稳期的治理</strong>——两件事。</div>
+
+    <h3>季度健康检查清单（5 项）</h3>
+    <p>每季度由审核小组（见 <a href="stage1.html">阶段1 §4.2</a>）跑一次，5 项任一亮红灯就触发干预：</p>
+    <table>
+      <tr><th>#</th><th>检查项</th><th>健康信号</th><th>退化信号</th></tr>
+      <tr><td>①</td><td><strong>Skill 调用频次</strong></td><td>团队 Skill 仓库的 Skill 仍有稳定调用</td><td>多个 Skill 长期零调用（description 失效 / 已被新流程取代 / 没人记得有）</td></tr>
+      <tr><td>②</td><td><strong>CLAUDE.md 最后更新</strong></td><td>近 1 个季度有维护，内容仍反映当前技术栈/红线</td><td>最后更新在半年前、技术栈已变但 CLAUDE.md 没跟上</td></tr>
+      <tr><td>③</td><td><strong>AI 占比趋势</strong></td><td>度量数据（见 <a href="stage5.html">阶段5</a>）稳定在目标区间</td><td>从高点持续回落（如从 70%+ 掉回 40%）</td></tr>
+      <tr><td>④</td><td><strong>新人上手周期</strong></td><td>新人靠 Skill/规范/避坑库能在预期周期内上手</td><td>新人上手变慢、频繁问重复问题（说明资产没复用起来）</td></tr>
+      <tr><td>⑤</td><td><strong>规范执行</strong></td><td>Code Review 四问（见 <a href="stage1.html">阶段1 §4.2</a>）仍被认真执行</td><td>人审流于形式、AI 代码盲合、防偷改测试的 deny 名单被绕过</td></tr>
+    </table>
+
+    <h3>退化信号 → 干预措施</h3>
+    <table>
+      <tr><th>亮红灯的项</th><th>干预措施</th></tr>
+      <tr><td>① Skill 调用频次降</td><td>复盘阻碍：description 不够具体？被新流程取代了就归档（见本页 §2 范式）？没人记得有就重宣贯一遍</td></tr>
+      <tr><td>② CLAUDE.md 失修</td><td>季度审一次：对每行问「删掉这行 AI 会犯错吗」（见 <a href="stage2.html">阶段2</a>），过时的删、新增的红线补</td></tr>
+      <tr><td>③ AI 占比回落</td><td>查根因：工具连不上（见 <a href="stage1.html">阶段1 §6</a>）？网络/账号额度问题？换了新成员没培训？针对性修复，不靠喊口号</td></tr>
+      <tr><td>④ 新人上手变慢</td><td>补文档：把新人常问的问题沉淀进 Skill / 避坑库（见本页 §3），让下次新人能自助</td></tr>
+      <tr><td>⑤ 规范执行走样</td><td>重训 + 关键项用 Hook 强制（CLAUDE.md 只是建议，Hook 是确定性的——见 <a href="stage4.html">阶段4 §5</a>）</td></tr>
+    </table>
+
+    <div class="warn"><strong>一句心法</strong>：<strong>转型不是一次性项目，是持续治理</strong>。沉淀只是起点，防退化才是把"转型成果"变成长期能力的关键——和本页 §3.3 的"自我改进循环"是同一件事的两面：让资产持续保鲜。</div>
+
     <h2>6. 角色视角 + 常见坑 + 清单</h2>
     <div class="roles">
       <div class="role role-leader"><span class="role-tag">Leader</span><p>把个体经验沉淀为组织资产定成机制（Skill 仓库/避坑库/周报），纳入考核。</p></div>
