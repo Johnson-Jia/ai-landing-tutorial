@@ -51,6 +51,7 @@
       <li><strong>code-review 多 Agent</strong>（某业务组）：Haiku 资格检查 + 5 个 Sonnet 并行专项审查 + 独立 Haiku 打置信度分（阈值 80 才发评论）。</li>
     </ul>
     <div class="warn"><strong>踩坑共识</strong>：Windows 上同时跑 5 个 Agent 易 fork 失败（内存不足），建议 2-3 个；子 Agent 的 model 只支持 sonnet/opus/haiku；SendMessage 必须带 summary 参数。</div>
+    <div class="tip"><strong>Windows 用户注意</strong>：多 Agent 并行在本机建议 2-3 个（fork 限制）；要大规模并行（5+）请用 Linux/macOS 或 <strong>WSL2</strong>（可绕过 fork 限制）。</div>
     <div class="tip"><strong>📂 编排决策方法论 + Anthropic 五模式 + cookbooks 补充</strong>：选哪种多 Agent 拓扑？见 <a href="../demos/agent-teams/reference/orchestration-patterns.md"><strong>orchestration-patterns.md</strong></a>（<code>demos/agent-teams/reference/</code>）——按任务复杂度 / Agent 数 / 人机确认频率给出 Anthropic 官方五模式（Prompt Chaining / Routing / Parallelization / Orchestrator-Workers / Evaluator-Optimizer）+ cookbooks 补充（Async Multi-Agent）+ 决策树；另有 <a href="../demos/agent-teams/examples/swarm-example.md">swarm-example</a>（Swarm 全自动并行）与 <a href="../demos/agent-teams/examples/code-review-example.md">code-review-example</a>（Haiku 资格检查 + 多 Sonnet 并行 + 置信度打分）两个完整范例。</div>
 
     <h3>2.1 远期演进：全流程 Agent 微服务闭环（成熟期目标）</h3>
@@ -110,6 +111,7 @@ func ConfidenceFromSimilarity(s float64) float64 {
       <tr><td>bug 排查</td><td>累计 144/179（80.4%）</td><td>某架构团队·内部缺陷库统计</td></tr>
     </table>
     <p style="font-size:13px;color:var(--text-soft)">注：「事后统计」是转型跑完后用度量工具算出来的，<strong>推进过程中看不到</strong>——别拿它当中间指标卡进度；「案例」是各组真实分享的场景。所有数字都是转型前后的对比，提效和 AI 转型同期发生，但不能 100% 都归功于 AI（需求、人员变动也有影响）——量级足以说明 AI 转型和显著提效强相关。</p>
+    <div class="warn"><strong>⚠️ 度量口径（向上汇报前必须对齐）</strong>：人均产出指标的开发人员字段，真实数据常含多人 / 不规范写法（如"张三、李四""张三（前端）"），demo 按逗号 split 简化去重，<strong>真实数据人数会偏高约 2 倍</strong>（见 ai-metrics efficiency.py）。因此 <strong>+104%</strong> 这类人均数字的口径需在内部先对齐（按清洗前还是清洗后算），向上汇报时显式标注口径，避免被质疑。</div>
     <div class="tip"><strong>度量是逐步建的，不是部署工具就出数据</strong>：真实团队先有「业务 / 模块覆盖率」→ 再有「bug 排查覆盖率」→ 最后才有「AI 代码占比」。<strong>别指望一上来就跑出 76.6%</strong>——先建可量化的业务指标，度量体系随转型成熟分阶段落地。</div>
     <div class="tip"><strong>💡 思考一下</strong>：如果你是 Leader，看到 AI 代码占比从 0% 涨到 76.6%，你会做什么决策？加投入、扩团队、还是换方向？</div>
 

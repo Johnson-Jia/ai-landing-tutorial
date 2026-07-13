@@ -75,6 +75,7 @@
       <tr><td><strong>Archive</strong>（归档）</td><td>变更完成后存档</td><td><code>openspec/changes/archive/</code></td></tr>
     </table>
     <p>四条命令覆盖全流程：</p>
+    <div class="tip"><strong>先装 OpenSpec CLI</strong>：<code>npm install -g @fission-ai/openspec@latest</code>（需 Node.js ≥20.19.0）。<strong>项目内初始化</strong>：进入项目根目录跑 <code>openspec init</code>（生成 <code>openspec/</code> 目录）。装好后下面的 <code>/opsx:*</code> slash 命令才能在 Claude Code 里用。</div>
     <pre><code class="language-bash">/opsx:explore   # 探索需求、调查代码库
 /opsx:propose   # 生成 proposal.md / design.md / specs/ / tasks.md
 /opsx:apply     # 按 tasks 执行（或交给 Superpowers）
