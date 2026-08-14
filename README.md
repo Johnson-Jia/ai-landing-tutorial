@@ -4,7 +4,7 @@
 
 <div align="center">
 
-![阶段](https://img.shields.io/badge/转型阶段-7个-blue) ![Demo](https://img.shields.io/badge/Demo资产-7个-green) ![Skill](https://img.shields.io/badge/Claude_Skill-7个+-9cf) ![规范](https://img.shields.io/badge/团队规范-13份-orange) ![人均产出](https://img.shields.io/badge/人均产出-+104%25-brightgreen) ![AI占比](https://img.shields.io/badge/AI代码占比-76.6%25-blue) ![License](https://img.shields.io/badge/license-MIT-green)
+![阶段](https://img.shields.io/badge/转型阶段-7个-blue) ![Demo](https://img.shields.io/badge/Demo资产-10个-green) ![Skill](https://img.shields.io/badge/Claude_Skill-7个+-9cf) ![规范](https://img.shields.io/badge/团队规范-13份-orange) ![番外](https://img.shields.io/badge/番外-FDE篇-9cf) ![人均产出](https://img.shields.io/badge/人均产出-+104%25-brightgreen) ![AI占比](https://img.shields.io/badge/AI代码占比-76.6%25-blue) ![License](https://img.shields.io/badge/license-MIT-green)
 
 </div>
 
@@ -22,7 +22,9 @@ flowchart LR
     S5 --> S6["阶段6<br/>沉淀复用<br/>Skill仓库"]
 ```
 
-不只是讲道理——配套 **7 个 demo 与资产包**：3 个可直接运行（AI 自动化测试框架、AI 代码度量、AI RAG 端到端），4 个拿来即用的资产（汇报材料 Prompt 包、角色操作手册、Claude Code skill 仓库、多 Agent 并行编排 skill）。
+不只是讲道理——配套 **10 个 demo 与资产包**：3 个可直接运行（AI 自动化测试框架、AI 代码度量、AI RAG 端到端），其余拿来即用（汇报材料 Prompt 包、角色操作手册、Claude Code skill 仓库、多 Agent 并行编排、交接与审查模板、FDE 现场四件套）。
+
+> **番外·FDE 篇**：主线讲「带自己团队转型」（甲方内部视角）；番外切换到「去客户现场用 AI 创造价值」（乙方 / FDE 视角）——写给想转 FDE（Forward Deployed Engineer）的开发者，含成长路径 + 客户现场方法论 + 现场四件套。详见下方[番外·FDE 篇](#番外fde-篇)。
 
 ## 为什么做
 
@@ -67,6 +69,7 @@ ai-landing-tutorial/
 ├── pages/                  # 教程页面（统一管理）
 │   ├── stage0.html         # 总纲：思想转变 + AI 原理
 │   ├── stage1-6.html       # 实施六阶段（战略→赋能→设施→试点→度量→沉淀）
+│   ├── fde.html            # 番外·FDE 篇（乙方客户现场视角）
 │   └── appendix.html       # 附录（术语表 / 源码索引 / 技术栈）
 ├── assets/
 │   ├── css/                # 样式
@@ -75,11 +78,14 @@ ai-landing-tutorial/
 └── demos/                  # 可运行 demo + 资产包
     ├── ai-test-frame/      # AI 自动化测试框架（python main.py 即跑）
     ├── ai-metrics/         # 四维度度量（代码占比 + 质量 + 成本 + Agent 效能，--dim 切换）
+    ├── rag-service/        # AI RAG 端到端（zvec 三级递进 + 评估）
     ├── report-templates/   # 5 类汇报 Prompt 包 + ppt-master 渲染 PPT
-    ├── role-handbooks/     # 4 份角色手册（开发 / 测试 / 组长 / 产品）
+    ├── role-handbooks/     # 角色手册（开发 / 测试 / 组长 / 产品 / 运营）
     ├── claude-skills/      # Claude Code skill + 团队规范仓库
     ├── agent-teams/        # 多 Agent 并行编排 skill（6 步流程 / Swarm / 跨项目）
-    └── rag-service/        # AI RAG 端到端（zvec 三级递进 + 评估）
+    ├── handover-templates/ # 团队交接协作模板（开发↔测试 / 前后端 / 跨部门）
+    ├── review-checklists/  # 落地验收清单 + 代码审查 checklist + 风险登记册
+    └── fde-fieldkit/       # FDE 现场四件套（画布 / PoC清单 / 能力矩阵 / 干系人图）
 ```
 
 ## 怎么开始
@@ -87,19 +93,34 @@ ai-landing-tutorial/
 1. **打开 `index.html`**——首页有整体导览 + 核心术语速查
 2. **按阶段走**：stage0 总纲（思想 + 原理）→ stage1 战略启动 → ... → stage6 沉淀复用
 3. **按角色拿手册**：开发 / 测试 / 组长 / 产品，各读各的（`demos/role-handbooks/`），不用通读全教程
-4. **边做边用 demo**：
+4. **想转 FDE**：读番外 [`pages/fde.html`](pages/fde.html) + 现场四件套（`demos/fde-fieldkit/`）
+5. **边做边用 demo**：
    - 度量 AI 效果 → `demos/ai-metrics`（`--dim code/quality/cost/agent` 四维度）
    - 写汇报材料 → `demos/report-templates`
    - 做自动化测试 → `demos/ai-test-frame`
    - 跑 RAG 端到端 → `demos/rag-service`（zvec 三级递进 + 评估）
    - 沉淀团队规范 / skill → `demos/claude-skills`
    - 多 Agent 并行编排 → `demos/agent-teams`
+   - FDE 现场工作 → `demos/fde-fieldkit`（画布 / 清单 / 矩阵 / 干系人图）
 
 ## 适合谁
 
 - **技术负责人 / 研发 Leader**：要主导团队 AI 转型、向上争取资源、向下推动落地
 - **想转型的开发 / 测试 / 组长 / 产品**：想知道自己在 AI 时代该干什么、怎么干
+- **想转 FDE 的开发者**：想搞清 FDE（前线部署工程师）要什么能力、缺口怎么补、没现场经验怎么入行——读[番外·FDE 篇](pages/fde.html)
 - **企业决策者**：想看清 AI 转型怎么做、效果如何、值不值得投
+
+## 番外·FDE 篇
+
+主线讲的是**甲方内部视角**——带自己的研发团队完成 AI 转型。番外切换到**乙方 / FDE 视角**：你作为 FDE（Forward Deployed Engineer，前线部署工程师），去**客户的业务现场**用 AI 创造价值，从需求探索一路做到生产上线。
+
+写给**想转 FDE 的开发者**，回答三个问题：
+
+- **FDE 要什么能力**：能力图谱 = 技术执行 + 客户现场两块肌肉（配比约 40/60，经验参考、随资历演化），用[能力自评矩阵](demos/fde-fieldkit/03-fde-skill-matrix.md)给自己打分找缺口。
+- **客户现场怎么干**：五件事——需求探索（[画布](demos/fde-fieldkit/01-fde-discovery-canvas.md)）→ PoC→生产（[清单](demos/fde-fieldkit/02-poc-to-prod-checklist.md)，含商务与组织前提）→ 价值证明 → 干系人管理（[干系人地图](demos/fde-fieldkit/04-stakeholder-map.md)）→ 把价值讲清楚。
+- **没现场经验怎么入行**：四条路径（内部转交付岗 / 给兄弟部门做 AI 落地 / 乙方初级岗 / 开源项目练手）+ 简历改造 + 面试题骨架。
+
+> 现场四件套（`demos/fde-fieldkit/`）可独立使用，复用主教程的技术 demo 作为 FDE 的「现场武器库」。详见 [`pages/fde.html`](pages/fde.html)。
 
 ## 关于
 
