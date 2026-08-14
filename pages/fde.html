@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>番外·FDE 篇 · AI 提效战略转型方法论</title>
+<link rel="stylesheet" href="../assets/css/style.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/styles/atom-one-dark.min.css">
+</head>
+<body>
+<header class="topbar"><div class="wrap topbar-inner">
+  <a class="brand" href="../index.html"><span class="brand-mark">⚡</span><span>AI 提效战略转型方法论</span></a>
+  <nav class="topnav"><a href="../index.html">首页</a><a href="stage0.html">总纲</a><a href="appendix.html">附录</a></nav>
+</div></header>
+<div class="chapter">
+  <aside class="side">
+    <h4>转型阶段</h4>
+    <a href="stage0.html">阶段0 总纲：思想+原理</a>
+    <a href="stage1.html">阶段1 战略启动</a>
+    <a href="stage2.html">阶段2 全员赋能</a>
+    <a href="stage3.html">阶段3 基础设施</a>
+    <a href="stage4.html">阶段4 闭环试点</a>
+    <a href="stage5.html">阶段5 推广度量</a>
+    <a href="stage6.html">阶段6 沉淀复用</a>
+    <h4>其他</h4><a href="../index.html">首页</a><a href="fde.html" class="cur">番外·FDE篇</a><a href="appendix.html">附录</a>
+  </aside>
+  <main class="content">
+    <h1>番外 · FDE 篇</h1>
+    <p class="subtitle">FDE（Forward Deployed Engineer）的成长地图 + 客户现场实战方法论——AI 落地时代增长最快的岗位之一。</p>
+
+    <div class="key-conclusion"><p>⚠️ <strong>视角切换声明</strong>：主教程讲的是<strong>甲方内部视角</strong>——「带自己的团队完成 AI 转型」。本篇切换到<strong>乙方 / FDE 视角</strong>——「去客户的业务现场，用 AI 创造价值」。两套肌肉有重叠（都用 AI、都要证明价值），但立场不同。读完主教程再来读这篇，你会清楚「内部转型」和「对外部署」的差别在哪。</p></div>
+
+    <div style="margin:18px 0;padding:14px 18px;background:#f0f7ff;border:1px solid #bcd9ff;border-radius:10px">
+      <div style="font-weight:700;color:#1057cb;font-size:14px;margin-bottom:8px">🧰 本篇速查 <span style="font-weight:400;color:#64748b;font-size:12px">（做什么 · 产出什么 · 用什么）</span></div>
+      <ul style="margin:0;padding-left:22px;font-size:14px;line-height:1.9;color:#334155">
+        <li><strong>🎯 适合谁</strong>：想转 FDE 的开发者 / 技术骨干；想看清 FDE 岗位的人</li>
+        <li><strong>📦 主线</strong>：FDE 是什么 → 能力图谱 → 客户现场实战（核心）→ 求职成长</li>
+        <li><strong>🛠 现场四件套</strong>：<a href="../demos/fde-fieldkit/01-fde-discovery-canvas.md">需求探索画布</a> · <a href="../demos/fde-fieldkit/02-poc-to-prod-checklist.md">PoC→生产清单</a> · <a href="../demos/fde-fieldkit/03-fde-skill-matrix.md">能力自评矩阵</a> · <a href="../demos/fde-fieldkit/04-stakeholder-map.md">客户干系人地图</a></li>
+      </ul>
+    </div>
+
+    <h2>篇首 · FDE 到底是什么</h2>
+    <p>FDE（Forward Deployed Engineer，前线 / 前沿部署工程师）概念最早由 <strong>Palantir</strong> 提出，现在是 AI 落地时代增长最快的岗位之一。它的核心定义是：<strong>把公司的 AI 产品带进客户的业务现场，根据具体业务需求设计、实现，并确保产品在现场落地扎根</strong>。从需求探索一路做到生产上线，全流程负责。</p>
+    <p>一种被广泛引用的刻画是 FDE 的工作模式约「<strong>40% 写代码 + 60% 面向客户</strong>」（需求沟通、方案设计、推动落地）——这是<strong>经验性刻画、非精确统计</strong>，且随资历变化：初级 FDE 写代码占比高，越资深客户现场占比越大，Lead FDE 几乎不写代码。<strong>FDE ≠ AI Engineer</strong>——AI Engineer 偏纯技术、需求量大；FDE 偏客户现场 + 业务落地，相对稀缺（市场普遍印象，无公开薪资统计，置信度低）。</p>
+    <p style="font-size:13px;color:#64748b;background:#f8fafc;border-left:3px solid #cbd5e1;padding:8px 12px;border-radius:0 6px 6px 0">📊 热度参考：2023–2025 年 FDE 招聘增长约 42 倍（来源：财联社转引 LinkedIn 数据，置信度中——媒体转引，非原始统计）。岗位定义、Palantir 起源、OpenAI 等头部公司在招，置信度高。</p>
+    <p>一句话定位本篇：<strong>FDE 的成长地图 + 客户现场实战方法论</strong>。主教程给了你技术武器库（RAG / 多 Agent / 度量 / 测试），本篇教你这些武器在<strong>客户现场</strong>怎么用，以及 FDE 独有的、主教程没覆盖的那块核心肌肉。</p>
+
+    <h2>第 1 章 · 能力图谱——你离 FDE 还有多远</h2>
+    <p>想转 FDE，先搞清楚它到底要什么能力。能力版图就两大块（配比与演化见篇首）：<strong>技术执行</strong>——把 AI 方案做出来；<strong>客户现场</strong>——在客户那儿把它落地、让人买单。下面用矩阵自评、看你的缺口在哪。</p>
+
+    <h3>1.1 自评：你站在哪</h3>
+    <p>用 <a href="../demos/fde-fieldkit/03-fde-skill-matrix.md">FDE 能力自评矩阵</a>给自己逐项打分（1 未见 / 2 入门 / 3 胜任 / 4 精通）。重点不是分数高低，而是<strong>找到缺口</strong>——尤其标出 1-2 分的项，那是要补的地方。</p>
+    <p>大白话：<strong>3 分</strong> = 交给你一个客户场景能独立扛；<strong>4 分</strong> = 别人卡住了来找你。FDE 的稀缺性主要在客户现场那 60%——很多技术强的人，恰恰卡在「不会跟客户打交道」。</p>
+
+    <h3>1.2 现有技能怎么迁移</h3>
+    <p>好消息：如果你走过主教程，你已经有了相当一部分 FDE 的底子。下表告诉你现有的角色经验怎么迁移过去。</p>
+    <div style="overflow-x:auto">
+      <table style="width:100%;border-collapse:collapse;font-size:14px;margin:12px 0">
+        <thead><tr style="background:#f1f5f9"><th style="border:1px solid #cbd5e1;padding:8px 10px;text-align:left">你现在的角色</th><th style="border:1px solid #cbd5e1;padding:8px 10px;text-align:left">直接能迁移到 FDE 的能力（对应能力组）</th><th style="border:1px solid #cbd5e1;padding:8px 10px;text-align:left">主教程对应</th></tr></thead>
+        <tbody>
+          <tr><td style="border:1px solid #cbd5e1;padding:8px 10px"><strong>开发</strong></td><td style="border:1px solid #cbd5e1;padding:8px 10px">AI 原生编码、RAG / 多 Agent 技术执行</td><td style="border:1px solid #cbd5e1;padding:8px 10px"><a href="../demos/claude-skills/">claude-skills</a> · <a href="../demos/rag-service/">rag-service</a> · <a href="../demos/agent-teams/">agent-teams</a></td></tr>
+          <tr><td style="border:1px solid #cbd5e1;padding:8px 10px"><strong>测试</strong></td><td style="border:1px solid #cbd5e1;padding:8px 10px">AI 产出质量把关、回归用例、效果度量</td><td style="border:1px solid #cbd5e1;padding:8px 10px"><a href="../demos/ai-test-frame/">ai-test-frame</a> · <a href="../demos/ai-metrics/">ai-metrics</a></td></tr>
+          <tr><td style="border:1px solid #cbd5e1;padding:8px 10px"><strong>组长</strong></td><td style="border:1px solid #cbd5e1;padding:8px 10px">现场项目推进、跨方协调的雏形；<strong>但</strong>对客户无职权（不像带自己团队有汇报线权威），推动逻辑完全不同</td><td style="border:1px solid #cbd5e1;padding:8px 10px"><a href="../demos/role-handbooks/组长手册.md">组长手册</a></td></tr>
+          <tr><td style="border:1px solid #cbd5e1;padding:8px 10px"><strong>产品</strong></td><td style="border:1px solid #cbd5e1;padding:8px 10px">需求探索、价值假设、方案表达</td><td style="border:1px solid #cbd5e1;padding:8px 10px"><a href="../demos/role-handbooks/产品手册.md">产品手册</a></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>看出规律了吗：<strong>开发 / 测试</strong>的人，A 组（技术执行）强，要补 B 组（客户现场）；<strong>组长 / 产品</strong>的人反过来。FDE 要两条腿都有——先补最拖后腿的那条。</p>
+
+    <h2>第 2 章 · 客户现场方法论——FDE 的核心肌肉</h2>
+    <p>这一章是本篇的重点，也是 FDE 区别于普通 AI 工程师的核心差异。主教程教你在<strong>自己团队</strong>里用 AI；这里教你进<strong>别人的业务</strong>用 AI。五件事：需求探索 → PoC→生产 → 价值证明 → 干系人管理 → 把价值讲清楚。</p>
+
+    <h3>2.1 需求探索：先业务，后技术</h3>
+    <p>FDE 新手最常犯的错：进客户现场就讲模型、讲 RAG、讲 Agent。客户听不懂，你也抓不准痛点。正确顺序是<strong>先把业务和痛点摸清，再回来看 AI 能接哪一块</strong>。</p>
+    <p>用 <a href="../demos/fde-fieldkit/01-fde-discovery-canvas.md">客户需求探索画布</a>带着做访谈，六格：业务现状 → 痛点清单 → AI 发力点 → 价值假设 → 约束 → 下一步。填完一定要和客户<strong>当面</strong>对齐「发力点」和「价值假设」——这是后面证明价值的基准。</p>
+    <p style="font-size:13px;color:#64748b;background:#fffbeb;border-left:3px solid #fbbf24;padding:8px 12px;border-radius:0 6px 6px 0">📌 示意案例（虚构脱敏，非真实客户）：某区域 SaaS 客服平台，客服人工分流日均约 4000 条工单、分流准确率约 82%。AI 发力点是「工单自动分流 + 草拟回复」，<strong>不碰</strong>最终发送（草稿要客服审核后才发）。价值假设：分流准确率提到 95%+（待 PoC 验证）。</p>
+
+    <h3>2.2 PoC→生产：演示不等于生产</h3>
+    <p>PoC 用干净数据跑通了，<strong>不等于</strong>能上生产。真实客户数据有空值 / 错值 / 长尾，客户的 IT 环境有内网 / 遗留系统 / 合规约束。把演示变成客户真在跑的系统，要先过一组「商务与组织前提」（见下方清单第 0 组），再过五组工程关卡：数据准备、合规审查、客户 IT 集成、验收标准、上线与回滚。</p>
+    <p>照 <a href="../demos/fde-fieldkit/02-poc-to-prod-checklist.md">PoC→生产现场清单</a>逐项打勾，任一组没过别上线。其中「验收标准」里的回归用例，用 <a href="../demos/ai-test-frame/">ai-test-frame</a> 做 AI 产出的自动化测试——防止改一处坏一片。</p>
+    <p>注意：这份清单和主教程 <a href="stage3.html">阶段 3 基础设施</a>不一样。阶段 3 是给<strong>自己团队</strong>搭设施；这里是适配<strong>客户的</strong>数据、合规、IT 环境和验收口径。</p>
+
+    <h3>2.3 价值证明：用数据说话</h3>
+    <p>客户买单的根本理由是「AI 给我带来了收益」。FDE 要从头到尾用数据证明价值——这就是主教程 <a href="../demos/ai-metrics/">ai-metrics</a> 四维度度量（代码占比 / 质量 / 成本 / Agent 效能）的用武之地，只是<strong>口径要换成客户的</strong>：客户不在乎你的 AI 代码占比，在乎的是分流准确率提了多少、处理时间快了多少、省了多少客服工时。</p>
+    <p>把度量结果写成客户能看的效果报告，可套用 <a href="../demos/report-templates/05-效果度量报告.prompt.md">效果度量报告 prompt</a>——但需自行把受众从内部决策层换成客户方：把内部口径换成客户业务指标、把技术名词翻译成业务收益。</p>
+    <p style="font-size:13px;color:#64748b;background:#fffbeb;border-left:3px solid #fbbf24;padding:8px 12px;border-radius:0 6px 6px 0">📌 示意（虚构脱敏，非真实客户）：延续客服案例——技术指标「工单分流准确率 96%」（超过 PoC 约定的 95% 门槛）翻译成业务收益「分流准确率 82%→96%，单条处理从 6 分钟降到 2 分钟，月省客服工时约 5800 小时（示意口径，按日均 4000 条 × 省时 4 分钟 × 22 个工作日估算）」。客户为后者买单，不为前者。</p>
+
+    <h3>2.4 干系人管理：在现场扎根（和不踩雷）</h3>
+    <p>FDE 项目失败的首要原因往往不是技术，是客户内部政治（经验观察，无统计）。干系人管理如果只停在「各方要什么、给什么」，是把利益想成天然可调和——真实现场是业务领导和 IT 打架、采购卡流程、一线怕被替代、中层怕担责。用 <a href="../demos/fde-fieldkit/04-stakeholder-map.md">客户干系人地图</a> 把它做成一张能打的表。关键四件事：</p>
+    <ul>
+      <li><strong>各方诉求</strong>：业务领导要 ROI、运营要省事、一线要好用、IT 要可运维、采购要性价比——这是基础。</li>
+      <li><strong>识别受益方 vs 受损方</strong>（最关键）：AI 落地后谁的权力/工作量/饭碗受影响？比如分流被自动化后、原本靠「熟练分流」立足的资深客服、或担心被裁的一线——<strong>受损方不处理，项目会在验收阶段被暗箭射死</strong>。要么争取（给新角色如 AI 草稿复核岗 / 参与设计），要么中和（争取更高层背书压住）。</li>
+      <li><strong>找内部 champion</strong>：在客户内部找一个真正想推动、且有话语权的人。没有 champion，FDE 在外面推不动；champion 调岗，项目立刻失速——要有备手。</li>
+      <li><strong>摸决策链</strong>：谁签字、谁否决、验收谁定——别只对接「出面谈需求的人」，真正的拍板人常在幕后。验收口径要 PoC 前就书面确认，防中途被偷改。</li>
+    </ul>
+    <p>一线员工的抵触是最大的暗礁：用<strong>参与式设计</strong>（让他们参与画布和 PoC 试用）+ 明确「AI 是帮你的不是替你的」话术化解。大白话：FDE 在现场扎根的标志，是<strong>受益方愿推、受损方不拆、拍板人点头</strong>——三方缺一，项目就卡。</p>
+
+    <h3>2.5 把价值讲清楚：向非技术决策者汇报</h3>
+    <p>业务领导和采购多半不懂技术。你讲 RAG 召回率 95%，他们没感觉；讲「分流准确率从 82% 提到 96%，每月省客服工时 X 小时」，他们听得懂。<strong>把技术方案翻译成业务语言</strong>，是 FDE 那 60% 里的关键能力。</p>
+    <p>可套用 <a href="../demos/report-templates/01-战略汇报PPT.prompt.md">战略汇报 PPT prompt</a>，但需自行把受众从内部决策层换成客户方：现状痛点 + 目标 + 试点结果 + 下一步，全程用客户听得懂的话，少放架构图、多放收益数字。</p>
+
+    <h2>第 3 章 · 技术武器库——主教程 demo 的 FDE 现场重映射</h2>
+    <p>主教程的 demos 是你的弹药库。这一章不讲 demo 本身怎么跑（那是主教程的事），只讲 <strong>FDE 在客户现场什么时候用、怎么改造适配客户</strong>。</p>
+
+    <h3>3.1 rag-service：客户知识库 / 文档智能</h3>
+    <p><strong>什么时候用</strong>：客户有一堆文档 / 知识库 / 历史工单，想让 AI 能查能答。</p>
+    <p><strong>FDE 改造要点</strong>：接客户的数据源（不是示例数据）；评估指标对齐客户口径（客户关心「答得准不准」，不是你的 rerank 分数）；私有化部署到客户内网。</p>
+    <p style="font-size:13px;color:#334155;background:#f8fafc;border:1px solid #e2e8f0;border-radius:6px;padding:8px 12px"><strong>改造对比</strong>：主教程 rag-service 用示例数据 + 看 rerank 分数评估；FDE 现场版要多加三层——<strong>数据脱敏</strong>（接客户数据前先脱敏）、<strong>权限隔离</strong>（不同客户/部门的数据不能串）、<strong>结果回写</strong>（AI 答案要写回客户系统留痕），评估指标换成「客户业务答准率」。</p>
+
+    <h3>3.2 agent-teams：复杂客户场景的多 Agent 方案</h3>
+    <p><strong>什么时候用</strong>：客户场景复杂，一个 Agent 搞不定，要多角色协作。</p>
+    <p><strong>FDE 改造要点</strong>：按客户的真实流程拆 stage（蓝图 → 并行 → 验收那套）；每个 Agent 的职责用客户听得懂的话命名；验收标准对齐客户签字标准。</p>
+
+    <h3>3.3 ai-test-frame：AI 产出的现场质量把关</h3>
+    <p><strong>什么时候用</strong>：PoC→生产的「验收标准」组（2.2），防止 AI 改一处坏一片。</p>
+    <p><strong>FDE 改造要点</strong>：回归用例用客户的真实场景；软断言容忍客户可接受的误差范围——但<strong>软断言的阈值要和客户当面谈定</strong>：哪些错误客户能接受（如分类边界模糊时回退人工）、哪些是红线（如金额、安全相关），把阈值写进验收标准，别上线后扯皮。</p>
+
+    <h3>3.4 ai-metrics：现场四维度度量</h3>
+    <p><strong>什么时候用</strong>：价值证明（2.3），用数据向客户证 ROI。</p>
+    <p><strong>FDE 改造要点</strong>：四维度里客户通常最在意「成本 / 效能」维度（经验观察）——把技术指标翻译成「省了多少人 / 钱」。但最关键的一点 2.3 没讲：<strong>度量基线必须在 PoC 启动前就采</strong>（转型前的分流准确率、处理时间、客服工时），否则上线后没有对比基准，ROI 算出来客户也不认。</p>
+
+    <h3>3.5 claude-skills：FDE 自己的 AI 原生工程肌肉</h3>
+    <p><strong>什么时候用</strong>：FDE 自己写代码、沉淀现场经验时。</p>
+    <p><strong>FDE 改造要点</strong>：把每个客户现场的通用经验沉淀成 Skill，下一个客户直接复用——这是资深 FDE 和初级 FDE 的效率分界。</p>
+    <p style="font-size:13px;color:#334155;background:#f8fafc;border:1px solid #e2e8f0;border-radius:6px;padding:8px 12px"><strong>改造对比</strong>：主教程的 Skill 沉淀「团队规范」（CLAUDE.md / devflow）；FDE 现场版沉淀的是<strong>客户现场的套路</strong>——比如把「某行业工单分流的标准口径」「某类遗留系统的对接踩坑」写成 Skill，下个同行业客户直接套。区别在于：前者沉淀<strong>怎么写代码</strong>，后者沉淀<strong>怎么搞定这类客户</strong>。</p>
+
+    <h2>第 4 章 · 求职与成长</h2>
+
+    <h3>4.0 先想清楚：FDE 不是所有人的菜</h3>
+    <p>转岗前先看代价——这些不是劝退，是转岗决策的必要输入。适合的人如鱼得水，不适合的人会非常痛苦。</p>
+    <ul>
+      <li><strong>长期驻场 / 高频出差</strong>：FDE 字面就是「前线部署」，长期在客户现场是常态。对有家庭、不愿奔波的人是硬约束。</li>
+      <li><strong>乙方地位 / 技术自主权低</strong>：在客户现场你是乙方，要听客户的；客户常做出反技术的决策，你得执行。话语权和「在自己公司写代码」完全不同。</li>
+      <li><strong>纯编码时间锐减</strong>：那「40%」还含调试、部署、写文档，真正写业务代码的时间更少。很多开发者转 FDE 后最不适应的就是「不怎么写代码了」。</li>
+      <li><strong>验收与回款绑定</strong>：国内乙方交付，尾款常和验收挂钩；客户拖着不验收、需求蔓延（合同范围外的活怎么挡是日常）、一人多项目压工时，都是常态。</li>
+      <li><strong>岗位概念较新</strong>：FDE 作为热门方向才兴起约两年，热度可持续性未经完整周期验证——别把当下的「42 倍增长」当永久铁律。</li>
+      <li><strong>跳槽面相对窄</strong>：深耕某个行业客户，技术广度可能收窄；乙方公司内的晋升通道通常窄于甲方大厂。</li>
+    </ul>
+    <p>一句话：FDE 是高回报但高消耗的岗位。如果你看重纯技术深度、稳定作息、自主权，要慎重；如果你享受跟人打交道、在真实业务里解决问题、能适应出差和不确定性，这岗位的稀缺性（见篇首热度参考，置信度低）对适合的人是实打实的。</p>
+
+    <h3>4.1 求职准备：把能力变成作品</h3>
+    <p>FDE 招聘方想看的是「你能不能独立扛一个客户场景」。最硬的证据不是简历上的词，是 <strong>作品</strong>。把你做过的（或照着本篇练的）沉淀成可展示的东西：</p>
+    <ul>
+      <li>一份填实的 <a href="../demos/fde-fieldkit/01-fde-discovery-canvas.md">需求探索画布</a>（证明你会摸业务）</li>
+      <li>一个跑通的 <a href="../demos/rag-service/">rag-service</a> 或 <a href="../demos/agent-teams/">agent-teams</a>（证明技术执行力）</li>
+      <li>一份 <a href="../demos/report-templates/05-效果度量报告.prompt.md">效果度量报告</a>（证明你会证价值）</li>
+    </ul>
+
+    <h3>4.2 入行路径：没现场经验，怎么拿到第一次现场经验</h3>
+    <p>这是想转 FDE 的人最焦虑、也是本篇原本缺的一环。照着虚构案例填画布骗不过面试官——「客户的采购流程卡在哪」「客户 IT 怎么卡你」一问就穿帮。真正能拿到第一份现场经验的，是这四条路（按门槛从低到高）：</p>
+    <ol>
+      <li><strong>内部转本司的交付 / 售前 / 客户成功岗</strong>：最近的练兵场。你熟悉本司产品，从内部转岗到面向客户的岗位，是成本最低的「准 FDE」入口。</li>
+      <li><strong>给兄弟部门 / 内部客户做 AI 落地</strong>：把公司内部其他部门当「客户」——帮 HR 做简历筛选、帮财务做票据识别、帮运营做内容审核。这是零风险的现场演练，且能产出真作品。</li>
+      <li><strong>乙方 / 集成商的初级交付岗</strong>：直接以 FDE/交付工程师身份入职 AI 产品厂商或集成商（Palantir 系、国内 AI 厂商交付团队），从跟着资深 FDE 打下手开始。</li>
+      <li><strong>开源项目当「客户现场」练</strong>：用开源项目的 issue 区练需求探索——用户的 issue 就是「客户诉求」，你做的就是「定位痛点 → 给方案 → 验证价值」。</li>
+    </ol>
+    <p>关键：FDE 岗位集中在三类公司——<strong>AI 产品厂商</strong>（有自己的 AI 产品要部署）、<strong>Palantir 系 / 数据咨询公司</strong>（天生做客户现场）、<strong>集成商</strong>（替甲方做 AI 落地）。找岗位时认准这三类，JD 关键词多为「交付 / 解决方案 / 现场部署 / AI 落地」。</p>
+
+    <h3>4.3 简历改造与面试</h3>
+    <p><strong>简历改造</strong>：把你过去的经历重述成 FDE 语言——弱化「写了多少代码」，强化「解决过什么业务问题、跨方协调过什么、用技术产出了什么可衡量的业务结果」。比如「用 Java 重写了订单服务」改成「主导订单系统重构，协调前后端 + 业务方，解决高峰期超卖，降低资损 X%」。</p>
+    <p><strong>面试常见题与答题骨架</strong>：</p>
+    <ul>
+      <li>「给一个陌生业务场景，你怎么定位 AI 发力点？」→ 走画布六格：先业务后技术，主动砍掉 AI 接不了的部分（这是第 2 章那条链）。</li>
+      <li>「客户说准确率不够，你怎么办？」→ 先问「不够」是相对什么基线、谁的标准；再拆：是数据问题、模型问题、还是口径问题；最后给方案 + 设预期（AI 上限不是 100%，定降级路径）。</li>
+      <li>「PoC 做完客户不买单，怎么办？」→ 回到价值假设有没有和客户对齐过；验收口径是不是 PoC 前就书面约定了；是不是 champion 没找对——多数「不买单」根子在前期对齐，不是技术。</li>
+      <li>「客户数据很乱 / 给不了，怎么办？」→ 这是常态不是意外；答你怎么做数据盘点、怎么推动跨部门数据协调、怎么把「数据治理」写进项目范围而不是自己扛。</li>
+    </ul>
+
+    <h3>4.4 成长阶梯</h3>
+    <p>照 <a href="../demos/fde-fieldkit/03-fde-skill-matrix.md">能力矩阵</a> 的成长阶梯：初级 FDE（跟项目，技术扎实）→ 资深 FDE（独立扛一个客户从探索到上线）→ Lead FDE（带团队打多个客户、定方法论）。别急——初级阶段先把 A 组练扎实，B 组在实战里慢慢攒。</p>
+
+    <h3>4.5 常见坑（FDE 视角）</h3>
+    <ul>
+      <li><strong>重技术轻现场</strong>：沉迷把模型调到 99%，却没搞清客户真正在乎什么。</li>
+      <li><strong>跳过对齐就开干</strong>：价值假设没和客户确认，做完不买单。</li>
+      <li><strong>PoC 贪大</strong>：想一次解决客户所有问题，结果什么都验证不充分。</li>
+      <li><strong>不留痕</strong>：每个客户现场的经验没沉淀成 Skill / 文档，下个项目从零开始。</li>
+    </ul>
+
+    <h2>附录 · 同一角色，从主教程到 FDE，<strong>考核标准变了什么</strong></h2>
+    <p style="font-size:14px;color:#64748b;margin:0 0 10px">能力迁移见 §1.2，这里只讲 §1.2 没讲的：<strong>同一件事，在主教程（甲方内部）和 FDE（乙方现场）的成败标准 / 考核口径差异</strong>——这是转岗后最容易不适应的地方。</p>
+    <div style="overflow-x:auto">
+      <table style="width:100%;border-collapse:collapse;font-size:14px;margin:12px 0">
+        <thead><tr style="background:#f1f5f9"><th style="border:1px solid #cbd5e1;padding:8px 10px;text-align:left">角色</th><th style="border:1px solid #cbd5e1;padding:8px 10px;text-align:left">主教程里怎么算干得好（甲方内部）</th><th style="border:1px solid #cbd5e1;padding:8px 10px;text-align:left">FDE 现场怎么算干得好（乙方）</th></tr></thead>
+        <tbody>
+          <tr><td style="border:1px solid #cbd5e1;padding:8px 10px"><strong>开发</strong></td><td style="border:1px solid #cbd5e1;padding:8px 10px">代码质量、AI 代码占比、提效</td><td style="border:1px solid #cbd5e1;padding:8px 10px">客户签收验收、方案在客户现场跑得稳（代码质量是手段，不是考核项）</td></tr>
+          <tr><td style="border:1px solid #cbd5e1;padding:8px 10px"><strong>测试</strong></td><td style="border:1px solid #cbd5e1;padding:8px 10px">覆盖率、缺陷率、回归通过率</td><td style="border:1px solid #cbd5e1;padding:8px 10px">客户验收口径达成、AI 错误的责任边界已书面划清</td></tr>
+          <tr><td style="border:1px solid #cbd5e1;padding:8px 10px"><strong>组长</strong></td><td style="border:1px solid #cbd5e1;padding:8px 10px">带团队 KPI、转型推进度</td><td style="border:1px solid #cbd5e1;padding:8px 10px">项目回款、客户续约 / 扩单（你对客户无职权，靠结果推动）</td></tr>
+          <tr><td style="border:1px solid #cbd5e1;padding:8px 10px"><strong>产品</strong></td><td style="border:1px solid #cbd5e1;padding:8px 10px">产品指标、用户留存</td><td style="border:1px solid #cbd5e1;padding:8px 10px">客户业务收益可量化、价值假设被 PoC 验证</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p style="font-size:13px;color:#64748b">一句话：主教程里你对自己的系统负责，FDE 你对<strong>客户的业务结果</strong>负责——同一个动作，考核标尺从"技术指标"换成了"客户签字 + 业务收益"。</p>
+    <p style="font-size:13px;color:#64748b">术语扩展：FDE（Forward Deployed Engineer，前线 / 前沿部署工程师）· PoC（Proof of Concept，概念验证，验证可行性的小范围试验，非最小可行产品）· ROI（Return on Investment，投资回报）· 干系人（Stakeholder，项目利益相关方）。</p>
+
+  </main>
+</div>
+<footer class="foot">
+  <div class="wrap">
+    <p>企业级 AI 提效战略转型方法论教程 · 番外·FDE 篇 · 作者 Johnson</p>
+  </div>
+</footer>
+</body>
+</html>

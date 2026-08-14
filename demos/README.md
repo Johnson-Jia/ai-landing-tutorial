@@ -15,6 +15,7 @@
 | [agent-teams](./agent-teams/) | [阶段 5 推广](../pages/stage5.html) | 多 Agent 并行编排 skill：6 步流程（检测→蓝图→确认→并行→验收→交付）拉起团队做完复杂任务，含 Anthropic 五模式 + cookbooks 补充、Swarm/code-review 两个 example | `/agent-teams <任务>` 或对话触发 |
 | [handover-templates](./handover-templates/) | [阶段 4 闭环](../pages/stage4.html) / [阶段 5 推广](../pages/stage5.html) | 团队交接协作模板：开发↔测试 / 前后端 / 跨部门（产品↔研发见产品手册） | 按场景挑模板落进工作流 |
 | [review-checklists](./review-checklists/) | [阶段 4 闭环](../pages/stage4.html) / [阶段 5 推广](../pages/stage5.html) | 落地验收清单（试点 / 推广）+ 代码审查 checklist（给人看） | 试点结项 / 合并 AI 产出前核对 |
+| [fde-fieldkit](./fde-fieldkit/) | [番外·FDE篇](../pages/fde.html) | FDE 现场四件套：客户需求探索画布 + PoC→生产清单 + 能力自评矩阵 + 客户干系人地图（番外配套，复用技术武器库 demos） | 见 [fde-fieldkit/README](./fde-fieldkit/README.md) |
 
 > 后续 demo（RAG 服务、代码知识图谱等）按下方规范追加。
 
