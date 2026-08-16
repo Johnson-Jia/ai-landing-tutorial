@@ -23,9 +23,12 @@ REQUIRED=(
   "manual.md"
   "README.md"
   "reference/orchestration.md"
+  "reference/orchestration-patterns.md"
   "reference/team-and-registry.md"
   "examples/project-registry.json"
   "examples/blueprint-example.md"
+  "examples/swarm-example.md"
+  "examples/code-review-example.md"
   "scripts/verify.sh"
 )
 for f in "${REQUIRED[@]}"; do

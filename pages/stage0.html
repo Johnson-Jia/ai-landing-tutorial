@@ -44,8 +44,8 @@
     </div>
 
     <h2>1. 为什么：AI 冲击与人的能力边界</h2>
-    <p>这不是"锦上添花"，而是"不转就出局"。传统软件巨头正被 AI 直接冲击（Salesforce、ServiceNow 等因 AI 颠覆其模式而估值承压）。对研发团队，AI 是<strong>重写生产关系</strong>的变量——先动的人用同样人数产出 2 倍代码。</p>
-    <p>但关键认知是：<strong>AI 扩展的是"会用 AI 的人"的能力边界</strong>。一个懂业务、懂原理、会精准下达指令的人，配上 AI 能放大 10 倍；一个不懂的人，AI 产出再多也用不起来、用不对。<strong>人的能力边界，决定了 AI 产出的上限。</strong></p>
+    <p>这不是"锦上添花"，而是"不转就出局"。传统软件巨头正被 AI 直接冲击（Salesforce、ServiceNow 等因 AI 颠覆其模式而估值承压）。对研发团队，AI 是<strong>重写生产关系</strong>的变量——先动的团队用同样人数产出翻倍代码（本教程团队实测 +104%，见阶段 5）。</p>
+    <p>但关键认知是：<strong>AI 扩展的是"会用 AI 的人"的能力边界</strong>。一个懂业务、懂原理、会精准下达指令的人，配上 AI 能成倍放大；一个不懂的人，AI 产出再多也用不起来、用不对。<strong>人的能力边界，决定了 AI 产出的上限。</strong></p>
     <div class="tip"><strong>两个都要避免的极端</strong>：①<strong>抗拒 AI</strong>（觉得是噱头、怕被替代）→ 被时代抛下；②<strong>盲目崇拜 AI</strong>（觉得万能、全盘交付）→ 产出不可控、质量崩塌。正确姿态：<strong>拥抱 + 验证</strong>——信任但验证。</div>
     <div class="tip"><strong>💡 思考一下</strong>：你的团队里，谁已经在用 AI？谁还在抗拒？差距有多大？半年后这个差距会变成什么？</div>
     <figure style="margin:20px 0;text-align:center">
@@ -81,7 +81,7 @@
     </ul>
 
     <h3>3.1 大模型本质：预测下一个 token</h3>
-    <p>大模型的底层就是<strong>根据上文预测下一个 token（词元）</strong>。它不是"理解"了你的代码，而是基于海量模式生成最可能的续写。这解释了：为什么它会"一本正经地胡说"（幻觉）——因为生成的是"看起来对"的，不是"验证过对"的。所以<strong>必须验证</strong>。</p>
+    <p>大模型的底层就是<strong>根据上文预测下一个 token（词元；本教程计量场景下 token 与词元同义，下文混用不另注）</strong>。它不是"理解"了你的代码，而是基于海量模式生成最可能的续写。这解释了：为什么它会"一本正经地胡说"（幻觉）——因为生成的是"看起来对"的，不是"验证过对"的。所以<strong>必须验证</strong>。</p>
     <p>大模型本质上是<strong>神经网络</strong>。下面这张手绘图把"生物神经元 → 人工神经元 → 感知机 → 多层网络/反向传播 → 框架"这条线一次画清，是理解大模型底层结构最快的入口：</p>
     <figure style="margin:20px 0;text-align:center">
       <img src="../assets/images/ai4b/ai-neuralnetworks.png" alt="神经网络全景手绘图：生物神经元、感知机、激活函数、反向传播、深度学习框架" style="max-width:100%;border-radius:8px;border:1px solid var(--border)">

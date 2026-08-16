@@ -77,10 +77,13 @@ agent-teams/
 ├── settings.json                # 配置样例(权限 / Swarm 开关)
 ├── reference/                   # 按需加载(AI 细节)
 │   ├── orchestration.md         #   4 策略 + Swarm + devflow 集成
+│   ├── orchestration-patterns.md #  Anthropic 五模式 + Coordinator + 数量指南
 │   └── team-and-registry.md     #   团队模板 + 模型速查 + 注册表
 ├── examples/
 │   ├── project-registry.json    #   注册表示例
-│   └── blueprint-example.md     #   标准并行完整样例
+│   ├── blueprint-example.md     #   标准并行完整样例
+│   ├── swarm-example.md         #   Swarm 协作完整生命周期样例
+│   └── code-review-example.md   #   分级审查样例(Haiku 资审 + Sonnet 深审)
 └── scripts/
     └── verify.sh                #   自检
 ```

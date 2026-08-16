@@ -122,3 +122,5 @@
 4. AI 按 ppt-master 的 `SKILL.md` 工作流，生成原生可编辑 `.pptx`
 
 > **关键**：PPT 类汇报用 ppt-master 生成原生可编辑 PPTX（DrawingML 形状/文本框），AI 生成内容 → ppt-master 生成精美 PPT，不用手画。ppt-master 的 [`examples/`](https://github.com/hugohe3/ppt-master) 目录有 20+ 精美可编辑 deck 可参考。
+
+> **成品示例**：本目录附带 `strategy-report-darktech.pptx`（用本 prompt 内容 + ppt-master 渲染的战略汇报 PPT 成品），可先打开看效果再自己生成。

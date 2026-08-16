@@ -32,6 +32,7 @@
 @.claude/rules/database.md
 @.claude/rules/distributed-lock.md
 @.claude/rules/testing.md
+@.claude/rules/batch.md
 ```
 
 ## 写好 CLAUDE.md 的检验标准
