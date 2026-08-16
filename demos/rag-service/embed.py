@@ -52,11 +52,7 @@ class Embedder:
         # 2. 本地 sentence_transformers
         if self._impl is None and allow_local:
             try:
-                from zvec.extension.sentence_transformer_embedding_function import (
-                    SentenceTransformerDenseEmbedding,
-                )
-
-                # 类名按 zvec 实际导出调整;若该名不存在,回退直接用 sentence_transformers
+                # 直接用自定义封装(内部按需 import sentence_transformers)
                 self._impl = _LocalSentenceTransformer(local_model, dim)
                 self.backend = "local"
             except Exception:

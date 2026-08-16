@@ -10,6 +10,9 @@ from __future__ import annotations
 
 from zvec.model.param.query import Fts, Query
 
+# L3 降级提示只打印一次（避免每条评测问题重复打印）
+_L3_WARNED = False
+
 
 def retrieve_l1_vector(coll, query_vec: list[float], topk: int = 5):
     """L1 纯向量检索。"""
@@ -70,7 +73,10 @@ def retrieve_l3_rerank(
         )
     except Exception:
         # 模型下载失败/无网络 → 回退 L2(打印提示,避免静默降级被误以为真三级)
-        print("[L3] CrossEncoder 不可用(sentence_transformers 未装或模型下载失败),回退 L2")
+        global _L3_WARNED
+        if not _L3_WARNED:
+            print("[L3] CrossEncoder 不可用(sentence_transformers 未装或模型下载失败),回退 L2")
+            _L3_WARNED = True
         return retrieve_l2_hybrid(coll, query_text, query_vec, topk=topk)
 
 

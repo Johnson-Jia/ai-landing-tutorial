@@ -1,6 +1,6 @@
 """Anthropic Admin API 封装:usage/cost 按 workspace。
 
-无 ANTHROPIC_API_KEY 或无 Admin 权限时用 sample JSON 兜底(演示归因报表流程)。
+无 ANTHROPIC_ADMIN_API_KEY 或无 Admin 权限时用 sample JSON 兜底(演示归因报表流程)。
 源自 cookbooks observability/usage_cost_api。"""
 from __future__ import annotations
 

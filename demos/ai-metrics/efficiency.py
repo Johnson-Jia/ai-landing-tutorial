@@ -23,8 +23,10 @@ def parse_releases(xlsx_path):
     return records
 
 
-def analyze(records, years=("2025", "2026")):
-    """按年份统计上线条目 / 需求 / Bug / 人数 / 人均。"""
+def analyze(records, years=None):
+    """按年份统计上线条目 / 需求 / Bug / 人数 / 人均（默认取 records 中最近两年）。"""
+    if years is None:
+        years = sorted({r["year"] for r in records})[-2:] or ("2025", "2026")
     stats = {}
     for y in years:
         rs = [r for r in records if r["year"] == y]

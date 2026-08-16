@@ -1,7 +1,7 @@
 """RAG 评估指标:recall@k / MRR / faithfulness(LLM-as-judge prompt)。
 
-recall@k、MRR 是纯函数;faithfulness 需 LLM,这里只给 prompt 模板,
-实际调用在 main.py 里按是否有 ANTHROPIC_API_KEY 决定。
+recall@k、MRR 是纯函数;faithfulness 需 LLM,这里只给 prompt 模板
+(main.py 当前未接入 faithfulness,供测试与后续扩展使用)。
 """
 from __future__ import annotations
 

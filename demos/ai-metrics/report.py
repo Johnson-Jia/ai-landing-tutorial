@@ -35,9 +35,11 @@ def render(git_stats, eff_stats):
     md.append("")
     md.append("## 二、提效同比（上线记录）")
     md.append("")
-    md.append("| 指标 | 2025 | 2026 | 同比 |")
+    ys = sorted(eff_stats)
+    y_prev, y_cur = ys[0], ys[-1]
+    md.append(f"| 指标 | {y_prev} | {y_cur} | 同比 |")
     md.append("|---|---|---|---|")
-    s25, s26 = eff_stats["2025"], eff_stats["2026"]
+    s25, s26 = eff_stats[y_prev], eff_stats[y_cur]
     for key, label, is_float in [
         ("total", "上线条目", False), ("req", "需求", False),
         ("bug", "Bug", False), ("devs", "参与人数", False),
@@ -54,7 +56,9 @@ def render(git_stats, eff_stats):
 
 def render_html(git_stats, eff_stats):
     """生成 HTML 报告（ECharts 可视化）。对齐 AI提效统计分析 风格。"""
-    s25, s26 = eff_stats["2025"], eff_stats["2026"]
+    ys = sorted(eff_stats)
+    y_prev, y_cur = ys[0], ys[-1]
+    s25, s26 = eff_stats[y_prev], eff_stats[y_cur]
 
     def chg(a, b):
         return f"{(b - a) / a * 100:+.1f}%" if a else "-"
@@ -129,10 +133,10 @@ td{{padding:8px 12px;border-bottom:1px solid var(--bdr)}}
 </div>
 
 <div class="stl">二、提效同比（上线记录）</div>
-<div class="cb"><h3>上线 / 需求 / Bug 同比（2025 vs 2026）</h3><div id="c1" style="height:320px"></div></div>
+<div class="cb"><h3>上线 / 需求 / Bug 同比（{y_prev} vs {y_cur}）</h3><div id="c1" style="height:320px"></div></div>
 <div class="cr">
-<div class="cb"><h3>需求 vs Bug 占比（2025）</h3><div id="c2" style="height:300px"></div></div>
-<div class="cb"><h3>需求 vs Bug 占比（2026）</h3><div id="c3" style="height:300px"></div></div>
+<div class="cb"><h3>需求 vs Bug 占比（{y_prev}）</h3><div id="c2" style="height:300px"></div></div>
+<div class="cb"><h3>需求 vs Bug 占比（{y_cur}）</h3><div id="c3" style="height:300px"></div></div>
 </div>
 
 <div class="stl">三、AI 代码识别（三层算法）</div>
@@ -150,7 +154,7 @@ td{{padding:8px 12px;border-bottom:1px solid var(--bdr)}}
 
 <script>
 var ch1=echarts.init(document.getElementById('c1'));
-ch1.setOption({{tooltip:{{trigger:'axis'}},legend:{{data:['2025年','2026年'],top:0}},grid:{{left:40,right:20,bottom:30,top:40}},xAxis:{{type:'category',data:['上线条目','需求','Bug']}},yAxis:{{type:'value'}},series:[{{name:'2025年',type:'bar',data:[{s25['total']},{s25['req']},{s25['bug']}],itemStyle:{{color:'#94a3b8'}}}},{{name:'2026年',type:'bar',data:[{s26['total']},{s26['req']},{s26['bug']}],itemStyle:{{color:'#4f46e5'}}}}]}});
+ch1.setOption({{tooltip:{{trigger:'axis'}},legend:{{data:['{y_prev}年','{y_cur}年'],top:0}},grid:{{left:40,right:20,bottom:30,top:40}},xAxis:{{type:'category',data:['上线条目','需求','Bug']}},yAxis:{{type:'value'}},series:[{{name:'{y_prev}年',type:'bar',data:[{s25['total']},{s25['req']},{s25['bug']}],itemStyle:{{color:'#94a3b8'}}}},{{name:'{y_cur}年',type:'bar',data:[{s26['total']},{s26['req']},{s26['bug']}],itemStyle:{{color:'#4f46e5'}}}}]}});
 var ch2=echarts.init(document.getElementById('c2'));
 ch2.setOption({{tooltip:{{trigger:'item',formatter:'{{b}}: {{c}} ({{d}}%)'}},color:['#10b981','#ef4444'],series:[{{type:'pie',radius:['40%','70%'],data:[{{name:'需求',value:{s25['req']}}},{{name:'Bug',value:{s25['bug']}}}]}}]}});
 var ch3=echarts.init(document.getElementById('c3'));

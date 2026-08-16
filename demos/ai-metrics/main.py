@@ -55,7 +55,8 @@ def run_quality_dim():
     from quality.run_eval import evaluate
     import json
     evalset_path = os.path.join(HERE, "quality", "sample_evalset.json")
-    cases = json.loads(open(evalset_path, encoding="utf-8").read())
+    with open(evalset_path, encoding="utf-8") as f:
+        cases = json.loads(f.read())
     # demo：用 expected 本身作 response（模拟"完美回答"），展示评估流程
     responses = [c["expected"] for c in cases]
     stats = evaluate(responses, cases)
