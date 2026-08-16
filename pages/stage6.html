@@ -35,7 +35,7 @@
       <ul style="margin:0;padding-left:22px;font-size:14px;line-height:1.9;color:#334155">
         <li><strong>🎯 做什么</strong>：Skill 范式沉淀 + 知识沉淀 + 自我改进循环（个体经验 → 组织资产）</li>
         <li><strong>📦 产出与汇报</strong>：<a href="../assets/ref/汇报材料-AI生成指南.html">阶段总结报告</a>（整体结项 / 晋升述职）+ 团队 Skill 仓库交接</li>
-        <li><strong>🔧 工具/Demo</strong>：<a href="https://github.com/iflytek/skillhub" target="_blank">skillhub</a>（自托管 Skill 注册中心）/ <a href="../demos/ai-test-frame/">demos/ai-test-frame</a>（"录制 + AI 生成"范式落地）</li>
+        <li><strong>🔧 工具/Demo</strong>：<a href="https://github.com/iflytek/skillhub" target="_blank">skillhub</a>（自托管 Skill 注册中心）/ <a href="../demos/ai-test-frame/README.md">demos/ai-test-frame</a>（"录制 + AI 生成"范式落地）</li>
         <li><strong>👥 角色手册</strong>：<a href="../assets/ref/角色操作手册.html">开发手册</a>（沉淀 Skill 的主力）</li>
       </ul>
     </div>
@@ -60,11 +60,11 @@ description: "查询业务库只读数据，自动走 SSH 隧道 + 租户库发�
       <tr><td>流程型（/commit 规范提交）</td><td>AI 平台团队</td><td>AI 分析变更生成 Conventional Commits，自动提交</td></tr>
       <tr><td>记忆型（claude-mem）</td><td>定制交付团队</td><td>持久化记忆，跨会话复用，按项目隔离</td></tr>
       <tr><td>诊断 / 分析型（只读）</td><td>性能 / 测试分析团队</td><td>只读分析不改代码（性能诊断、脚本分析、慢 SQL 定位），与工具型（会改代码）有别</td></tr>
-      <tr><td>编排型（单 / 多 Agent）</td><td>架构团队</td><td>编排其他 skill / Agent 成流水线（<a href="../demos/claude-skills/skills/devflow/">devflow</a> 单 Agent 编排 OpenSpec+Superpowers；多 Agent Swarm 模式更复杂）</td></tr>
+      <tr><td>编排型（单 / 多 Agent）</td><td>架构团队</td><td>编排其他 skill / Agent 成流水线（<a href="../demos/claude-skills/skills/devflow/SKILL.md">devflow</a> 单 Agent 编排 OpenSpec+Superpowers；多 Agent Swarm 模式更复杂）</td></tr>
     </table>
     <div class="tip"><strong>写好 Skill 的关键</strong>：description 要具体（✅"查询业务库只读数据，自动走 SSH 隧道" ❌"查询数据库"）；写清"何时触发"和"何时禁止"；任务关键的 Skill 用 <code>disable-model-invocation</code> + 显式调用，比自动检测可靠。</div>
-    <div class="tip"><strong>编排型 skill 的范例</strong>：上表的工具型 / 规范型 / 平台型 / 流程型 / 记忆型 Skill 各管一摊，还有一种「<strong>编排型</strong>」——自己不实现，只把多个 skill 串成流水线。见 <a href="../demos/claude-skills/skills/devflow/">devflow</a>（<code>demos/claude-skills</code>）：编排 OpenSpec + Superpowers 成 6 阶段（需求→交付），带断点续传 + 规则覆盖。<strong>多阶段、跨框架的工作流</strong>适合这种编排型。</div>
-    <div class="tip"><strong>范文型 / 诊断型 / 记忆型三范例实物</strong>：上表对应行各配一个开箱可用的 skill——<a href="../demos/claude-skills/skills/brand-guidelines/"><strong>brand-guidelines</strong></a>（规范型：设计 Token / 平台规范，让 AI 输出符合团队设计规范，不硬编码颜色）/ <a href="../demos/claude-skills/skills/perf-diagnosis/"><strong>perf-diagnosis</strong></a>（诊断 / 分析型：只读性能诊断、慢 SQL 定位，不改代码）/ <a href="../demos/claude-skills/skills/session-memory/"><strong>session-memory</strong></a>（记忆型：跨会话持久化、按项目隔离）。复制到 <code>.claude/skills/</code> 即用，作为沉淀自己团队 Skill 的模板。</div>
+    <div class="tip"><strong>编排型 skill 的范例</strong>：上表的工具型 / 规范型 / 平台型 / 流程型 / 记忆型 Skill 各管一摊，还有一种「<strong>编排型</strong>」——自己不实现，只把多个 skill 串成流水线。见 <a href="../demos/claude-skills/skills/devflow/SKILL.md">devflow</a>（<code>demos/claude-skills</code>）：编排 OpenSpec + Superpowers 成 6 阶段（需求→交付），带断点续传 + 规则覆盖。<strong>多阶段、跨框架的工作流</strong>适合这种编排型。</div>
+    <div class="tip"><strong>范文型 / 诊断型 / 记忆型三范例实物</strong>：上表对应行各配一个开箱可用的 skill——<a href="../demos/claude-skills/skills/brand-guidelines/SKILL.md"><strong>brand-guidelines</strong></a>（规范型：设计 Token / 平台规范，让 AI 输出符合团队设计规范，不硬编码颜色）/ <a href="../demos/claude-skills/skills/perf-diagnosis/SKILL.md"><strong>perf-diagnosis</strong></a>（诊断 / 分析型：只读性能诊断、慢 SQL 定位，不改代码）/ <a href="../demos/claude-skills/skills/session-memory/SKILL.md"><strong>session-memory</strong></a>（记忆型：跨会话持久化、按项目隔离）。复制到 <code>.claude/skills/</code> 即用，作为沉淀自己团队 Skill 的模板。</div>
 
     <h2>3. 知识沉淀：规范 + 避坑 + 自我改进</h2>
     <h3>3.1 规范资产化（三条红线示例）</h3>
@@ -100,8 +100,8 @@ catch (Exception e) { log.error("任务失败", e); XxlJobHelper.handleFail(e.ge
     <h2>5. 沉淀复用案例：从推广到资产</h2>
     <p>13 组推广跑通后，<strong>能力沉淀</strong>是阶段 6 的落脚点。以下是推广中真实沉淀下来的几类资产（均来自实践，非举例虚构）：</p>
     <ul>
-      <li><strong>工具型 Skill</strong>：SQL 查询、CRUD 生成等高频开发动作封装成 Skill（如本教程 <a href="../demos/claude-skills/skills/sql-query/">sql-query</a> / <a href="../demos/claude-skills/skills/crud-gen/">crud-gen</a>），新人调用即用，不必重复摸索。</li>
-      <li><strong>编排型 Skill</strong>：把 OpenSpec + Superpowers 串成 6 阶段流水线（<a href="../demos/claude-skills/skills/devflow/">devflow</a>），"规范驱动开发"从口号变成团队默认工作流。</li>
+      <li><strong>工具型 Skill</strong>：SQL 查询、CRUD 生成等高频开发动作封装成 Skill（如本教程 <a href="../demos/claude-skills/skills/sql-query/SKILL.md">sql-query</a> / <a href="../demos/claude-skills/skills/crud-gen/SKILL.md">crud-gen</a>），新人调用即用，不必重复摸索。</li>
+      <li><strong>编排型 Skill</strong>：把 OpenSpec + Superpowers 串成 6 阶段流水线（<a href="../demos/claude-skills/skills/devflow/SKILL.md">devflow</a>），"规范驱动开发"从口号变成团队默认工作流。</li>
       <li><strong>避坑资产</strong>：生产 bug 复盘沉淀成规则（如 §3.2 的"静默吞异常"写进 rules/，AI 自动加载），同类问题不再重犯。</li>
       <li><strong>录制 + AI 生成范式</strong>：测试 / 前端 / 运维"人做一遍、AI 看会、批量复制"——测试用例生成从 4-8h 降到 10-30min。</li>
     </ul>
@@ -128,9 +128,9 @@ catch (Exception e) { log.error("任务失败", e); XxlJobHelper.handleFail(e.ge
       <tr><th>亮红灯的项</th><th>干预措施</th></tr>
       <tr><td>① Skill 调用频次降</td><td>复盘阻碍：description 不够具体？被新流程取代了就归档（见本页 §2 范式）？没人记得有就重宣贯一遍</td></tr>
       <tr><td>② CLAUDE.md 失修</td><td>季度审一次：对每行问「删掉这行 AI 会犯错吗」（见 <a href="stage2.html">阶段2</a>），过时的删、新增的红线补</td></tr>
-      <tr><td>③ AI 占比回落</td><td>查根因：工具连不上（见 <a href="stage1.html">阶段1 §6</a>）？网络/账号额度问题？换了新成员没培训？针对性修复，不靠喊口号</td></tr>
+      <tr><td>③ AI 占比回落</td><td>查根因：工具连不上（见 <a href="stage2.html">阶段2 §3</a>）？网络/账号额度问题？换了新成员没培训？针对性修复，不靠喊口号</td></tr>
       <tr><td>④ 新人上手变慢</td><td>补文档：把新人常问的问题沉淀进 Skill / 避坑库（见本页 §3），让下次新人能自助</td></tr>
-      <tr><td>⑤ 规范执行走样</td><td>重训 + 关键项用 Hook 强制（CLAUDE.md 只是建议，Hook 是确定性的——见 <a href="stage4.html">阶段4 §5</a>）</td></tr>
+      <tr><td>⑤ 规范执行走样</td><td>重训 + 关键项用 Hook 强制（CLAUDE.md 只是建议，Hook 是确定性的——见 <a href="stage2.html">阶段2 §3.3</a>）</td></tr>
     </table>
 
     <div class="warn"><strong>一句心法</strong>：<strong>转型不是一次性项目，是持续治理</strong>。沉淀只是起点，防退化才是把"转型成果"变成长期能力的关键——和本页 §3.3 的"自我改进循环"是同一件事的两面：让资产持续保鲜。</div>

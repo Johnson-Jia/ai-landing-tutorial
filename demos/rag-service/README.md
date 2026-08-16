@@ -32,7 +32,6 @@ python main.py --no-rerank-model  # L3 不下模型,回退 L2
 |---|---|---|
 | online | 有 API key | 生产 |
 | local | 装了 sentence_transformers + 模型 | 离线生产 |
-| sample | workspace/vectors.json 命中 | 教学演示 |
 | hash | 以上都不可用 | 流程演示(语义无关) |
 
 ## 目录

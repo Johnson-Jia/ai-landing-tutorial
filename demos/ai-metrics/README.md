@@ -75,7 +75,7 @@ python main.py
 源自 cookbooks `building_evals`。AI 输出好不好不能只看占比，得**量化评估**。本 demo 提供两级评估：
 
 - **code-grading（精确/正则）**：最快最可靠——把任务设计成可用代码自动评分（如「输出是否含正确函数名」「是否通过单测」）。
-- **LLM-as-judge（开放性回答）**：对没有标准答案的开放性输出，用 LLM 当裁判，要求模型输出 `<correctness>pass|fail</correctness>` 标签便于自动解析。
+- **LLM-as-judge（开放性回答）**：对没有标准答案的开放性输出，用 LLM 当裁判，要求模型输出 `<correctness>yes|no</correctness>` 标签便于自动解析。
 
 核心哲学（提炼自 building_evals）：**尽量把任务设计成可代码自动评分**——精确匹配 > 正则 > LLM 判断，能用 code-grading 就别上 LLM-as-judge。
 

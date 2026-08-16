@@ -58,8 +58,8 @@
       <table style="width:100%;border-collapse:collapse;font-size:14px;margin:12px 0">
         <thead><tr style="background:#f1f5f9"><th style="border:1px solid #cbd5e1;padding:8px 10px;text-align:left">你现在的角色</th><th style="border:1px solid #cbd5e1;padding:8px 10px;text-align:left">直接能迁移到 FDE 的能力（对应能力组）</th><th style="border:1px solid #cbd5e1;padding:8px 10px;text-align:left">主教程对应</th></tr></thead>
         <tbody>
-          <tr><td style="border:1px solid #cbd5e1;padding:8px 10px"><strong>开发</strong></td><td style="border:1px solid #cbd5e1;padding:8px 10px">AI 原生编码、RAG / 多 Agent 技术执行</td><td style="border:1px solid #cbd5e1;padding:8px 10px"><a href="../demos/claude-skills/">claude-skills</a> · <a href="../demos/rag-service/">rag-service</a> · <a href="../demos/agent-teams/">agent-teams</a></td></tr>
-          <tr><td style="border:1px solid #cbd5e1;padding:8px 10px"><strong>测试</strong></td><td style="border:1px solid #cbd5e1;padding:8px 10px">AI 产出质量把关、回归用例、效果度量</td><td style="border:1px solid #cbd5e1;padding:8px 10px"><a href="../demos/ai-test-frame/">ai-test-frame</a> · <a href="../demos/ai-metrics/">ai-metrics</a></td></tr>
+          <tr><td style="border:1px solid #cbd5e1;padding:8px 10px"><strong>开发</strong></td><td style="border:1px solid #cbd5e1;padding:8px 10px">AI 原生编码、RAG / 多 Agent 技术执行</td><td style="border:1px solid #cbd5e1;padding:8px 10px"><a href="../demos/claude-skills/README.md">claude-skills</a> · <a href="../demos/rag-service/README.md">rag-service</a> · <a href="../demos/agent-teams/README.md">agent-teams</a></td></tr>
+          <tr><td style="border:1px solid #cbd5e1;padding:8px 10px"><strong>测试</strong></td><td style="border:1px solid #cbd5e1;padding:8px 10px">AI 产出质量把关、回归用例、效果度量</td><td style="border:1px solid #cbd5e1;padding:8px 10px"><a href="../demos/ai-test-frame/README.md">ai-test-frame</a> · <a href="../demos/ai-metrics/README.md">ai-metrics</a></td></tr>
           <tr><td style="border:1px solid #cbd5e1;padding:8px 10px"><strong>组长</strong></td><td style="border:1px solid #cbd5e1;padding:8px 10px">现场项目推进、跨方协调的雏形；<strong>但</strong>对客户无职权（不像带自己团队有汇报线权威），推动逻辑完全不同</td><td style="border:1px solid #cbd5e1;padding:8px 10px"><a href="../demos/role-handbooks/组长手册.md">组长手册</a></td></tr>
           <tr><td style="border:1px solid #cbd5e1;padding:8px 10px"><strong>产品</strong></td><td style="border:1px solid #cbd5e1;padding:8px 10px">需求探索、价值假设、方案表达</td><td style="border:1px solid #cbd5e1;padding:8px 10px"><a href="../demos/role-handbooks/产品手册.md">产品手册</a></td></tr>
         </tbody>
@@ -77,11 +77,11 @@
 
     <h3>2.2 PoC→生产：演示不等于生产</h3>
     <p>PoC 用干净数据跑通了，<strong>不等于</strong>能上生产。真实客户数据有空值 / 错值 / 长尾，客户的 IT 环境有内网 / 遗留系统 / 合规约束。把演示变成客户真在跑的系统，要先过一组「商务与组织前提」（见下方清单第 0 组），再过五组工程关卡：数据准备、合规审查、客户 IT 集成、验收标准、上线与回滚。</p>
-    <p>照 <a href="../demos/fde-fieldkit/02-poc-to-prod-checklist.md">PoC→生产现场清单</a>逐项打勾，任一组没过别上线。其中「验收标准」里的回归用例，用 <a href="../demos/ai-test-frame/">ai-test-frame</a> 做 AI 产出的自动化测试——防止改一处坏一片。</p>
+    <p>照 <a href="../demos/fde-fieldkit/02-poc-to-prod-checklist.md">PoC→生产现场清单</a>逐项打勾，任一组没过别上线。其中「验收标准」里的回归用例，用 <a href="../demos/ai-test-frame/README.md">ai-test-frame</a> 做 AI 产出的自动化测试——防止改一处坏一片。</p>
     <p>注意：这份清单和主教程 <a href="stage3.html">阶段 3 基础设施</a>不一样。阶段 3 是给<strong>自己团队</strong>搭设施；这里是适配<strong>客户的</strong>数据、合规、IT 环境和验收口径。</p>
 
     <h3>2.3 价值证明：用数据说话</h3>
-    <p>客户买单的根本理由是「AI 给我带来了收益」。FDE 要从头到尾用数据证明价值——这就是主教程 <a href="../demos/ai-metrics/">ai-metrics</a> 四维度度量（代码占比 / 质量 / 成本 / Agent 效能）的用武之地，只是<strong>口径要换成客户的</strong>：客户不在乎你的 AI 代码占比，在乎的是分流准确率提了多少、处理时间快了多少、省了多少客服工时。</p>
+    <p>客户买单的根本理由是「AI 给我带来了收益」。FDE 要从头到尾用数据证明价值——这就是主教程 <a href="../demos/ai-metrics/README.md">ai-metrics</a> 四维度度量（代码占比 / 质量 / 成本 / Agent 效能）的用武之地，只是<strong>口径要换成客户的</strong>：客户不在乎你的 AI 代码占比，在乎的是分流准确率提了多少、处理时间快了多少、省了多少客服工时。</p>
     <p>把度量结果写成客户能看的效果报告，可套用 <a href="../demos/report-templates/05-效果度量报告.prompt.md">效果度量报告 prompt</a>——但需自行把受众从内部决策层换成客户方：把内部口径换成客户业务指标、把技术名词翻译成业务收益。</p>
     <p style="font-size:13px;color:#64748b;background:#fffbeb;border-left:3px solid #fbbf24;padding:8px 12px;border-radius:0 6px 6px 0">📌 示意（虚构脱敏，非真实客户）：延续客服案例——技术指标「工单分流准确率 96%」（超过 PoC 约定的 95% 门槛）翻译成业务收益「分流准确率 82%→96%，单条处理从 6 分钟降到 2 分钟，月省客服工时约 5800 小时（示意口径，按日均 4000 条 × 省时 4 分钟 × 22 个工作日估算）」。客户为后者买单，不为前者。</p>
 
@@ -142,7 +142,7 @@
     <p>FDE 招聘方想看的是「你能不能独立扛一个客户场景」。最硬的证据不是简历上的词，是 <strong>作品</strong>。把你做过的（或照着本篇练的）沉淀成可展示的东西：</p>
     <ul>
       <li>一份填实的 <a href="../demos/fde-fieldkit/01-fde-discovery-canvas.md">需求探索画布</a>（证明你会摸业务）</li>
-      <li>一个跑通的 <a href="../demos/rag-service/">rag-service</a> 或 <a href="../demos/agent-teams/">agent-teams</a>（证明技术执行力）</li>
+      <li>一个跑通的 <a href="../demos/rag-service/README.md">rag-service</a> 或 <a href="../demos/agent-teams/README.md">agent-teams</a>（证明技术执行力）</li>
       <li>一份 <a href="../demos/report-templates/05-效果度量报告.prompt.md">效果度量报告</a>（证明你会证价值）</li>
     </ul>
 

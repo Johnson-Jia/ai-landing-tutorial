@@ -59,6 +59,10 @@ def render_html(git_stats, eff_stats):
     def chg(a, b):
         return f"{(b - a) / a * 100:+.1f}%" if a else "-"
 
+    def cell(v):
+        # 与 Markdown 版一致：similarity/confidence 为 None 时显示 "-"（如 AI 提交作者无画像）
+        return f"{v:.2f}" if v is not None else "-"
+
     # 风格学 sim 分桶（看 AI 提交的相似度分布 → 反伪造效果）
     sims = [c["detect"]["similarity"] for c in git_stats["commits"]
             if c["detect"]["is_ai"] and c["detect"]["similarity"] is not None]
@@ -70,7 +74,7 @@ def render_html(git_stats, eff_stats):
     # 表格行
     ai_rows = "".join(
         f'<tr><td>{c["hash"][:8]}</td><td>{c["detect"]["source"]}</td>'
-        f'<td>{c["detect"]["similarity"]:.2f}</td><td>{c["detect"]["confidence"]:.2f}</td></tr>'
+        f'<td>{cell(c["detect"]["similarity"])}</td><td>{cell(c["detect"]["confidence"])}</td></tr>'
         for c in git_stats["commits"] if c["detect"]["is_ai"])
     author_rows = "".join(
         f'<tr><td>{a["name"]}</td><td>{a["total"]}</td><td>{a["ai"]}</td>'

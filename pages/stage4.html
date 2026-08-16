@@ -35,7 +35,7 @@
       <ul style="margin:0;padding-left:22px;font-size:14px;line-height:1.9;color:#334155">
         <li><strong>🎯 做什么</strong>：OpenSpec + Superpowers 串六阶段闭环 + AI 自动化测试 + 防偷改护栏</li>
         <li><strong>📦 产出与汇报</strong>：<a href="../assets/ref/汇报材料-AI生成指南.html">周报</a>（试点数据）+ 测试资产交接（录制转生成规范沉淀成 Skill）</li>
-        <li><strong>🔧 工具/Demo</strong>：<a href="https://openspec.dev" target="_blank">OpenSpec</a>（规范管理）+ <a href="https://github.com/obra/superpowers" target="_blank">Superpowers</a>（执行）/ <a href="../demos/ai-test-frame/">demos/ai-test-frame</a>（<code>python main.py</code> 即跑）</li>
+        <li><strong>🔧 工具/Demo</strong>：<a href="https://openspec.dev" target="_blank">OpenSpec</a>（规范管理）+ <a href="https://github.com/obra/superpowers" target="_blank">Superpowers</a>（执行）/ <a href="../demos/ai-test-frame/README.md">demos/ai-test-frame</a>（<code>python main.py</code> 即跑）</li>
         <li><strong>📖 测试方法论</strong>：<a href="../assets/ref/AI自动化测试-方法论与实践.html">《AI 自动化测试：方法论与实践》</a></li>
         <li><strong>👥 角色手册</strong>：<a href="../assets/ref/角色操作手册.html">开发 + 测试手册</a>（闭环主力 + 质量把关）</li>
         <li><strong>📋 验收与交接</strong>：<a href="../demos/review-checklists/落地验收清单.md">试点验收清单</a>（结项打分）+ <a href="../demos/handover-templates/开发-测试交接.md">开发↔测试交接</a>（防偷改测试）</li>
@@ -81,7 +81,7 @@
 /opsx:apply     # 按 tasks 执行（或交给 Superpowers）
 /opsx:archive   # 验证通过后归档变更</code></pre>
     <p>每次对话 OpenSpec 会自动读 <code>openspec/specs/</code> 下所有 spec.md 并应用到生成代码——所以 specs/ 要精简（只放稳定的全局规范），一次性变更放 changes/。</p>
-    <div class="tip"><strong>tasks 状态机</strong>（断点续传的关键）：<code>[ ]</code> 待办 → <code>[in_progress]</code> 进行 → <code>[x]</code> 完成 → <code>[deleted]</code> / <code>[blocked]</code>。<a href="../demos/claude-skills/skills/devflow/">devflow</a> 的恢复判定正是扫 tasks 的 <code>[x]</code> 标记判断从哪续。</div>
+    <div class="tip"><strong>tasks 状态机</strong>（断点续传的关键）：<code>[ ]</code> 待办 → <code>[in_progress]</code> 进行 → <code>[x]</code> 完成 → <code>[deleted]</code> / <code>[blocked]</code>。<a href="../demos/claude-skills/skills/devflow/SKILL.md">devflow</a> 的恢复判定正是扫 tasks 的 <code>[x]</code> 标记判断从哪续。</div>
 
     <h2>3. 六阶段工作流（OpenSpec + Superpowers）</h2>
     <p>团队工作流编排 OpenSpec（规范）+ Superpowers（执行）+ 代码图谱（定位）。</p>
@@ -96,7 +96,7 @@ Stage 6 归档        → openspec-archive</code></pre>
 
     <div class="warn"><strong>跳过了阶段 3（无代码图谱）怎么办</strong>：上面「+ 代码图谱 impact/locate/detect_changes」是<strong>有图谱时</strong>的增强，不是闭环的硬前提。小团队跳过 stage3 时用替代：<strong>impact</strong>（改前评估影响）→ 改前 grep + 人脑梳理上下游；<strong>locate</strong>（定位文件）→ grep / 项目结构；<strong>detect_changes</strong>（提交前验证）→ <code>git diff</code> + 人审 + 测试。能力降级（靠人补），但闭环仍能跑——等代码量大到人脑兜不住，再回来建图谱（阶段 3）。</div>
 
-    <div class="tip"><strong>这套工作流的 skill 落地</strong>：<a href="../demos/claude-skills/skills/devflow/">devflow</a>（<code>demos/claude-skills</code>）把上面 6 阶段串成一条命令——自己不实现任何逻辑，只编排 OpenSpec + Superpowers，还带「断点续传」（中断后查文件状态自动恢复到正确阶段）和「规则覆盖」（<code>rules/</code> 改写底层 skill 的默认出口）。想看一个完整的多阶段 skill 怎么写，直接读它的 <code>SKILL.md</code> + <code>stages/</code>。</div>
+    <div class="tip"><strong>这套工作流的 skill 落地</strong>：<a href="../demos/claude-skills/skills/devflow/SKILL.md">devflow</a>（<code>demos/claude-skills</code>）把上面 6 阶段串成一条命令——自己不实现任何逻辑，只编排 OpenSpec + Superpowers，还带「断点续传」（中断后查文件状态自动恢复到正确阶段）和「规则覆盖」（<code>rules/</code> 改写底层 skill 的默认出口）。想看一个完整的多阶段 skill 怎么写，直接读它的 <code>SKILL.md</code> + <code>stages/</code>。</div>
 
     <div class="tip"><strong>工具演进：随能力做减法</strong>。OpenSpec + Superpowers 不必一直一起用，随你驾驭 AI 的能力提升逐步精简：<br>
     • <strong>入门期</strong>：OpenSpec + Superpowers 结合——前者把需求拆成规范（防 AI 跑偏），后者按规范执行，新手靠框架兜底；<br>

@@ -192,7 +192,7 @@ def read_config(path):                     # ③ 路径限制
         raise PermissionError("out of bounds")   # 越界直接拒</code></pre>
 
     <p><strong>④ AI 供应链安全（装 skill / MCP 先审）</strong>：<br>
-    skill、MCP server、第三方 prompt 模板都是「外部代码」——恶意 skill 可以偷数据、改代码、留后门。<strong>装前必审</strong>（呼应 <a href="stage6.html">阶段 6「装 skill 先审安全」</a>）：</p>
+    skill、MCP server、第三方 prompt 模板都是「外部代码」——恶意 skill 可以偷数据、改代码、留后门。<strong>装前必审</strong>：</p>
     <ul>
       <li><strong>只用可信源</strong>：官方仓库 / 公司内部仓库优先，少装来路不明的第三方 skill。</li>
       <li><strong>审 SKILL.md 和脚本</strong>：装前看一眼 skill 里有没有可疑的 <code>curl</code> / <code>eval</code> / 外发请求、要不要敏感权限。</li>
