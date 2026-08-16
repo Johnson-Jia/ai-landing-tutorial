@@ -1129,7 +1129,7 @@
     </details>
 
     <h3 id="pagedattn">⑤ PagedAttention 与 vLLM：KV Cache 的内存管理革命 <span class="src">Kwon et al. arXiv:2309.06180</span></h3>
-    <p>前面看到 KV Cache 是显存大户。但问题不止"占用大"，还有更隐蔽的<strong>内存浪费</strong>。传统推理引擎为每条请求的 KV Cache <strong>预分配一整块连续显存</strong>，这在实际服务中暴露出致命问题，而 <strong>PagedAttention</strong> 借鉴操作系统虚拟内存的分页思想，彻底解决了它。</p>
+    <p>前面看到 KV Cache 是显存大户。但问题不止"占用大"，还有更隐蔽的<strong>内存浪费</strong>。传统推理引擎为每条请求的 KV Cache <strong>预分配一整块连续显存</strong>，这在实际服务中暴露出致命问题，而 <strong>PagedAttention</strong> 借鉴操作系统虚拟内存的分页思想，解决了它。</p>
 
     <details class="tech"><summary>连续分配的三大浪费</summary>
       <div class="tech-body">

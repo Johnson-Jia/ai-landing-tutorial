@@ -15,19 +15,20 @@
   <h1>角色操作手册</h1>
   <p class="subtitle">转型全员参与——开发、测试、组长、产品，各自怎么做，一份手册讲清。</p>
 
-  <div class="key-conclusion"><p>4 个角色 4 份手册，覆盖转型全员。每份含：<strong>定位 + 核心任务 + 怎么做 + 工具箱 + 检查清单 + 常见坑</strong>。各级人员拿自己那份照做即可——不需要通读全教程，也能知道「我该干什么」。</p></div>
+  <div class="key-conclusion"><p>5 个角色 5 份手册，覆盖转型全员。每份含：<strong>定位 + 核心任务 + 怎么做 + 工具箱 + 检查清单 + 常见坑</strong>。各级人员拿自己那份照做即可——不需要通读全教程，也能知道「我该干什么」。</p></div>
 
   <h2>一、为什么需要角色手册</h2>
   <p>转型不是一个人的事，是全员的事。但各角色职责不同：开发用 AI 写代码、测试用 AI 生成用例、组长推动落地、产品用 AI 验证需求。<strong>没有角色手册，大家不知道自己该做什么</strong>——开发以为只是自己的事，测试不知道怎么介入，组长不知道怎么推，产品还在等排期。</p>
   <p>本模块给每个角色一份<strong>专属操作手册</strong>，让全员各司其职。</p>
 
-  <h2>二、4 个角色概览</h2>
+  <h2>二、5 个角色概览</h2>
   <table>
     <tr><th>角色</th><th>AI 时代的定位</th><th>核心任务</th><th>手册</th></tr>
     <tr><td><strong>开发</strong></td><td>AI 主力执行者——把重复交出去，聚焦架构/审查/定义问题</td><td>用 AI 提效 + 把关质量 + 沉淀能力</td><td><a href="../../demos/role-handbooks/开发手册.md">开发手册</a></td></tr>
     <tr><td><strong>测试</strong></td><td>测试资产设计者 + 质量把关人</td><td>录制转生成 + 度量 + 防偷改</td><td><a href="../../demos/role-handbooks/测试手册.md">测试手册</a></td></tr>
     <tr><td><strong>组长</strong></td><td>基层推动者——上接战略，下带团队</td><td>培训 + 规范 + 试点 + 汇报</td><td><a href="../../demos/role-handbooks/组长手册.md">组长手册</a></td></tr>
     <tr><td><strong>产品</strong></td><td>需求验证加速者</td><td>AI 原型 + 需求结构化 + 协作</td><td><a href="../../demos/role-handbooks/产品手册.md">产品手册</a></td></tr>
+    <tr><td><strong>运营</strong></td><td>非技术岗的 AI 落地者（运营 / 行政 / HR）</td><td>网页版 AI 处理文档 / 表格 / 汇报 + 把关产出</td><td><a href="../../demos/role-handbooks/运营手册.md">运营手册</a></td></tr>
   </table>
 
   <h2>三、各角色核心要点</h2>
@@ -37,7 +38,7 @@
   <div class="tip"><strong>关键转变</strong>：价值从「写代码」转向「<strong>定义问题 + 设计架构 + 审查验证 + 沉淀知识</strong>」。AI 扩展你的能力边界，但不替代你的判断。</div>
 
   <h3>测试：从手写测试到「录制 + AI 生成」</h3>
-  <p>录制转生成（<a href="../../demos/ai-test-frame/">ai-test-frame</a>）→ 测试编写规范沉淀成 Skill → AI 占比 + Bug 度量（<a href="../../demos/ai-metrics/">ai-metrics</a>）→ <strong>防偷改测试</strong>（不让 AI 改测试迎合错误）。</p>
+  <p>录制转生成（<a href="../../demos/ai-test-frame/README.md">ai-test-frame</a>）→ 测试编写规范沉淀成 Skill → AI 占比 + Bug 度量（<a href="../../demos/ai-metrics/README.md">ai-metrics</a>）→ <strong>防偷改测试</strong>（不让 AI 改测试迎合错误）。</p>
 
   <h3>组长：把战略变成团队动作，把效果变成可汇报数据</h3>
   <p>全员培训 100% → 规范资产化（CLAUDE.md/Skill/Hook）→ 带 1-2 个试点跑通闭环 → 用 <a href="汇报材料-AI生成指南.html">汇报材料模板</a> + ai-metrics 数据向上汇报。<strong>试点不拿数据，就推不动投入</strong>。</p>
@@ -45,13 +46,17 @@
   <h3>产品：用 AI 加速需求验证，不必干等开发排期</h3>
   <p>Codex 做原型/需求验证 → 需求文档结构化（AI 可读）→ 用 OpenSpec spec 与开发协作（需求 → AI 实现的清晰交接）。</p>
 
+  <h3>运营（含行政 / HR）：网页版 AI 处理文档、表格、汇报，不碰命令行</h3>
+  <p>浏览器打开网页版 AI（智谱 / 豆包）→ 套 prompt 模板出初稿（文案 / 汇总表 / 周报）→ 人工核对业务事实后使用。价值从「手写每一段」转向「定义需求 + 把关产出」。全文见 <a href="../../demos/role-handbooks/运营手册.md">运营手册</a>。</p>
+
   <h2>四、与其他模块的衔接</h2>
   <ul>
-    <li><strong>开发/测试手册</strong> → <a href="../../pages/stage2.html">阶段 2 全员赋能</a> + <a href="../../pages/stage3.html">阶段 3 基础设施</a> + <a href="../../pages/stage4.html">阶段 4 闭环</a> + <a href="../../demos/ai-test-frame/">ai-test-frame</a> / <a href="../../demos/ai-metrics/">ai-metrics</a></li>
+    <li><strong>开发/测试手册</strong> → <a href="../../pages/stage2.html">阶段 2 全员赋能</a> + <a href="../../pages/stage3.html">阶段 3 基础设施</a> + <a href="../../pages/stage4.html">阶段 4 闭环</a> + <a href="../../demos/ai-test-frame/README.md">ai-test-frame</a> / <a href="../../demos/ai-metrics/README.md">ai-metrics</a></li>
     <li><strong>组长手册</strong> → 贯穿 <a href="../../pages/stage0.html">阶段 0</a>~<a href="../../pages/stage6.html">阶段 6</a> + <a href="汇报材料-AI生成指南.html">汇报材料模块</a></li>
     <li><strong>产品手册</strong> → <a href="../../pages/stage2.html">阶段 2（Codex）</a> + <a href="../../pages/stage4.html">阶段 4（OpenSpec）</a></li>
+    <li><strong>运营手册</strong>（含行政 / HR）→ <a href="../../pages/stage0.html">阶段 0 §3.5 精准指令</a>（网页版 AI，不碰命令行）</li>
   </ul>
-  <div class="key-conclusion" style="margin-top:20px"><p><strong>记住</strong>：4 份手册覆盖全员，是「<strong>下级各级人员怎么做</strong>」的解法。配合<a href="汇报材料-AI生成指南.html">汇报材料模块</a>（向上汇报），转型就形成「<strong>向上汇报 + 向下指导</strong>」的完整闭环。</p></div>
+  <div class="key-conclusion" style="margin-top:20px"><p><strong>记住</strong>：5 份手册覆盖全员，是「<strong>下级各级人员怎么做</strong>」的解法。配合<a href="汇报材料-AI生成指南.html">汇报材料模块</a>（向上汇报），转型就形成「<strong>向上汇报 + 向下指导</strong>」的完整闭环。</p></div>
 
   <div class="pager">
     <a href="汇报材料-AI生成指南.html">← 汇报材料指南</a>
