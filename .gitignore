@@ -22,3 +22,6 @@ Thumbs.db
 
 # 内部工作文档（核验报告/规划/spec，不随公开仓库分发）
 docs/
+
+# Python 测试缓存
+.pytest_cache/

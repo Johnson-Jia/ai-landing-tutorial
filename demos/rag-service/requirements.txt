@@ -2,3 +2,4 @@ zvec>=0.5.0
 numpy>=1.23
 anthropic>=0.40
 sentence_transformers>=3.0
+pytest>=7.0
